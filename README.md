@@ -1,7 +1,9 @@
 # NPE - NullPointerException
 
-> 개발자들을 위한 실시간 질문/답변 커뮤니티
-> 
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/67536413/139211898-eb2576e7-e209-4e88-99d0-6649f6a0fef3.png" style="width:404px"/>
+  <div>:zap:개발자들을 위한 실시간 질문/답변 커뮤니티:zap:</div>
+</div>
 
 ## 팀원소개
 
