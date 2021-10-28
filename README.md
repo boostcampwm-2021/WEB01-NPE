@@ -1,3 +1,5 @@
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fboostcampwm-2021%2FWEB01-NPE&count_bg=%23F48024&title_bg=%23222426&icon=&icon_color=%23BCBBBB&title=visits&edge_flat=false)](https://hits.seeyoufarm.com)
+
 # NPE - NullPointerException
 
 <div align="center">
