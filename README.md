@@ -53,6 +53,24 @@ NPE 는 개발자들을 위한 질문/답변 위주의 커뮤니티 입니다. �
 
 ![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/33d63296-3e31-4992-a94c-1c95b4d346ac/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211028%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211028T070705Z&X-Amz-Expires=86400&X-Amz-Signature=8ad9fdea6c723b366790a2e5aa2cfa6b3bcb761564be678d029f36d48de7c7c9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
 
+## 와이어프레임
+
+메인 페이지
+
+![](https://user-images.githubusercontent.com/67536413/139359557-7f87cffc-9399-468d-b5f4-6dc94caf78ea.png)
+
+질문조회 페이지
+
+![](https://user-images.githubusercontent.com/67536413/139359552-47224203-2f76-44ce-bb46-759bfc9b490c.png)
+
+질문하기 페이지
+
+![](https://user-images.githubusercontent.com/67536413/139359556-452c4c0f-50cc-407d-8f56-54f020b6583e.png)
+
+프로필 페이지
+
+![](https://user-images.githubusercontent.com/67536413/139359547-6dfc1fbe-42e0-4885-b1a0-5000cc79b883.png)
+
 ### 😎 그라운드 룰 😎
 
 [https://github.com/boostcampwm-2021/WEB01-NPE/wiki/그라운드-룰](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
