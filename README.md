@@ -8,14 +8,11 @@
 </div>
 
 ## 팀원소개
-
-J120 - 안승재
-
-J175 - 장다윗
-
-J196 - 조승희
-
-J222 - 황우진
+| 안승재 🕸 | 장다윗 🕸 | 조승희 🕸 | 황우진 🕸 |
+| :---: | :---: | :---: | :---: |
+| <img src="https://user-images.githubusercontent.com/49035066/138902384-74aa03f1-e2ad-4584-9f1c-a6168b3cd2ef.jpg" width="500px"> | <img src="https://i.ibb.co/pXTkwJV/image.jpg" width="500px"> | <img src="https://avatars.githubusercontent.com/u/50866506?v=4" width="500px"> | <img src="https://avatars.githubusercontent.com/u/67536413?v=4" width="500px"> | 
+| [@getState](https://github.com/getState) | [@david02324](https://github.com/david02324) | [@sa02045](https://github.com/sa02045)| [@hwangwoojin](https://github.com/hwangwoojin) |
+| 저희 10분만 쉬었다 할까요..? | 네 알겠습니다~ | 그렇게 하면 될 것 같아요 | 작업한거 노션 링크좀 올려주세요 |
 
 ## 위키
 
