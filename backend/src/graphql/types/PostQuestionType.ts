@@ -6,11 +6,14 @@ import {
   GraphQLString,
 } from "graphql";
 import PostService from "../services/PostService";
-import PostanswerType from "./PostanswerType";
+import UserService from "../services/UserService";
+import PostAnswerType from "./PostAnswerType";
+import UserType from "./UserType";
 
 export default new GraphQLObjectType({
-  name: "Post_question",
-  description: "This is Post(question)",
+  name: "PostQuestion",
+  description:
+    "질문글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 질문을 의미합니다.",
   fields: () => ({
     id: {
       type: GraphQLInt,
@@ -45,8 +48,18 @@ export default new GraphQLObjectType({
       type: GraphQLInt,
       resolve: (question) => question.score ?? 0,
     },
-    post_answer: {
-      type: new GraphQLList(PostanswerType),
+    user: {
+      type: UserType,
+      resolve: async (question) => {
+        const user = await UserService.findOneUserByArgs({
+          id: question.userId,
+        });
+
+        return user;
+      },
+    },
+    question_answer: {
+      type: new GraphQLList(PostAnswerType),
       resolve: async (question) => {
         const answers = await PostService.findAllAnswerByArgs({
           postQuestionId: question.id,

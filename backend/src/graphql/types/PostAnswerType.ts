@@ -1,8 +1,11 @@
 import { GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
+import UserType from "./UserType";
+import UserService from "../services/UserService";
 
 export default new GraphQLObjectType({
-  name: "Post_answer",
-  description: "This is Post(answer)",
+  name: "PostAnswer",
+  description:
+    "답변글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 답변을 의미합니다.",
   fields: () => ({
     id: {
       type: GraphQLInt,
@@ -24,6 +27,16 @@ export default new GraphQLObjectType({
     },
     state: {
       type: GraphQLInt,
+    },
+    user: {
+      type: UserType,
+      resolve: async (answer) => {
+        const user = await UserService.findOneUserByArgs({
+          id: answer.userId,
+        });
+
+        return user;
+      },
     },
   }),
 });
