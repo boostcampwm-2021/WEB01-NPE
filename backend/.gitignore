@@ -1,0 +1,5 @@
+# 노드 모듈 파일
+/node_modules
+
+# DB 설정 파일
+ormconfig.json
