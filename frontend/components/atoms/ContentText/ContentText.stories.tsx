@@ -1,8 +1,8 @@
-import ContentText from '../../components/atoms/text/content';
+import ContentText from '.';
 
 export default {
     Component: ContentText,
-    title: 'TextContent'
+    title: 'ContentText'
 }
 
 export const normal = () => {

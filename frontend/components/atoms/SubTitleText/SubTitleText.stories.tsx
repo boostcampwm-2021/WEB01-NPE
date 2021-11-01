@@ -1,4 +1,13 @@
-import SubTitleText from '../../components/atoms/text/subTitle';
+import SubTitleText from '.';
+
+export interface textProps {
+    text: string;
+    color?: string;
+}
+
+export interface textStyleProps {
+    color?: string;
+}
 
 export default {
     Component: SubTitleText,

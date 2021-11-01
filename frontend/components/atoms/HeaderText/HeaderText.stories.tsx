@@ -1,8 +1,8 @@
-import HeaderText from '../../components/atoms/text/header';
+import HeaderText from '.';
 
 export default {
     Component: HeaderText,
-    title: 'TextHeader'
+    title: 'HeaderText'
 }
 
 export const normal = () => {

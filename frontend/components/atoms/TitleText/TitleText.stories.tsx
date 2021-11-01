@@ -1,4 +1,4 @@
-import TitleText from '../../components/atoms/text/title';
+import TitleText from '.';
 
 export default {
     Component: TitleText,
