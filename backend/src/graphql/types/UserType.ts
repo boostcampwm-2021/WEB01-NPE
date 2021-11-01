@@ -1,4 +1,11 @@
-import { GraphQLInt, GraphQLObjectType, GraphQLString } from "graphql";
+import {
+  GraphQLInt,
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLString,
+} from "graphql";
+import PostService from "../services/PostService";
+import PostQuestionType from "./PostQuestionType";
 
 export default new GraphQLObjectType({
   name: "User",
@@ -6,23 +13,24 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: {
       type: GraphQLInt,
-      resolve: (user) => user.id,
     },
     username: {
       type: GraphQLString,
-      resolve: (user) => user.username,
     },
     score: {
       type: GraphQLInt,
-      resolve: (user) => user.score,
     },
     profile_url: {
       type: GraphQLString,
-      resolve: (user) => user.profile_url,
     },
     social_url: {
       type: GraphQLString,
-      resolve: (user) => user.social_url,
+    },
+    post_question: {
+      type: new GraphQLList(PostQuestionType),
+      resolve: async (user) => {
+        return await PostService.findAllQuestionByArgs({ userId: user.id });
+      },
     },
   }),
 });

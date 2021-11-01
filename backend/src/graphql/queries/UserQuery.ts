@@ -20,8 +20,9 @@ export default class UserQuery {
   };
 
   private static resolve = async (_, args) => {
-    // 서비스 로직
-    return await UserService.findAllUserByArgs(args);
+    const data = await UserService.findAllUserByArgs(args);
+
+    return data;
   };
 
   public static get() {

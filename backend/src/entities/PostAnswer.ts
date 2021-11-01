@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToOne,
   BaseEntity,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
 import { PostQuestion } from "./PostQuestion";
@@ -17,13 +18,16 @@ import { PostQuestion } from "./PostQuestion";
 )
 @Entity("post_answer")
 export class PostAnswer extends BaseEntity {
+  @PrimaryGeneratedColumn({ type: "int", name: "id" })
+  id: number;
+
   @Column("int", { name: "post_question_id" })
   postQuestionId: number;
 
   @Column("int", { name: "post_question_user_id" })
   postQuestionUserId: number;
 
-  @Column("int", { primary: true, name: "user_id" })
+  @Column("int", { name: "user_id" })
   userId: number;
 
   @Column("text", { name: "desc" })
