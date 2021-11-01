@@ -1,6 +1,11 @@
 import type { NextPage } from 'next'
-import { profileProps } from './profileInterface'
 import Image from 'next/image'
+
+interface profileProps {
+    src: string,
+    size: number,
+    alt?: string,
+}
 
 const profile: NextPage<profileProps> = ({ src, size, alt }) => {
     return (

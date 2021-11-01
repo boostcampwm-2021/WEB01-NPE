@@ -1,4 +1,4 @@
-import ProfileImage from '../../components/atoms/image/profile'
+import ProfileImage from './index'
 
 export default {
     Component: ProfileImage,
