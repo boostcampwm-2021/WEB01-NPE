@@ -1,5 +1,4 @@
 import { PostAnswer } from "../../entities/PostAnswer";
-import { getConnection } from "typeorm";
 import { PostQuestion } from "../../entities/PostQuestion";
 
 export default class PostService {

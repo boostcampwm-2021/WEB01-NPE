@@ -1,4 +1,3 @@
-import { getConnection } from "typeorm";
 import { User } from "../../entities/User";
 
 export default class UserService {
@@ -6,5 +5,11 @@ export default class UserService {
     const data = await User.find(args);
 
     return data;
+  }
+
+  public static async findOneUserByArgs(args): Promise<User> {
+    const user = await User.findOneOrFail(args);
+
+    return user;
   }
 }
