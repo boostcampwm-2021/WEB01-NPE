@@ -15,6 +15,7 @@ const profile: NextPage<profileProps> = ({ src, size, alt }) => {
             alt={alt || 'Profile image'}
             width={size}
             height={size}
+            objectFit='contain'
         />
     );
 }
