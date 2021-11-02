@@ -44,3 +44,29 @@ export const Logout = () => {
         />
     );
 }
+
+export const OnlyTextButton = () => {
+    return (
+        <Button
+            text="로그인"
+            bgColor="#F48024"
+            textColor="white"
+            onClick={() => {}}
+            
+        />
+    );
+}
+
+export const LongButton = () => {
+    const [text, setText] = useState("라이브스트리밍onoff");
+
+    return (
+        <Button
+            text={text}
+            bgColor="#fff"
+            textColor="black"
+            onClick={() => {}}
+            width="200px"
+        />
+    );
+}

@@ -6,16 +6,20 @@ interface Props {
     text: string,
     bgColor: string
     textColor: string,
-    onClick: Function
+    onClick: Function,
+    width?: string,
+    height?: string,
 }
-const Button : FunctionComponent<Props> = ({image, text, bgColor, textColor, onClick }) => {
+const Button : FunctionComponent<Props> = ({image, text, bgColor, textColor, width, height, onClick }) => {
     return (
         <StyledButton
             bgColor={bgColor}
             textColor={textColor}
+            width={width || "136px"}
+            height={height || "36px"}
             onClick={() => onClick()}
         >
-            <Icon src={image} alt="아이콘" />
+            {image && <Icon src={image} alt="아이콘" />}
             <Text textColor={textColor}>{text}</Text>
         </StyledButton>
     );
