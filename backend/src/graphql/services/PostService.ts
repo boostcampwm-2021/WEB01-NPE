@@ -1,6 +1,7 @@
 import { Like } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
+import { User } from "../../entities/User";
 
 export default class PostService {
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
@@ -14,14 +15,19 @@ export default class PostService {
     if (title) whereObj.title = Like(`%${title}%`);
     if (desc) whereObj.desc = Like(`%${desc}%`);
 
-    const data = await PostQuestion.find({
-      order: {
-        createdAt: "DESC",
-      },
-      skip: skip ?? 0,
-      take: take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT,
-      where: whereObj,
-    });
+    if (author) {
+      const user = await User.findOne({ username: author });
+      if (user) whereObj.userId = user.id;
+      else return [];
+    }
+
+    const builder = PostQuestion.createQueryBuilder("Question")
+      .where(whereObj)
+      .skip(skip ?? 0)
+      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
+      .orderBy("created_at", "DESC");
+
+    const data = await builder.getMany();
 
     return data;
   }
