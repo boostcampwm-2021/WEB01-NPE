@@ -3,6 +3,8 @@ import styled from "styled-components";
 interface ButtonProps{
     bgColor: string;
     textColor: string;
+    width: string;
+    height: string;
 }
 interface TextProps{
     textColor: string;
@@ -11,8 +13,8 @@ const StyledButton = styled.button<ButtonProps>`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 136px;
-    height: 36px;
+    width: ${(props) => props.width};
+    height: ${(props) => props.height};
     padding: 8px 16px;
     border-radius: 8px;
     border: none;
