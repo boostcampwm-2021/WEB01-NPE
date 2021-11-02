@@ -12,9 +12,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/chart.js": "^2.9.34",
     "@types/styled-components": "^5.1.15",
+    "chart.js": "^3.6.0",
     "next": "12.0.1",
     "react": "17.0.2",
+    "react-chartjs-2": "^3.3.0",
     "react-dom": "17.0.2",
     "styled-components": "^5.3.3"
   },
