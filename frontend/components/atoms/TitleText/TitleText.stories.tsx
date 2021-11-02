@@ -2,7 +2,7 @@ import TitleText from '.';
 
 export default {
     Component: TitleText,
-    title: 'TextTitle'
+    title: 'Atoms/TitleText'
 }
 
 export const normal = () => {
