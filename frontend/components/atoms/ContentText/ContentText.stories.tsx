@@ -2,7 +2,7 @@ import ContentText from '.';
 
 export default {
     Component: ContentText,
-    title: 'ContentText'
+    title: 'Atoms/ContentText'
 }
 
 export const normal = () => {

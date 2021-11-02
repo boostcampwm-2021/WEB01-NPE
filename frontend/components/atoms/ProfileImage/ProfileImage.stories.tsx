@@ -2,7 +2,7 @@ import ProfileImage from './index'
 
 export default {
     Component: ProfileImage,
-    title: 'ProfileImage'
+    title: 'Atoms/ProfileImage'
 }
 
 export const normal = () => {

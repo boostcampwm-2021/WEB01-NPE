@@ -2,7 +2,7 @@ import HeaderText from '.';
 
 export default {
     Component: HeaderText,
-    title: 'HeaderText'
+    title: 'Atoms/HeaderText'
 }
 
 export const normal = () => {

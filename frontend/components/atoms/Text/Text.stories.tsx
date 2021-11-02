@@ -1,17 +1,8 @@
 import Text from '.';
 
-export interface textProps {
-    text: string;
-    color?: string;
-}
-
-export interface textStyleProps {
-    color?: string;
-}
-
 export default {
     Component: Text,
-    title: 'TextSubTitle'
+    title: 'Atoms/Text'
 }
 
 export const normal = () => {
