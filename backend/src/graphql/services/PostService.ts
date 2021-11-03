@@ -1,4 +1,4 @@
-import { Like } from "typeorm";
+import { FindOperator, Like } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { User } from "../../entities/User";
@@ -9,7 +9,7 @@ export default class PostService {
     const { author, tags, skip, take } = args;
     const { title, desc, realtime_share } = args;
 
-    const whereObj: any = {};
+    const whereObj: Record<string, number | FindOperator<string>> = {};
 
     if (realtime_share) whereObj.realtimeShare = realtime_share;
     if (title) whereObj.title = Like(`%${title}%`);
