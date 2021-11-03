@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from "react";
-import { Icon, StyledButton, Text } from "./styled";
+import * as Styled from "./styled";
 
 interface Props {
   image?: string;
   text: string;
   bgColor: string;
   textColor: string;
-  onClick: Function;
+  onClick: VoidFunction;
   width?: string;
   height?: string;
 }
@@ -20,16 +20,16 @@ const Button: FunctionComponent<Props> = ({
   onClick,
 }) => {
   return (
-    <StyledButton
+    <Styled.StyledButton
       bgColor={bgColor}
       textColor={textColor}
       width={width || "136px"}
       height={height || "36px"}
-      onClick={() => onClick()}
+      onClick={onClick}
     >
-      {image && <Icon src={image} alt="아이콘" />}
-      <Text textColor={textColor}>{text}</Text>
-    </StyledButton>
+      {image && <Styled.Icon src={image} alt="아이콘" />}
+      <Styled.Text textColor={textColor}>{text}</Styled.Text>
+    </Styled.StyledButton>
   );
 };
 
