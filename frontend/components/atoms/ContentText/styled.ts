@@ -1,10 +1,10 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 interface textStyleProps {
-    color?: string;
+  color?: string;
 }
 
 export const StyledText = styled.p<textStyleProps>`
-    font-family: NotoSansKR;
-    color: ${props => (props.color || 'black')};
+  font-family: NotoSansKR;
+  color: ${(props) => props.color || "black"};
 `;
