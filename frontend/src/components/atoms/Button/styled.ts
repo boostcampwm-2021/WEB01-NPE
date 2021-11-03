@@ -9,7 +9,7 @@ interface ButtonProps {
 interface TextProps {
   textColor: string;
 }
-const StyledButton = styled.button<ButtonProps>`
+export const StyledButton = styled.button<ButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,16 +27,14 @@ const StyledButton = styled.button<ButtonProps>`
   }
 `;
 
-const Icon = styled.img`
+export const Icon = styled.img`
   display: block;
   width: 24px;
   height: 24px;
   margin-right: 8px;
 `;
 
-const Text = styled.div<TextProps>`
+export const Text = styled.div<TextProps>`
   font-size: 16px;
   color: ${(props) => props.textColor};
 `;
-
-export { StyledButton, Icon, Text };
