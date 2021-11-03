@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Button, ImageBox, TextBox } from "./styled";
+import * as Styled from "./styled";
 import Image from "../../atoms/Image";
 import Text from "../../atoms/Text";
 
@@ -11,15 +11,15 @@ interface Props {
 
 const ProfileSummary: FunctionComponent<Props> = ({ src, name, rank }) => {
   return (
-    <Button>
-      <ImageBox size={48}>
+    <Styled.Anchor>
+      <Styled.ImageDiv>
         <Image src={src} width={48} height={48} />
-      </ImageBox>
-      <TextBox>
+      </Styled.ImageDiv>
+      <Styled.TextDiv>
         <Text text={name} ellipsis={true} fontSize={10} fontWeight={"bold"} />
         <Text text={rank} fontSize={10} />
-      </TextBox>
-    </Button>
+      </Styled.TextDiv>
+    </Styled.Anchor>
   );
 };
 
