@@ -1,37 +1,34 @@
 import React, { FunctionComponent } from "react";
-import { DeleteButton, TagContainer, TagText } from "./styled";
+import * as Styled from "./styled";
 
 interface Props {
   text: string;
   tagBgColor?: string;
   textColor?: string;
   deleteBgColor?: string;
-  deleteHandler: Function;
+  onDelete: VoidFunction;
 }
 
-const SideTag: React.VFC<Props> = ({
+const SideTag: FunctionComponent<Props> = ({
   text,
   tagBgColor,
   textColor,
   deleteBgColor,
-  deleteHandler,
+  onDelete,
 }) => {
   return (
-    <TagContainer
+    <Styled.TagContainer
       bgColor={tagBgColor || "#94D3CC"}
       textColor={textColor || "white"}
-      {...deleteHandler}
     >
-      <TagText>{text}</TagText>
-      <DeleteButton
+      <Styled.TagText>{text}</Styled.TagText>
+      <Styled.DeleteButton
         bgColor={deleteBgColor || "#fc7047"}
-        onClick={() => {
-          deleteHandler();
-        }}
+        onClick={onDelete}
       >
         🗑
-      </DeleteButton>
-    </TagContainer>
+      </Styled.DeleteButton>
+    </Styled.TagContainer>
   );
 };
 

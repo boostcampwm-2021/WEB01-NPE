@@ -8,7 +8,7 @@ interface DeleteButtonProps {
   bgColor: string;
 }
 
-const TagContainer = styled.li<TagProps>`
+export const TagContainer = styled.li<TagProps>`
   display: flex;
   justify-content: space-between;
   width: 150px;
@@ -19,11 +19,11 @@ const TagContainer = styled.li<TagProps>`
   margin-bottom: 15px;
 `;
 
-const TagText = styled.div`
+export const TagText = styled.div`
   padding: 10px 0px 10px 20px;
 `;
 
-const DeleteButton = styled.button<DeleteButtonProps>`
+export const DeleteButton = styled.button<DeleteButtonProps>`
   width: 30px;
   border-radius: 0px 50px 50px 0px;
   color: white;
@@ -35,4 +35,3 @@ const DeleteButton = styled.button<DeleteButtonProps>`
   }
 `;
 
-export { TagContainer, TagText, DeleteButton };
