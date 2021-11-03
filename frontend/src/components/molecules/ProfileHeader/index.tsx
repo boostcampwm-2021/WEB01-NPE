@@ -1,24 +1,24 @@
 import React, { FunctionComponent } from "react";
-import { Button, ImageBox, TextBox } from "./styled";
+import * as Styled from "./styled";
 import Image from "../../atoms/Image";
 import Text from "../../atoms/Text";
 
 interface Props {
   src: string;
   text: string;
-  onClick: Function;
+  href: string;
 }
 
-const ProfileHeader: FunctionComponent<Props> = ({ src, text, onClick }) => {
+const ProfileHeader: FunctionComponent<Props> = ({ src, text, href }) => {
   return (
-    <Button onClick={() => onClick()}>
-      <ImageBox size={24}>
+    <Styled.Anchor href={href}>
+      <Styled.ImageDiv>
         <Image src={src} width={24} height={24} />
-      </ImageBox>
-      <TextBox>
+      </Styled.ImageDiv>
+      <Styled.TextDiv>
         <Text text={text} ellipsis={true} fontSize={12} fontWeight={"bold"} />
-      </TextBox>
-    </Button>
+      </Styled.TextDiv>
+    </Styled.Anchor>
   );
 };
 
