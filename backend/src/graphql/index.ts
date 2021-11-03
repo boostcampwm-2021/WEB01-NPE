@@ -7,7 +7,7 @@ import UserQuery from "./queries/UserQuery";
 export default class GraphQLMiddleware {
   private static schema: GraphQLSchema;
 
-  public static get(): any {
+  public static get() {
     if (!this.schema) {
       this.schema = new GraphQLSchema({
         query: this.RootQuery,
