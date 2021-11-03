@@ -1,4 +1,4 @@
-import { Like } from "typeorm";
+import { FindOperator, Like } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { User } from "../../entities/User";
@@ -6,10 +6,10 @@ import { User } from "../../entities/User";
 export default class PostService {
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
   public static async findAllQuestionByArgs(args): Promise<PostQuestion[]> {
-    const { author, tags, skip, take } = args;
+    const { author, tagIDs, skip, take } = args;
     const { title, desc, realtime_share } = args;
 
-    const whereObj: any = {};
+    const whereObj: Record<string, number | FindOperator<string>> = {};
 
     if (realtime_share) whereObj.realtimeShare = realtime_share;
     if (title) whereObj.title = Like(`%${title}%`);
@@ -39,8 +39,19 @@ export default class PostService {
   }
 
   public static async findOneQuestionById(id): Promise<PostQuestion> {
-    const question = await PostQuestion.findOneOrFail({ id: id });
+    const question = await PostQuestion.findOne({ id: id });
 
     return question;
+  }
+
+  public static async addNewQuestion(args, user): Promise<PostQuestion> {
+    const newQuestion = new PostQuestion();
+    newQuestion.userId = user.id;
+    newQuestion.title = args.title;
+    newQuestion.desc = args.desc;
+    newQuestion.realtimeShare = args.realtime_share;
+    await newQuestion.save();
+
+    return newQuestion;
   }
 }

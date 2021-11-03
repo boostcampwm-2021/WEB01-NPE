@@ -1,32 +1,24 @@
-import { GraphQLInt, GraphQLList, GraphQLString, GraphQLType } from "graphql";
+import {
+  GraphQLInt,
+  GraphQLFieldConfig,
+  GraphQLFieldConfigArgumentMap,
+} from "graphql";
 import PostService from "../services/PostService";
 import PostQuestionType from "../types/PostQuestionType";
-export default class QuestionQuery {
-  private static instance: any;
-  private static type: GraphQLType | GraphQLList<GraphQLType> =
-    PostQuestionType;
+export default class QuestionQuery
+  implements GraphQLFieldConfig<any, any, any>
+{
+  type = PostQuestionType;
 
-  private static args: object = {
+  args = {
     id: {
       type: GraphQLInt,
     },
   };
 
-  private static resolve = async (_, args) => {
+  resolve = async (src, args, context) => {
     const data = await PostService.findOneQuestionById(args.id);
 
     return data;
   };
-
-  public static get() {
-    if (!QuestionQuery.instance) {
-      QuestionQuery.instance = {
-        type: QuestionQuery.type,
-        args: QuestionQuery.args,
-        resolve: QuestionQuery.resolve,
-      };
-    }
-
-    return QuestionQuery.instance;
-  }
 }

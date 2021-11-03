@@ -1,11 +1,15 @@
-import { GraphQLInt, GraphQLList, GraphQLString, GraphQLType } from "graphql";
+import {
+  GraphQLFieldConfig,
+  GraphQLFieldResolver,
+  GraphQLInt,
+  GraphQLString,
+} from "graphql";
 import UserService from "../services/UserService";
 import UserType from "../types/UserType";
-export default class UserQuery {
-  private static instance: any;
-  private static type: GraphQLType | GraphQLList<GraphQLType> = UserType;
+export default class UserQuery implements GraphQLFieldConfig<any, any, any> {
+  type = UserType;
 
-  private static args: object = {
+  args = {
     id: {
       type: GraphQLInt,
     },
@@ -14,21 +18,10 @@ export default class UserQuery {
     },
   };
 
-  private static resolve = async (_, args) => {
+  resolve = async (src, args, context) => {
+    console.log(src);
     const data = await UserService.findOneUserByArgs(args);
 
     return data;
   };
-
-  public static get() {
-    if (!UserQuery.instance) {
-      UserQuery.instance = {
-        type: UserQuery.type,
-        args: UserQuery.args,
-        resolve: UserQuery.resolve,
-      };
-    }
-
-    return UserQuery.instance;
-  }
 }
