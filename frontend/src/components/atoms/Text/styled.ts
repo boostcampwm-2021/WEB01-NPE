@@ -8,7 +8,6 @@ interface textStyleProps {
 }
 
 export const StyledText = styled.span<textStyleProps>`
-  font-family: NotoSansKR;
   color: ${(props) => props.color || "black"};
   font-size: ${(props) => props.fontSize || "16"}px;
   font-weight: ${(props) => props.fontWeight || "normal"};
