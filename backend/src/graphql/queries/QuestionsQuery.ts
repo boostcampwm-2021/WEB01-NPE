@@ -20,8 +20,8 @@ export default class QuestionsQuery
     desc: {
       type: GraphQLString,
     },
-    tags: {
-      type: new GraphQLList(GraphQLString),
+    tagIDs: {
+      type: new GraphQLList(GraphQLInt),
     },
     realtime_share: {
       type: GraphQLBoolean,
