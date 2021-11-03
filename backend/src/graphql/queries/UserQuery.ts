@@ -1,17 +1,15 @@
 import {
   GraphQLFieldConfig,
-  GraphQLFieldConfigArgumentMap,
+  GraphQLFieldResolver,
   GraphQLInt,
-  GraphQLOutputType,
   GraphQLString,
 } from "graphql";
 import UserService from "../services/UserService";
 import UserType from "../types/UserType";
-export default class UserQuery {
-  private static instance: GraphQLFieldConfig<any, any, any>;
-  private static type: GraphQLOutputType = UserType;
+export default class UserQuery implements GraphQLFieldConfig<any, any, any> {
+  type = UserType;
 
-  private static args: GraphQLFieldConfigArgumentMap = {
+  args = {
     id: {
       type: GraphQLInt,
     },
@@ -20,21 +18,10 @@ export default class UserQuery {
     },
   };
 
-  private static resolve = async (_, args: GraphQLFieldConfigArgumentMap) => {
+  resolve = async (src, args, context) => {
+    console.log(src);
     const data = await UserService.findOneUserByArgs(args);
 
     return data;
   };
-
-  public static get() {
-    if (!UserQuery.instance) {
-      UserQuery.instance = {
-        type: UserQuery.type,
-        args: UserQuery.args,
-        resolve: UserQuery.resolve,
-      };
-    }
-
-    return UserQuery.instance;
-  }
 }
