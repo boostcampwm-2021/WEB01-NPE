@@ -19,7 +19,6 @@ export default class UserQuery implements GraphQLFieldConfig<any, any, any> {
   };
 
   resolve = async (src, args, context) => {
-    console.log(src);
     const data = await UserService.findOneUserByArgs(args);
 
     return data;
