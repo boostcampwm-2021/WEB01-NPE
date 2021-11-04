@@ -19,8 +19,6 @@ jobs:
         run: cd frontend && npm install
       - name: Install npm dependencies in BE
         run: cd backend && npm install
-      - name: Run Frontend build task
-        run: cd frontend && npm run build
       - name: Copy folder content recursively to remote
         uses: garygrossgarten/github-action-scp@release
         with:
