@@ -28,5 +28,6 @@ jobs:
           ARGS: "-rltgoDzvO --delete"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          PORT: ${{ secrets.REMOTE_PORT }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "backend/node_modules/, frontend/node_modules/, frontend/.next, frontend/.storybook"
