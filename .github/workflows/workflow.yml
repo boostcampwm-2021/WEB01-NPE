@@ -34,5 +34,5 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           script: |
             fuser -k -n tcp 6006
-            cd /root/deploy
+            cd deploy
             npm i && npm run build-storybook && npm run storybook &
