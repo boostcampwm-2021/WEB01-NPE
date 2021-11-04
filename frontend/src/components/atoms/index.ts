@@ -9,3 +9,5 @@ export { default as SideTag } from "./SideTag";
 export { default as Switch } from "./Switch";
 export { default as Text } from "./Text";
 export { default as TitleText } from "./TitleText";
+export { default as Logo } from "./Logo";
+export { default as LogoFull } from "./LogoFull";
