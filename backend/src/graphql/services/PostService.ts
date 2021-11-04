@@ -73,4 +73,8 @@ export default class PostService {
 
     return newQuestion;
   }
+
+  public static async getAllTags(): Promise<Tag[]> {
+    return Tag.find();
+  }
 }
