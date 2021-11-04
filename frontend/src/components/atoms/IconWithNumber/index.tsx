@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import Image from "next/image";
 import { StyledIconWithNumber } from "./styled";
 import views from "./views.png";
 import comments from "./comments.png";
@@ -11,8 +12,8 @@ interface Props {
 const IconWithNumber: FunctionComponent<Props> = ({ message, value }) => {
   return (
     <StyledIconWithNumber>
-      {message === "views" && <img src={views} width="30px" />}
-      {message === "comments" && <img src={comments} width="30px" />}
+      {message === "views" && <Image src={views} width={30} />}
+      {message === "comments" && <Image src={comments} width={30} />}
       {value}
     </StyledIconWithNumber>
   );

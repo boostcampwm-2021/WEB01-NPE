@@ -7,13 +7,13 @@ export default {
 };
 
 export const Default = () => {
-  return <Indicator type={true} />;
+  return <Indicator isOnline={true} />;
 };
 
 export const Offline = () => {
-  return <Indicator type={false} />;
+  return <Indicator isOnline={false} />;
 };
 
 export const BigButton = () => {
-  return <Indicator type={false} width={"30px"} height={"30px"} />;
+  return <Indicator isOnline={false} width={"30px"} height={"30px"} />;
 };

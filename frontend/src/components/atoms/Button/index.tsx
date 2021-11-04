@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from "react";
+import Image from "next/image";
 import * as Styled from "./styled";
 
 interface Props {
-  image?: string;
+  image?: string | StaticImageData;
   text: string;
   bgColor: string;
   textColor: string;
@@ -27,7 +28,7 @@ const Button: FunctionComponent<Props> = ({
       height={height || "36px"}
       onClick={onClick}
     >
-      {image && <Styled.Icon src={image} alt="아이콘" />}
+      {image && <Image src={image} alt="아이콘" width={24} height={24} />}
       <Styled.Text textColor={textColor}>{text}</Styled.Text>
     </Styled.StyledButton>
   );

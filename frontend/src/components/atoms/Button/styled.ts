@@ -25,13 +25,10 @@ export const StyledButton = styled.button<ButtonProps>`
   &:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
-`;
 
-export const Icon = styled.img`
-  display: block;
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
+  img {
+    margin-right: 8px;
+  }
 `;
 
 export const Text = styled.div<TextProps>`
