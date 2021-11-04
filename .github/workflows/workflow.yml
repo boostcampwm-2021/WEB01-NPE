@@ -33,6 +33,4 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
           script: |
-            cd /root/deploy
-            ls
-            cd frontend && npm i && npm run build-storybook && npm run storybook
+            cd /root/deploy && npm i && npm run build-storybook && npm run storybook
