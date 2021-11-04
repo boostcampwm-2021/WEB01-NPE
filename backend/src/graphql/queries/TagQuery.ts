@@ -1,4 +1,5 @@
 import { GraphQLFieldConfig, GraphQLInt, GraphQLString } from "graphql";
+import TagService from "../services/TagService";
 import TagType from "../types/TagType";
 export default class TagQuery implements GraphQLFieldConfig<any, any, any> {
   type = TagType;
@@ -14,9 +15,9 @@ export default class TagQuery implements GraphQLFieldConfig<any, any, any> {
 
   resolve = async (src, args, context) => {
     if (args.id) {
-      return [];
+      return await TagService.findTagById(args.id);
     } else if (args.name) {
-      return [];
+      return await TagService.findTagByName(args.name);
     } else {
       return [];
     }

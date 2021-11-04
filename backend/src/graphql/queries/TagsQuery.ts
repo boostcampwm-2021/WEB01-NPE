@@ -1,5 +1,5 @@
 import { GraphQLFieldConfig, GraphQLList } from "graphql";
-import PostService from "../services/PostService";
+import TagService from "../services/TagService";
 import TagType from "../types/TagType";
 export default class TagsQuery implements GraphQLFieldConfig<any, any, any> {
   type = GraphQLList(TagType);
@@ -9,6 +9,6 @@ export default class TagsQuery implements GraphQLFieldConfig<any, any, any> {
   description: "모든 태그의 id와 name을 반환합니다.";
 
   resolve = async (src, args, context) => {
-    return await PostService.getAllTags();
+    return await TagService.getAllTags();
   };
 }
