@@ -8,4 +8,8 @@ export const StyledTag = styled.a`
   padding: 0.4em 0.5em;
   border-width: 1px solid;
   border-radius: 3px;
+  &:hover {
+    cursor: pointer;
+    background-color: #c9742c;
+  }
 `;

@@ -8,7 +8,11 @@ interface Props {
 }
 
 const Tag: FunctionComponent<Props> = ({ label, onClick }) => {
-  return <StyledTag onClick={onClick}>{label}</StyledTag>;
+  return (
+    <StyledTag className="tag" onClick={onClick}>
+      {label}
+    </StyledTag>
+  );
 };
 
 export default Tag;

@@ -1,4 +1,4 @@
-import Tag from ".";
+import Tag from "./";
 
 export default {
   Component: Tag,
