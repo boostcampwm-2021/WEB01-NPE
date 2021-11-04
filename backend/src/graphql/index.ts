@@ -3,6 +3,8 @@ import { GraphQLSchema, GraphQLObjectType, graphql } from "graphql";
 import QuestionMutation from "./mutations/QuestionMutation";
 import QuestionQuery from "./queries/QuestionQuery";
 import QuestionsQuery from "./queries/QuestionsQuery";
+import TagQuery from "./queries/TagQuery";
+import TagsQuery from "./queries/TagsQuery";
 import UserQuery from "./queries/UserQuery";
 
 export default class GraphQLMiddleware {
@@ -29,6 +31,8 @@ export default class GraphQLMiddleware {
       user: new UserQuery(),
       post_question: new QuestionQuery(),
       post_questions: new QuestionsQuery(),
+      tag: new TagQuery(),
+      tags: new TagsQuery(),
     }),
   });
 
