@@ -4,10 +4,12 @@ export const StyledSearchResult = styled.div`
   display: flex;
   width: 900px;
   height: 500px;
+
   .profile-container__profile {
     position: relative;
     top: 30px;
   }
+
   .title-container {
     display: flex;
     align-items: center;
@@ -18,26 +20,26 @@ export const StyledSearchResult = styled.div`
       margin-left: 10px;
     }
   }
+
   .markdown-container {
     min-height: 200px;
   }
+
   .content-container {
     display: flex;
     flex-direction: column;
     .tag-container {
       display: flex;
-      li {
-        list-style: none;
-      }
-      li + li {
-        margin-left: 30px;
+      .tag + .tag {
+        margin-left: 10px;
       }
     }
   }
   .views-comment-container {
+    margin-top: 20px;
     display: flex;
-    div {
-      display: flex;
+    div + div {
+      margin-left: 10px;
     }
   }
 `;

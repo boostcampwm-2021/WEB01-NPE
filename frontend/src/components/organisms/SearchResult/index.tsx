@@ -1,27 +1,26 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, MouseEventHandler } from "react";
 import { StyledSearchResult } from "./styled";
-import TitleText from "../../atoms/TitleText";
-import ProfileSummary from "../../molecules/ProfileSummary";
-import Indicator from "../../atoms/Indicator";
-import SideTag from "../../atoms/SideTag";
-import Image from "../../atoms/Image";
 
-interface tagData {
-  text: string;
-  onDelete: () => void;
+import { TitleText, Indicator, Tag, IconWithNumber } from "../../atoms";
+import { ProfileSummary } from "../../molecules";
+interface tag {
+  label: string;
+  onClick: MouseEventHandler;
 }
 interface Props {
   title: string;
   markdown: string;
-  tagDatas: Array<tagData>;
+  tags: Array<tag>;
   views: number;
+  comments: number;
 }
 
 const SearchResult: FunctionComponent<Props> = ({
   title,
   markdown,
-  tagDatas,
+  tags,
   views,
+  comments,
 }) => {
   return (
     <StyledSearchResult>
@@ -43,28 +42,16 @@ const SearchResult: FunctionComponent<Props> = ({
         </div>
         <div className="markdown-container">{markdown}</div>
         <div className="tag-container">
-          {tagDatas.map((tagData) => {
-            return <SideTag text={tagData.text} onDelete={tagData.onDelete} />;
+          {tags.map((tag, index) => {
+            return <Tag label={tag.label} onClick={tag.onClick} key={index} />;
           })}
         </div>
         <div className="views-comment-container">
           <div className="views-container">
-            <Image
-              src={"/views.png"}
-              width={30}
-              height={30}
-              alt="views image"
-            />
-            <p>{views}</p>
+            <IconWithNumber message="views" value={views} />
           </div>
           <div className="comment-container">
-            <Image
-              src={"/views.png"}
-              width={30}
-              height={30}
-              alt="views image"
-            />
-            <p>32</p>
+            <IconWithNumber message="comments" value={comments} />
           </div>
         </div>
       </div>
