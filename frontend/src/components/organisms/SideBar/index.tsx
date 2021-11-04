@@ -9,7 +9,16 @@ interface Props {
   setSelectedTags: (value: string[]) => void;
 }
 
-const tagList = ["react.js", "javascript", "react-router-dom"];
+const tagList = [
+  "react.js",
+  "javascript",
+  "react-router-dom",
+  "java",
+  "vue.js",
+  "angular.js",
+  "python",
+  "C++",
+];
 
 const SideBar: FunctionComponent<Props> = ({
   selectedTags,

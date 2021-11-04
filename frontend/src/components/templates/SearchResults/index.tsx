@@ -25,6 +25,26 @@ const SearchResults: FunctionComponent = () => {
       views: 32,
       comments: 150,
     },
+    {
+      title: "이것은 제목3",
+      markdown: "마크다운3",
+      tags: [
+        { label: "javascript", onClick: () => {} },
+        { label: "react", onClick: () => {} },
+      ],
+      views: 32,
+      comments: 150,
+    },
+    {
+      title: "이것은 제목4",
+      markdown: "마크다운4",
+      tags: [
+        { label: "javascript", onClick: () => {} },
+        { label: "react", onClick: () => {} },
+      ],
+      views: 32,
+      comments: 150,
+    },
   ];
 
   return (

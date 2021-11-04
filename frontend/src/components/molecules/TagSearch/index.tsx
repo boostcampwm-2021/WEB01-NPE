@@ -39,7 +39,14 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
         onInput={onInput}
         ref={inputTag}
       />
-      <Styled.Button onClick={() => onSubmit(inputTag.current.value)}>추가</Styled.Button>
+      <Styled.Button
+        onClick={() => {
+          onSubmit(inputTag.current.value);
+          inputTag.current.value = "";
+        }}
+      >
+        추가
+      </Styled.Button>
       {candidateTags.length !== 0 && (
         <Styled.TagList>{candidateTags.map(getItem)}</Styled.TagList>
       )}

@@ -10,7 +10,7 @@ export const Container = styled.div`
 export const Input = styled.input`
   box-sizing: border-box;
   height: 35px;
-  width: 130px;
+  width: 150px;
   padding: 5px;
   border-radius: 5px 0 0 5px;
   border: 1px solid gray;
@@ -32,6 +32,7 @@ export const Button = styled.button`
 export const TagList = styled.ul`
   position: absolute;
   top: 25px;
+  z-index: 10;
   list-style: none;
   display: flex;
   flex-direction: column;

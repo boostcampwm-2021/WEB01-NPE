@@ -2,9 +2,7 @@ import styled from "styled-components";
 
 export const StyledSearchResult = styled.div`
   display: flex;
-  width: 900px;
-  height: 500px;
-
+  min-width: 500px;
   .profile-container__profile {
     position: relative;
     top: 30px;
