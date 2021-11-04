@@ -8,20 +8,22 @@ const SearchResults: FunctionComponent = () => {
     {
       title: "이것은 제목",
       markdown: "마크다운",
-      tagDatas: [
-        { text: "react", onDelete: () => {} },
-        { text: "react", onDelete: () => {} },
+      tags: [
+        { label: "react", onClick: () => {} },
+        { label: "react", onClick: () => {} },
       ],
       views: 32,
+      comments: 120,
     },
     {
       title: "이것은 제목2",
       markdown: "마크다운2",
-      tagDatas: [
-        { text: "javascript", onDelete: () => {} },
-        { text: "react", onDelete: () => {} },
+      tags: [
+        { label: "javascript", onClick: () => {} },
+        { label: "react", onClick: () => {} },
       ],
       views: 32,
+      comments: 150,
     },
   ];
 
@@ -32,8 +34,9 @@ const SearchResults: FunctionComponent = () => {
           <SearchResult
             title={example.title}
             markdown={example.markdown}
-            tagDatas={example.tagDatas}
+            tags={example.tags}
             views={example.views}
+            comments={example.comments}
             key={idx}
           ></SearchResult>
         );
