@@ -33,4 +33,8 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
           script: |
-            cd /root/deploy && npm i && npm run build-storybook && npm run storybook
+            lsof -ti:6006 | xargs kill
+            cd /root/deploy
+            npm i
+            npm run build-storybook
+            npm run storybook &
