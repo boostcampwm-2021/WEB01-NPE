@@ -1,13 +1,11 @@
 import styled from "styled-components";
 
-
-
 export const Container = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 5px;
-`
+`;
 
 export const Input = styled.input`
   box-sizing: border-box;
@@ -28,7 +26,7 @@ export const Button = styled.button`
   color: white;
   font-weight: 600;
   border: none;
-
+  cursor: pointer;
 `;
 
 export const TagList = styled.ul`
@@ -40,8 +38,8 @@ export const TagList = styled.ul`
   justify-content: center;
   align-items: center;
   padding: 10px 10px 0px 10px;
-  background: #FCFCFC;
-  border: 1px solid #D7D7D7;
+  background: #fcfcfc;
+  border: 1px solid #d7d7d7;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
@@ -51,7 +49,7 @@ export const Tag = styled.li`
   cursor: pointer;
   margin-bottom: 5px;
   padding: 5px;
-  &:hover{
+  &:hover {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
   }
 `;
