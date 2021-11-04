@@ -4,7 +4,6 @@ import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
 import userImg from "./user.png";
 import questionImg from "./question.png";
-import logoutImg from "./logout.png";
 
 interface Props {
   userName?: string;
