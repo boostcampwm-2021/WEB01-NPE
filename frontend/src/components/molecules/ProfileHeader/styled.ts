@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Anchor = styled.a`
+export const ProfileDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
