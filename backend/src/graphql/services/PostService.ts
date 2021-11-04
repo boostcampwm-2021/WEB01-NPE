@@ -25,12 +25,11 @@ export default class PostService {
 
     const builder = PostQuestion.createQueryBuilder()
       .where(whereObj)
-      .orderBy("createdAt", "DESC")
       .skip(skip ?? 0)
-      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT);
+      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
+      .orderBy("id", "DESC");
 
     const dataArr = await builder.getMany();
-    console.log(dataArr);
 
     let questions = [];
     if (tagIDs) {
