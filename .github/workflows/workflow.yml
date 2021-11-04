@@ -26,13 +26,9 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
 
       - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
+          command: fuser -k -n tcp 6006 && cd deploy && npm i && npm run build-storybook && npm run storybook &
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
-          port: ${{ secrets.REMOTE_PORT }}
-          script: |
-            fuser -k -n tcp 6006
-            cd deploy
-            npm i && npm run build-storybook && npm run storybook &
