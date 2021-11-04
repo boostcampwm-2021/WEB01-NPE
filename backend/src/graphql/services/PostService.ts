@@ -1,6 +1,8 @@
-import { FindOperator, Like } from "typeorm";
+import { createQueryBuilder, FindOperator, Like } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
+import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
+import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
 
 export default class PostService {
@@ -9,7 +11,7 @@ export default class PostService {
     const { author, tagIDs, skip, take } = args;
     const { title, desc, realtime_share } = args;
 
-    const whereObj: Record<string, number | FindOperator<string>> = {};
+    const whereObj: Record<string, unknown> = {};
 
     if (realtime_share) whereObj.realtimeShare = realtime_share;
     if (title) whereObj.title = Like(`%${title}%`);
@@ -21,15 +23,33 @@ export default class PostService {
       else return [];
     }
 
-    const builder = PostQuestion.createQueryBuilder("Question")
+    const builder = PostQuestion.createQueryBuilder()
       .where(whereObj)
+      .orderBy("createdAt", "DESC")
       .skip(skip ?? 0)
-      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
-      .orderBy("created_at", "DESC");
+      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT);
 
-    const data = await builder.getMany();
+    const dataArr = await builder.getMany();
+    console.log(dataArr);
 
-    return data;
+    let questions = [];
+    if (tagIDs) {
+      for (const data of dataArr) {
+        const data2 = await createQueryBuilder()
+          .relation(PostQuestion, "postQuestionHasTags")
+          .of(data)
+          .loadMany();
+
+        const data3 = data2.map((obj) => obj.tagId);
+
+        if (tagIDs.every((tagID) => data3.includes(tagID)))
+          questions.push(data);
+      }
+    } else {
+      questions = dataArr;
+    }
+
+    return questions;
   }
 
   public static async findAllAnswerByArgs(args): Promise<PostAnswer[]> {
