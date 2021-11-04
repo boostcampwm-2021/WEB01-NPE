@@ -1,4 +1,4 @@
-name: Node CI
+name: Main 브랜치 배포 자동화
 
 on:
   push:
@@ -21,13 +21,23 @@ jobs:
         run: cd backend && npm install
       - name: Run Frontend build task
         run: cd frontend && npm run build
+      - name: Copy folder content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./frontend
+          remote: /root/deploy
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.PASSWORD }}
+
       - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "-rltgoDzvO --delete"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          PORT: ${{ secrets.REMOTE_PORT }}
-          TARGET: ${{ secrets.REMOTE_TARGET }}
-          EXCLUDE: "backend/node_modules/, frontend/node_modules/, frontend/.next, frontend/.storybook"
+        uses: appleboy/ssh-action@master
+          with:
+            host: ${{ secrets.REMOTE_HOST }}
+            username: ${{ secrets.REMOTE_USER }}
+            password: ${{ secrets.PASSWORD }}
+            port: ${{ secrets.REMOTE_PORT }}
+            script: |
+              cd /root/deploy
+              ls
+              cd frontend && npm i && start-storybook -p 80
