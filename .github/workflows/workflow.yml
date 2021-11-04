@@ -35,4 +35,4 @@ jobs:
           script: |
             cd /root/deploy
             ls
-            cd frontend && npm i && start-storybook -p 80
+            cd frontend && npm i && npm run build-storybook && npm run storybook
