@@ -12,16 +12,20 @@ export default new GraphQLInputObjectType({
   fields: () => ({
     title: {
       type: GraphQLString,
+      description: "제목",
     },
     desc: {
       type: GraphQLString,
+      description: "내용",
     },
     realtime_share: {
       type: GraphQLBoolean,
+      description: "실시간 공유 여부",
     },
     score: {
       type: GraphQLInt,
       defaultValue: 0,
+      description: "채택시 지급할 점수",
     },
   }),
 });
