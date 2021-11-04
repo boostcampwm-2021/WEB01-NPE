@@ -32,6 +32,7 @@ jobs:
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
+          script_stop: true
           script: |
             lsof -ti:6006 | xargs kill
             cd /root/deploy
