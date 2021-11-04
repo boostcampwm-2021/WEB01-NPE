@@ -6,7 +6,7 @@ export default class TagsQuery implements GraphQLFieldConfig<any, any, any> {
 
   args = {};
 
-  description: "모든 태그의 id와 name을 반환합니다.";
+  description: "모든 태그의 id와 name을 반환";
 
   resolve = async (src, args, context) => {
     return await TagService.getAllTags();
