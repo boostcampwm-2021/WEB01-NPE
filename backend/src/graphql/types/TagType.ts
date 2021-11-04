@@ -6,9 +6,11 @@ export default new GraphQLObjectType({
   fields: () => ({
     id: {
       type: GraphQLInt,
+      description: "태그의 고유 ID",
     },
     name: {
       type: GraphQLString,
+      description: "태그의 이름",
     },
   }),
 });

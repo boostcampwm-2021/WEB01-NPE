@@ -73,4 +73,16 @@ export default class PostService {
 
     return newQuestion;
   }
+
+  public static async getAllTagIdsByQuestionId(id: number): Promise<number[]> {
+    const question = await PostQuestion.find({ id: id });
+    const tagRelations = await createQueryBuilder()
+      .relation(PostQuestion, "postQuestionHasTags")
+      .of(question)
+      .loadMany();
+
+    const tagIds = tagRelations.map((obj) => obj.tagId);
+
+    return tagIds;
+  }
 }

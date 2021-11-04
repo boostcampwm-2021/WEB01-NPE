@@ -9,6 +9,12 @@ export default class TagService {
     return Tag.findOne({ id });
   }
 
+  public static async findTagByIds(ids: number[]): Promise<Tag[]> {
+    return await Tag.find({
+      where: ids.map((id) => ({ id })),
+    });
+  }
+
   public static async findTagByName(name: string): Promise<Tag> {
     return Tag.findOne({ name });
   }
