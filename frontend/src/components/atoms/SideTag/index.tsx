@@ -6,7 +6,7 @@ interface Props {
   tagBgColor?: string;
   textColor?: string;
   deleteBgColor?: string;
-  onDelete: VoidFunction;
+  onDelete: (value: string) => void;
 }
 
 const SideTag: FunctionComponent<Props> = ({
@@ -24,7 +24,7 @@ const SideTag: FunctionComponent<Props> = ({
       <Styled.TagText>{text}</Styled.TagText>
       <Styled.DeleteButton
         bgColor={deleteBgColor || "#fc7047"}
-        onClick={onDelete}
+        onClick={() => onDelete(text)}
       >
         🗑
       </Styled.DeleteButton>

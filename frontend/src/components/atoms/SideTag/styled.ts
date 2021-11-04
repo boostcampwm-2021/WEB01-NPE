@@ -17,10 +17,10 @@ export const TagContainer = styled.li<TagProps>`
   color: ${(props) => props.textColor};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
-`;
+`; 
 
 export const TagText = styled.div`
-  padding: 10px 0px 10px 20px;
+  padding: 5px 0px 8px 15px;
 `;
 
 export const DeleteButton = styled.button<DeleteButtonProps>`
@@ -34,4 +34,3 @@ export const DeleteButton = styled.button<DeleteButtonProps>`
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
 `;
-
