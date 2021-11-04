@@ -25,37 +25,10 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
 
-      - name: Kill existing Process
+      - name: Excute deploy script
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: fuser -k -n tcp 6006
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          password: ${{ secrets.REMOTE_PASSWORD }}
-          port: ${{ secrets.REMOTE_PORT }}
-
-      - name: Install Dependencies
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: cd deploy && npm i
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          password: ${{ secrets.REMOTE_PASSWORD }}
-          port: ${{ secrets.REMOTE_PORT }}
-
-      - name: build storybook
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: cd deploy && npm run build-storybook
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          password: ${{ secrets.REMOTE_PASSWORD }}
-          port: ${{ secrets.REMOTE_PORT }}
-
-      - name: start storybook
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: cd deploy && nohup npm run storybook &
+          command: nohup ./deploy.sh &
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
