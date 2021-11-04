@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  Deploy_temp_storybook:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,3 +32,4 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
+          port: ${{ secrets.REMOTE_PORT }}
