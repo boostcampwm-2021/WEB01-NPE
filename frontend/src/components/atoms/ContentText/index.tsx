@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import React, { FunctionComponent } from "react";
 import { StyledText } from "./styled";
 
 interface textProps {
@@ -6,7 +6,7 @@ interface textProps {
   color?: string;
 }
 
-const contentText: NextPage<textProps> = ({ text, color }) => {
+const contentText: FunctionComponent<textProps> = ({ text, color }) => {
   return <StyledText color={color}>{text}</StyledText>;
 };
 

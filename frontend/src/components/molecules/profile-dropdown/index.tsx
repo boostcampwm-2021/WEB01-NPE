@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { StyledDropdown, StyledLine } from "./styled";
 
 import Button from "../../atoms/Button";

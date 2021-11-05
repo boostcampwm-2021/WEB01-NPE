@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import React, { FunctionComponent } from "react";
 import Image from "next/image";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
   alt?: string;
 }
 
-const image: NextPage<Props> = ({ src, width, height, alt }) => {
+const image: FunctionComponent<Props> = ({ src, width, height, alt }) => {
   return (
     <Image
       loader={() => src}

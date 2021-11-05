@@ -1,5 +1,5 @@
 import { ChartData } from "chart.js";
-import React from "react";
+import React, { FunctionComponent } from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
 import { StyledChart } from "./styled";
 
@@ -8,7 +8,7 @@ interface ChartProps {
   data: ChartData<"doughnut"> & ChartData<"bar">;
 }
 
-const Chart: React.FC<ChartProps> = ({ type, data }) => {
+const Chart: FunctionComponent<ChartProps> = ({ type, data }) => {
   if (type === "DOUGHNUT")
     return (
       <StyledChart>

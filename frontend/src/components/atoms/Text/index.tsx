@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import React, { FunctionComponent } from "react";
 import { StyledText } from "./styled";
 
 interface textProps {
@@ -9,7 +9,7 @@ interface textProps {
   ellipsis?: boolean;
 }
 
-const Text: NextPage<textProps> = ({
+const Text: FunctionComponent<textProps> = ({
   text,
   color,
   ellipsis,

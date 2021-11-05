@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { FunctionComponent, MouseEventHandler } from "react";
+import React, { FunctionComponent, MouseEventHandler } from "react";
 import { StyledTag } from "./styled";
 
 interface Props {
