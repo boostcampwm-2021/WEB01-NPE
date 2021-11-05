@@ -1,6 +1,5 @@
 html,
-body,
-button {
+body {
   padding: 0;
   margin: 0;
   font-family: "Noto Sans KR", sans-serif;
@@ -11,6 +10,14 @@ a {
   text-decoration: none;
 }
 
+li {
+  list-style: none;
+}
+
 * {
+  box-sizing: border-box;
+}
+
+*:hover {
   box-sizing: border-box;
 }
