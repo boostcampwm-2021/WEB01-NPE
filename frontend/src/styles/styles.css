@@ -1,0 +1,20 @@
+:root {
+  --orange-primary: #f48024;
+  --white-primary: #fff;
+  --black-primary: #000;
+  --green-primary: #6cc16f;
+  --red-primary: #e26a61;
+  --grey-primary: #808080;
+
+  --black-30: rgba(0, 0, 0, 0.3);
+  --black-10: rgba(0, 0, 0, 0.1);
+
+  --green-tag: #94d3cc;
+  --orange-tag: #fc7047;
+
+  --green-switch: #66bb6a;
+  --white-switch: #ccc;
+
+  --orange-tag2: #f6801e;
+  --orange-tag2-hover: #c9742c;
+}
