@@ -12,7 +12,7 @@ const Indicator: FunctionComponent<Props> = ({ isOnline, width, height }) => {
     return (
       <StyledIndicator
         title="현재 라이브 답변을 대기중에 있습니다."
-        bgColor="#6cc16f"
+        bgColor="var(--green-primary)"
         width={width || "16px"}
         height={height || "16px"}
       />
@@ -21,7 +21,7 @@ const Indicator: FunctionComponent<Props> = ({ isOnline, width, height }) => {
     return (
       <StyledIndicator
         title="현재 질문자가 오프라인 상태입니다."
-        bgColor="#e26a61"
+        bgColor="var(--red-primary)"
         width={width || "16px"}
         height={height || "16px"}
       />

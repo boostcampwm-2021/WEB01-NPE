@@ -17,8 +17,8 @@ export const Default = () => {
     <Button
       image={userImg}
       text={text}
-      bgColor="#F48024"
-      textColor="white"
+      bgColor="var(--orange-primary)"
+      textColor="var(--white-primary)"
       onClick={onClick}
     />
   );
@@ -34,8 +34,8 @@ export const Logout = () => {
     <Button
       image={logoutImg}
       text={text}
-      bgColor="#fff"
-      textColor="black"
+      bgColor="var(--white-primary)"
+      textColor="var(--black-primary)"
       onClick={onClick}
     />
   );
@@ -45,8 +45,8 @@ export const OnlyTextButton = () => {
   return (
     <Button
       text="로그인"
-      bgColor="#F48024"
-      textColor="white"
+      bgColor="var(--orange-primary)"
+      textColor="var(--white-primary)"
       onClick={() => {}}
     />
   );
@@ -58,8 +58,8 @@ export const LongButton = () => {
   return (
     <Button
       text={text}
-      bgColor="#fff"
-      textColor="black"
+      bgColor="var(--white-primary)"
+      textColor="var(--black-primary)"
       onClick={() => {}}
       width="200px"
     />

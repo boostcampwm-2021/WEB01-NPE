@@ -8,7 +8,7 @@ interface textStyleProps {
 }
 
 export const StyledText = styled.span<textStyleProps>`
-  color: ${(props) => props.color || "black"};
+  color: ${(props) => props.color || "var(--black-primary)"};
   font-size: ${(props) => props.fontSize || "16"}px;
   font-weight: ${(props) => props.fontWeight || "normal"};
   overflow: ${(props) => (props.ellipsis ? "hidden" : "visible")};

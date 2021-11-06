@@ -7,7 +7,9 @@ interface textProps {
 }
 
 const TitleText: FunctionComponent<textProps> = ({ text, color }) => {
-  return <StyledText color={color || "black"}>{text}</StyledText>;
+  return (
+    <StyledText color={color || "var(--black-primary)"}>{text}</StyledText>
+  );
 };
 
 export default TitleText;

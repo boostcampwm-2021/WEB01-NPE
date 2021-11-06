@@ -18,12 +18,12 @@ const SideTag: FunctionComponent<Props> = ({
 }) => {
   return (
     <Styled.TagContainer
-      bgColor={tagBgColor || "#94D3CC"}
-      textColor={textColor || "white"}
+      bgColor={tagBgColor || "var(--green-tag)"}
+      textColor={textColor || "var(--white-primary)"}
     >
       <Styled.TagText>{text}</Styled.TagText>
       <Styled.DeleteButton
-        bgColor={deleteBgColor || "#fc7047"}
+        bgColor={deleteBgColor || "var(--orange-tag)"}
         onClick={() => onDelete(text)}
       >
         🗑

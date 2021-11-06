@@ -5,5 +5,5 @@ interface textStyleProps {
 }
 
 export const StyledText = styled.h2<textStyleProps>`
-  color: ${(props) => props.color || "black"};
+  color: ${(props) => props.color || "var(--black-primary)"};
 `;

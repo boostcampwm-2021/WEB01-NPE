@@ -27,7 +27,7 @@ const Slider = styled.div<SliderProps>`
   top: 0;
   transition: 0.4s;
   &:before {
-    background-color: #fff;
+    background-color: var(--white-primary);
     bottom: 4px;
     content: "";
     height: 26px;

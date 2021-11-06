@@ -12,8 +12,8 @@ export const Default = () => {
     <Switch
       isChecked={check}
       setIsChecked={setCheck}
-      offColor="#66bb6a"
-      onColor="#ccc"
+      offColor="var(--green-switch)"
+      onColor="#var(--white-switch)"
     />
   );
 };
