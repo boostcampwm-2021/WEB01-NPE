@@ -1,4 +1,4 @@
-import { createQueryBuilder, FindOperator, Like } from "typeorm";
+import { createQueryBuilder, In, Like, SelectQueryBuilder } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
@@ -23,32 +23,46 @@ export default class PostService {
       else return [];
     }
 
+    function subQueryBuilderFromTagId(
+      tagId: number,
+      qb: SelectQueryBuilder<unknown>
+    ) {
+      return qb
+        .subQuery()
+        .from(Tag, "t")
+        .select("t_q.post_question_id", "qid")
+        .where(`t.id=${tagId}`)
+        .leftJoin(PostQuestionHasTag, "t_q", "t.id=t_q.tag_id");
+    }
+
+    if (tagIDs.length) {
+      let tagQueryBuilder = createQueryBuilder()
+        .select("t0.qid")
+        .from((qb) => subQueryBuilderFromTagId(tagIDs[0], qb), "t0");
+
+      for (let i = 1; i < tagIDs.length; i++) {
+        tagQueryBuilder.innerJoin(
+          (qb) => subQueryBuilderFromTagId(tagIDs[i], qb),
+          // alias
+          `t${i}`,
+          // ON
+          `t0.qid=t${i}.qid`
+        );
+      }
+
+      const qidArray = (await tagQueryBuilder.getRawMany()).map(
+        (qid) => qid.qid
+      );
+      whereObj.id = In(qidArray);
+    }
+
     const builder = PostQuestion.createQueryBuilder()
       .where(whereObj)
       .skip(skip ?? 0)
       .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
       .orderBy("id", "DESC");
 
-    const dataArr = await builder.getMany();
-
-    let questions = [];
-    if (tagIDs) {
-      for (const data of dataArr) {
-        const data2 = await createQueryBuilder()
-          .relation(PostQuestion, "postQuestionHasTags")
-          .of(data)
-          .loadMany();
-
-        const data3 = data2.map((obj) => obj.tagId);
-
-        if (tagIDs.every((tagID) => data3.includes(tagID)))
-          questions.push(data);
-      }
-    } else {
-      questions = dataArr;
-    }
-
-    return questions;
+    return await builder.getMany();
   }
 
   public static async findAllAnswerByArgs(args): Promise<PostAnswer[]> {
