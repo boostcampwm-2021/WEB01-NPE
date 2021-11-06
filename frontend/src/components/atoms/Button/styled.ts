@@ -22,9 +22,6 @@ export const StyledButton = styled.button<ButtonProps>`
   color: ${(props) => props.textColor};
   transition: box-shadow 0.5s ease;
   cursor: pointer;
-  &:hover {
-    box-shadow: 0 5px 15px var(--black-30);
-  }
 
   img {
     margin-right: 8px;
