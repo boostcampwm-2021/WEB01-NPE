@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import express from "express";
 import { Request, Response } from "express";
 import GraphQLMiddleware from "./graphql";
@@ -7,10 +8,12 @@ const app = express();
 // DB 커넥션 생성
 createConnection();
 
-app.use("/graphql", GraphQLMiddleware.get());
+GraphQLMiddleware.get().then((middleware) => {
+  app.use("/graphql", middleware);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hi!");
+  app.get("/", (req: Request, res: Response) => {
+    res.send("hi!");
+  });
+
+  app.listen(3000, () => console.log("server is ON at 3000"));
 });
-
-app.listen(3000, () => console.log("server is ON at 3000"));

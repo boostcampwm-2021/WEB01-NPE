@@ -1,22 +1,28 @@
-import { Request, Response } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { GraphQLSchema, GraphQLObjectType, graphql } from "graphql";
+import { buildSchema } from "type-graphql";
 import QuestionMutation from "./mutations/QuestionMutation";
 import QuestionQuery from "./queries/QuestionQuery";
 import QuestionsQuery from "./queries/QuestionsQuery";
 import TagQuery from "./queries/TagQuery";
 import TagsQuery from "./queries/TagsQuery";
 import UserQuery from "./queries/UserQuery";
+import UserResolver from "./resolvers/UserResolver";
 
 export default class GraphQLMiddleware {
   private static schema: GraphQLSchema;
 
-  public static get() {
+  public static async get() {
     if (!this.schema) {
-      this.schema = new GraphQLSchema({
-        query: this.RootQuery,
-        mutation: this.RootMutation,
+      // this.schema = new GraphQLSchema({
+      //   query: this.RootQuery,
+      //   mutation: this.RootMutation,
+      // });
+      const schema = await buildSchema({
+        resolvers: [UserResolver],
       });
+
+      this.schema = schema;
     }
 
     return graphqlHTTP({
