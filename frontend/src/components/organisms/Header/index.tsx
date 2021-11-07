@@ -21,7 +21,7 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
         <Atoms.LogoFull />
       </Styled.LogoAnchor>
       <Styled.SearchDiv>
-        <Atoms.SearchInput placeholder={"Search..."} width={"643px"} />
+        <Atoms.Input text={"Search..."} size={"medium"} />
       </Styled.SearchDiv>
       <Styled.ButtonDiv>
         {userName ? (
