@@ -71,6 +71,14 @@ export default class PostService {
     return data;
   }
 
+  public static async findAllAnswerByQuestionId(
+    id: number
+  ): Promise<PostAnswer[]> {
+    const data = await PostAnswer.find({ postQuestionId: id });
+
+    return data;
+  }
+
   public static async findOneQuestionById(id): Promise<PostQuestion> {
     const question = await PostQuestion.findOne({ id: id });
 

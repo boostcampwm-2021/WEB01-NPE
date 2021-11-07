@@ -58,17 +58,16 @@ export class PostQuestion extends BaseEntity {
   @Column("int", { name: "thumbup_count", default: () => "'0'" })
   thumbupCount: number;
 
-  @Field(() => Float, { description: "(미구현)글 채택시 지급할 점수" })
+  @Field(() => Float, {
+    description: "(미구현)글 채택시 지급할 점수",
+    nullable: true,
+  })
   @Column("float", { name: "score", nullable: true, precision: 12 })
   score: number | null;
 
-  @Field(() => [PostAnswer], {
-    description: "해당 질문글에 달린 답변글",
-  })
   @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.postQuestion)
   postAnswers: PostAnswer[];
 
-  @Field(() => User, { description: "작성자 User Object" })
   @ManyToOne(() => User, (user) => user.postQuestions, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",
@@ -76,10 +75,6 @@ export class PostQuestion extends BaseEntity {
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])
   user: User;
 
-  @Field(() => [Tag], {
-    description: "해당 글에 속한 태그들",
-    nullable: "items",
-  })
   @OneToMany(
     () => PostQuestionHasTag,
     (postQuestionHasTag) => postQuestionHasTag.postQuestion

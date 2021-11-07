@@ -7,6 +7,7 @@ import QuestionsQuery from "./queries/QuestionsQuery";
 import TagQuery from "./queries/TagQuery";
 import TagsQuery from "./queries/TagsQuery";
 import UserQuery from "./queries/UserQuery";
+import QuestionResolver from "./resolvers/QuestionResolver";
 import UserResolver from "./resolvers/UserResolver";
 
 export default class GraphQLMiddleware {
@@ -19,7 +20,7 @@ export default class GraphQLMiddleware {
       //   mutation: this.RootMutation,
       // });
       const schema = await buildSchema({
-        resolvers: [UserResolver],
+        resolvers: [UserResolver, QuestionResolver],
       });
 
       this.schema = schema;
