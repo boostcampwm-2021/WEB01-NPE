@@ -2,7 +2,7 @@ import { MaxLength, MinLength } from "class-validator";
 import { Field, InputType, Int } from "type-graphql";
 
 @InputType({ description: "질문글 검색시 사용되는 인자들" })
-export default class QuestionSearchInput {
+export default class SearchQuestionInput {
   @Field({ nullable: true, description: "작성자 Username" })
   @MaxLength(40)
   author: string;

@@ -1,9 +1,18 @@
-import { Arg, FieldResolver, Int, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  FieldResolver,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
-import QuestionSearchInput from "../inputTypes/QuestionSearchInput";
+import AddQuestionInput from "../inputTypes/AddQuestionInput";
+import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 import PostService from "../services/PostService";
 import TagService from "../services/TagService";
 import UserService from "../services/UserService";
@@ -55,10 +64,21 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async searchQuestions(
-    @Arg("searchQuery") searchQuery: QuestionSearchInput
+    @Arg("searchQuery") searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const questions = PostService.findAllQuestionByArgs(searchQuery);
+    const questions = await PostService.findAllQuestionByArgs(searchQuery);
 
     return questions;
+  }
+
+  @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
+  async addNewQuestion(
+    @Arg("data") questionData: AddQuestionInput
+  ): Promise<PostQuestion> {
+    const newQuestion = await PostService.addNewQuestion(questionData, {
+      id: 1,
+    });
+
+    return newQuestion;
   }
 }

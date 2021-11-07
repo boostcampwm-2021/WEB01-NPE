@@ -4,6 +4,7 @@ import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
+import AddQuestionInput from "../inputTypes/AddQuestionInput";
 
 export default class PostService {
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
@@ -85,13 +86,25 @@ export default class PostService {
     return question;
   }
 
-  public static async addNewQuestion(args, user): Promise<PostQuestion> {
+  public static async addNewQuestion(
+    args: AddQuestionInput,
+    user
+  ): Promise<PostQuestion> {
     const newQuestion = new PostQuestion();
     newQuestion.userId = user.id;
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
-    newQuestion.realtimeShare = args.realtime_share;
+    newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
     await newQuestion.save();
+
+    if (args.tagIds && args.tagIds.length > 0) {
+      for (const tagId of args.tagIds) {
+        const postQuestionHasTag = new PostQuestionHasTag();
+        postQuestionHasTag.postQuestion = newQuestion;
+        postQuestionHasTag.tagId = tagId;
+        await postQuestionHasTag.save();
+      }
+    }
 
     return newQuestion;
   }
