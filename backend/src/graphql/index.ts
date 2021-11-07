@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { GraphQLSchema, GraphQLObjectType, graphql } from "graphql";
 import QuestionMutation from "./mutations/QuestionMutation";

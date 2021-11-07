@@ -35,7 +35,7 @@ export default class PostService {
         .leftJoin(PostQuestionHasTag, "t_q", "t.id=t_q.tag_id");
     }
 
-    if (tagIDs.length) {
+    if (tagIDs && tagIDs.length) {
       let tagQueryBuilder = createQueryBuilder()
         .select("t0.qid")
         .from((qb) => subQueryBuilderFromTagId(tagIDs[0], qb), "t0");
