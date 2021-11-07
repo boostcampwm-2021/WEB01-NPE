@@ -15,5 +15,5 @@ export const Offline = () => {
 };
 
 export const BigButton = () => {
-  return <Indicator isOnline={false} width={"30px"} height={"30px"} />;
+  return <Indicator isOnline={false} />;
 };
