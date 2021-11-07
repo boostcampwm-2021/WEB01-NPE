@@ -36,14 +36,14 @@ export default class UserResolver {
 
   @FieldResolver(() => [PostQuestion], { nullable: "items" })
   async postQuestions(@Root() user: User): Promise<PostQuestion[]> {
-    const questions = PostService.findAllQuestionByArgs(user.id);
+    const questions = PostService.findAllQuestionByUserId(user.id);
 
     return questions;
   }
 
   @FieldResolver(() => [PostAnswer], { nullable: "items" })
   async postAnswers(@Root() user: User): Promise<PostAnswer[]> {
-    const answers = PostService.findAllAnswerByArgs({ userId: user.id });
+    const answers = PostService.findAllAnswerByUserId(user.id);
 
     return answers;
   }

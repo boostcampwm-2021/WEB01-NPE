@@ -53,7 +53,7 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async tags(@Root() question: PostQuestion): Promise<Tag[]> {
-    const tagIds = await PostService.getAllTagIdsByQuestionId(question.id);
+    const tagIds = await TagService.getAllTagIdsByQuestionId(question.id);
     const tags = await TagService.findTagByIds(tagIds);
 
     return tags;

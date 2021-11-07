@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "noImplicitAny": false
+    "noImplicitAny": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
