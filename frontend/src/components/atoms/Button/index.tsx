@@ -2,35 +2,33 @@ import React, { FunctionComponent } from "react";
 import Image from "next/image";
 import * as Styled from "./styled";
 
+type size_literal = "small" | "medium" | "large";
 interface Props {
   image?: string | StaticImageData;
   text: string;
-  bgColor: string;
   textColor: string;
+  size: size_literal;
   onClick: VoidFunction;
-  width?: string;
-  height?: string;
+  bgColor: string;
 }
 const Button: FunctionComponent<Props> = ({
   image,
   text,
-  bgColor,
   textColor,
-  width,
-  height,
+  bgColor,
   onClick,
+  size,
 }) => {
   return (
-    <Styled.StyledButton
-      bgColor={bgColor}
+    <Styled.Button
       textColor={textColor}
-      width={width || "136px"}
-      height={height || "36px"}
       onClick={onClick}
+      size={size}
+      bgColor={bgColor}
     >
       {image && <Image src={image} alt="아이콘" width={24} height={24} />}
-      <Styled.Text textColor={textColor}>{text}</Styled.Text>
-    </Styled.StyledButton>
+      {text}
+    </Styled.Button>
   );
 };
 

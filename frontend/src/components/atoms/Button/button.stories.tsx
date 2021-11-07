@@ -8,7 +8,7 @@ export default {
   component: Button,
 };
 
-export const Default = () => {
+export const SmallButton = () => {
   const [text, setText] = useState("로그인");
   const onClick = () => {
     setText((text) => (text === "로그인" ? "프로필" : "로그인"));
@@ -17,6 +17,7 @@ export const Default = () => {
     <Button
       image={userImg}
       text={text}
+      size="small"
       bgColor="#F48024"
       textColor="white"
       onClick={onClick}
@@ -34,9 +35,34 @@ export const Logout = () => {
     <Button
       image={logoutImg}
       text={text}
+      size="small"
       bgColor="#fff"
       textColor="black"
       onClick={onClick}
+    />
+  );
+};
+
+export const LargeButton = () => {
+  return (
+    <Button
+      text="로그인"
+      size="large"
+      bgColor="#F48024"
+      textColor="white"
+      onClick={() => {}}
+    />
+  );
+};
+
+export const MediumButton = () => {
+  return (
+    <Button
+      text="로그인"
+      size="medium"
+      bgColor="#F48024"
+      textColor="white"
+      onClick={() => {}}
     />
   );
 };
@@ -45,23 +71,10 @@ export const OnlyTextButton = () => {
   return (
     <Button
       text="로그인"
+      size="large"
       bgColor="#F48024"
       textColor="white"
       onClick={() => {}}
-    />
-  );
-};
-
-export const LongButton = () => {
-  const [text, setText] = useState("라이브스트리밍onoff");
-
-  return (
-    <Button
-      text={text}
-      bgColor="#fff"
-      textColor="black"
-      onClick={() => {}}
-      width="200px"
     />
   );
 };
