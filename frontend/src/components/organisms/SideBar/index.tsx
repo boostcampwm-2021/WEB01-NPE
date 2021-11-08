@@ -38,16 +38,11 @@ const SideBar: FunctionComponent<Props> = ({
       <TagSearch tagList={tagList} onSubmit={onSubmit} />
       <Styled.LiveContainer>
         <TitleText text="실시간 답변" />
-        <Switch
-          isChecked={isLive}
-          setIsChecked={setIsLive}
-          offColor="#66bb6a"
-          onColor="#ccc"
-        />
+        <Switch type={"SideBar"} isChecked={isLive} setIsChecked={setIsLive} />
       </Styled.LiveContainer>
       <Styled.UlTags>
         {selectedTags.map((tag) => (
-          <SideTag text={tag} onDelete={onDelete} />
+          <SideTag type={"Default"} text={tag} onDelete={onDelete} />
         ))}
       </Styled.UlTags>
     </Styled.Container>
