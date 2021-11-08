@@ -7,9 +7,9 @@ export default {
 };
 
 export const Default = () => {
-  return (
-    <>
-      <Logo />
-    </>
-  );
+  return <Logo type="Default" />;
+};
+
+export const Short = () => {
+  return <Logo type="Short" />;
 };
