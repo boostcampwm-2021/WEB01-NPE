@@ -81,4 +81,15 @@ export default class QuestionResolver {
 
     return newQuestion;
   }
+
+  @Mutation(() => Boolean, {
+    description: "질문글 삭제 Mutation, 삭제 여부를 Boolean 으로 반환합니다.",
+  })
+  async deleteQuestion(
+    @Arg("questionId", { description: "삭제할 질문글의 ID" }) questionId: number
+  ): Promise<boolean> {
+    const isDeleted = await PostService.deleteQuestion(questionId);
+
+    return isDeleted;
+  }
 }

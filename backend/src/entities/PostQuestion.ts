@@ -64,7 +64,9 @@ export class PostQuestion extends BaseEntity {
   @Column("float", { name: "score", nullable: true, precision: 12 })
   score: number | null;
 
-  @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.postQuestion)
+  @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.postQuestion, {
+    cascade: true,
+  })
   postAnswers: PostAnswer[];
 
   @ManyToOne(() => User, (user) => user.postQuestions, {

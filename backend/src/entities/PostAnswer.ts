@@ -66,7 +66,7 @@ export class PostAnswer extends BaseEntity {
   user: User;
 
   @ManyToOne(() => PostQuestion, (postQuestion) => postQuestion.postAnswers, {
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([

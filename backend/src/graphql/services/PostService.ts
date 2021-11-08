@@ -122,4 +122,11 @@ export default class PostService {
 
     return newQuestion;
   }
+
+  public static async deleteQuestion(questionId: number): Promise<boolean> {
+    const result = await PostQuestion.delete({ id: questionId });
+
+    if (result.affected > 0) return true;
+    else return false;
+  }
 }
