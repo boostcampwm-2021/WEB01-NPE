@@ -16,8 +16,8 @@ const ProfileSummary: FunctionComponent<Props> = ({ src, name, rank }) => {
         <Image src={src} width={48} height={48} />
       </Styled.ImageDiv>
       <Styled.TextDiv>
-        <Text text={name} ellipsis={true} fontSize={10} fontWeight={"bold"} />
-        <Text text={rank} fontSize={10} />
+        <Text message="profileHeader" text={name} />
+        <Text message="profileContent" text={rank} />
       </Styled.TextDiv>
     </Styled.Anchor>
   );

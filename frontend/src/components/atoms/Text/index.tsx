@@ -1,30 +1,24 @@
 import React, { FunctionComponent } from "react";
-import { StyledText } from "./styled";
+import * as Styled from "./styled";
 
-interface textProps {
+interface Props {
+  message: string;
   text: string;
-  color?: string;
-  fontSize?: number;
-  fontWeight?: string;
-  ellipsis?: boolean;
 }
 
-const Text: FunctionComponent<textProps> = ({
-  text,
-  color,
-  ellipsis,
-  fontSize,
-  fontWeight,
-}) => {
+const Text: FunctionComponent<Props> = ({ message, text }) => {
   return (
-    <StyledText
-      color={color}
-      fontSize={fontSize}
-      fontWeight={fontWeight}
-      ellipsis={ellipsis}
-    >
-      {text}
-    </StyledText>
+    <>
+      {message === "profileHeader" && (
+        <Styled.Span ellipsis={true} fontSize={12} fontWeight={"bold"}>
+          {text}
+        </Styled.Span>
+      )}
+
+      {message === "profileContent" && (
+        <Styled.Span fontSize={10}>{text}</Styled.Span>
+      )}
+    </>
   );
 };
 

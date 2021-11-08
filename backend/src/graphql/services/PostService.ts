@@ -1,19 +1,23 @@
-import { createQueryBuilder, FindOperator, Like } from "typeorm";
+import { createQueryBuilder, In, Like, SelectQueryBuilder } from "typeorm";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
+import AddQuestionInput from "../inputTypes/AddQuestionInput";
+import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 
 export default class PostService {
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
-  public static async findAllQuestionByArgs(args): Promise<PostQuestion[]> {
+  public static async findAllQuestionByArgs(
+    args: SearchQuestionInput
+  ): Promise<PostQuestion[]> {
     const { author, tagIDs, skip, take } = args;
-    const { title, desc, realtime_share } = args;
+    const { title, desc, realtimeShare } = args;
 
     const whereObj: Record<string, unknown> = {};
 
-    if (realtime_share) whereObj.realtimeShare = realtime_share;
+    if (realtimeShare) whereObj.realtimeShare = realtimeShare;
     if (title) whereObj.title = Like(`%${title}%`);
     if (desc) whereObj.desc = Like(`%${desc}%`);
 
@@ -23,66 +27,99 @@ export default class PostService {
       else return [];
     }
 
+    function subQueryBuilderFromTagId(
+      tagId: number,
+      qb: SelectQueryBuilder<unknown>
+    ) {
+      return qb
+        .subQuery()
+        .from(Tag, "t")
+        .select("t_q.post_question_id", "qid")
+        .where(`t.id=${tagId}`)
+        .leftJoin(PostQuestionHasTag, "t_q", "t.id=t_q.tag_id");
+    }
+
+    if (tagIDs && tagIDs.length) {
+      let tagQueryBuilder = createQueryBuilder()
+        .select("t0.qid")
+        .from((qb) => subQueryBuilderFromTagId(tagIDs[0], qb), "t0");
+
+      for (let i = 1; i < tagIDs.length; i++) {
+        tagQueryBuilder.innerJoin(
+          (qb) => subQueryBuilderFromTagId(tagIDs[i], qb),
+          // alias
+          `t${i}`,
+          // ON
+          `t0.qid=t${i}.qid`
+        );
+      }
+
+      const qidArray = (await tagQueryBuilder.getRawMany()).map(
+        (qid) => qid.qid
+      );
+      whereObj.id = In(qidArray);
+    }
+
     const builder = PostQuestion.createQueryBuilder()
       .where(whereObj)
       .skip(skip ?? 0)
       .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
       .orderBy("id", "DESC");
 
-    const dataArr = await builder.getMany();
+    return await builder.getMany();
+  }
 
-    let questions = [];
-    if (tagIDs) {
-      for (const data of dataArr) {
-        const data2 = await createQueryBuilder()
-          .relation(PostQuestion, "postQuestionHasTags")
-          .of(data)
-          .loadMany();
-
-        const data3 = data2.map((obj) => obj.tagId);
-
-        if (tagIDs.every((tagID) => data3.includes(tagID)))
-          questions.push(data);
-      }
-    } else {
-      questions = dataArr;
-    }
+  public static async findAllQuestionByUserId(
+    userId: number
+  ): Promise<PostQuestion[]> {
+    const questions = await PostQuestion.find({ userId });
 
     return questions;
   }
 
-  public static async findAllAnswerByArgs(args): Promise<PostAnswer[]> {
-    const data = await PostAnswer.find(args);
+  public static async findAllAnswerByUserId(
+    userId: number
+  ): Promise<PostAnswer[]> {
+    const data = await PostAnswer.find({ userId });
 
     return data;
   }
 
-  public static async findOneQuestionById(id): Promise<PostQuestion> {
+  public static async findAllAnswerByQuestionId(
+    id: number
+  ): Promise<PostAnswer[]> {
+    const data = await PostAnswer.find({ postQuestionId: id });
+
+    return data;
+  }
+
+  public static async findOneQuestionById(id: number): Promise<PostQuestion> {
     const question = await PostQuestion.findOne({ id: id });
 
     return question;
   }
 
-  public static async addNewQuestion(args, user): Promise<PostQuestion> {
+  public static async addNewQuestion(
+    args: AddQuestionInput,
+    // 이후 ctx.user 로 수정
+    user: { id: number }
+  ): Promise<PostQuestion> {
     const newQuestion = new PostQuestion();
     newQuestion.userId = user.id;
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
-    newQuestion.realtimeShare = args.realtime_share;
+    newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
     await newQuestion.save();
 
+    if (args.tagIds && args.tagIds.length > 0) {
+      for (const tagId of args.tagIds) {
+        const postQuestionHasTag = new PostQuestionHasTag();
+        postQuestionHasTag.postQuestion = newQuestion;
+        postQuestionHasTag.tagId = tagId;
+        await postQuestionHasTag.save();
+      }
+    }
+
     return newQuestion;
-  }
-
-  public static async getAllTagIdsByQuestionId(id: number): Promise<number[]> {
-    const question = await PostQuestion.find({ id: id });
-    const tagRelations = await createQueryBuilder()
-      .relation(PostQuestion, "postQuestionHasTags")
-      .of(question)
-      .loadMany();
-
-    const tagIds = tagRelations.map((obj) => obj.tagId);
-
-    return tagIds;
   }
 }
