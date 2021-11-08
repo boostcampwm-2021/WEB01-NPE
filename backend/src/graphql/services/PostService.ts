@@ -4,6 +4,7 @@ import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
+import AnswerInput from "../inputTypes/AnswerInput";
 import QuestionInput from "../inputTypes/QuestionInput";
 import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 
@@ -154,5 +155,25 @@ export default class PostService {
 
     if (result.affected > 0) return true;
     else return false;
+  }
+
+  public static async addNewAnswer(
+    args: AnswerInput, // 이후 ctx.user 로 수정
+    user: { id: number },
+    questionId: number
+  ): Promise<PostAnswer> {
+    const question = await PostQuestion.findOne(
+      { id: questionId },
+      {
+        select: ["id", "userId"],
+      }
+    );
+    const newAnswer = new PostAnswer();
+    newAnswer.postQuestionId = question.id;
+    newAnswer.postQuestionUserId = question.userId;
+    newAnswer.userId = user.id;
+    newAnswer.desc = args.desc;
+
+    return await newAnswer.save();
   }
 }

@@ -3,11 +3,11 @@ import { Field, InputType, Int } from "type-graphql";
 
 @InputType({ description: "질문글 작성/수정시 사용되는 인자들" })
 export default class QuestionInput {
-  @Field({ description: "제목" })
+  @Field({ description: "제목(5자이상 50자이하)" })
   @Length(5, 50)
   title: string;
 
-  @Field({ description: "내용" })
+  @Field({ description: "내용(10자 이상)" })
   @Length(10)
   desc: string;
 

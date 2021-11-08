@@ -1,6 +1,7 @@
 import { graphqlHTTP } from "express-graphql";
 import { GraphQLSchema, GraphQLObjectType, graphql } from "graphql";
 import { buildSchema } from "type-graphql";
+import AnswerResolver from "./resolvers/AnswerResolver";
 import QuestionResolver from "./resolvers/QuestionResolver";
 import TagResolver from "./resolvers/TagResolver";
 import UserResolver from "./resolvers/UserResolver";
@@ -11,7 +12,12 @@ export default class GraphQLMiddleware {
   public static async get() {
     if (!this.schema) {
       const schema = await buildSchema({
-        resolvers: [UserResolver, QuestionResolver, TagResolver],
+        resolvers: [
+          UserResolver,
+          QuestionResolver,
+          TagResolver,
+          AnswerResolver,
+        ],
       });
 
       this.schema = schema;
