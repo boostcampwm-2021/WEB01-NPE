@@ -12,9 +12,23 @@ interface Props {
 
 const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
   const [isDropdown, setIsDropdown] = useState(false);
+  const [isLoginModal, setIsLoginModal] = useState(false);
+
   const onDropdown = () => {
     setIsDropdown((props) => !props);
   };
+  const onLoginModal = () => {
+    document.body.style.overflow = "hidden";
+    setIsLoginModal(true);
+  };
+  const offLoginModal = () => {
+    document.body.style.overflow = "auto";
+    setIsLoginModal(false);
+  };
+  const clickLoginModal = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+  };
+
   return (
     <Styled.HeaderDiv>
       <Styled.LogoAnchor href="">
@@ -31,12 +45,10 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
               text={userName!}
               onClick={onDropdown}
             />
-            {isDropdown ? (
+            {isDropdown && (
               <Styled.DropdownDiv>
                 <Molecules.ProfileDropdown />
               </Styled.DropdownDiv>
-            ) : (
-              <></>
             )}
           </div>
         ) : (
@@ -45,7 +57,7 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
             text={"로그인"}
             bgColor="#F48024"
             textColor="white"
-            onClick={() => {}}
+            onClick={onLoginModal}
           />
         )}
         <Atoms.Button
@@ -56,6 +68,13 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
           onClick={() => {}}
         />
       </Styled.ButtonDiv>
+      {isLoginModal && (
+        <Styled.ModalWrapper onClick={offLoginModal}>
+          <Styled.Modal onClick={clickLoginModal}>
+            <Molecules.LoginModal />
+          </Styled.Modal>
+        </Styled.ModalWrapper>
+      )}
     </Styled.HeaderDiv>
   );
 };
