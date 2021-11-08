@@ -17,7 +17,7 @@ const ProfileSummary: FunctionComponent<Props> = ({ src, name, rank }) => {
       </Styled.ImageDiv>
       <Styled.TextDiv>
         <Text type="Header" text={name} />
-        <Text message="Default" text={rank} />
+        <Text type="Default" text={rank} />
       </Styled.TextDiv>
     </Styled.Anchor>
   );
