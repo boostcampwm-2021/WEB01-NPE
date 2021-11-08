@@ -13,10 +13,10 @@ const ProfileHeader: FunctionComponent<Props> = ({ src, text, onClick }) => {
   return (
     <Styled.ProfileDiv onClick={onClick}>
       <Styled.ImageDiv>
-        <Image src={src} width={24} height={24} />
+        <Image type="Default" src={src} />
       </Styled.ImageDiv>
       <Styled.TextDiv>
-        <Text text={text} ellipsis={true} fontSize={12} fontWeight={"bold"} />
+        <Text type="Header" text={text} />
       </Styled.TextDiv>
     </Styled.ProfileDiv>
   );

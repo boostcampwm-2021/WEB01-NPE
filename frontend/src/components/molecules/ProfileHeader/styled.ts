@@ -8,7 +8,6 @@ export const ProfileDiv = styled.div`
   padding: 0px 8px 0px 8px;
   width: 144px;
   height: 36px;
-
   &:hover {
     cursor: pointer;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -25,7 +24,6 @@ export const ImageDiv = styled.div`
 
 export const TextDiv = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   width: 96px;
   height: 24px;
