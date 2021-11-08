@@ -3,9 +3,9 @@ import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import Github from "./github.png";
 
-const LoginModal: FunctionComponent = () => {
-  const loginButtonClick = () => {};
-
+const LoginModal: FunctionComponent<{ onClick: () => void }> = ({
+  onClick,
+}) => {
   return (
     <Styled.Div>
       <Atoms.Logo message="short" />
@@ -18,7 +18,7 @@ const LoginModal: FunctionComponent = () => {
         image={Github}
         width={"100%"}
         height={"40px"}
-        onClick={loginButtonClick}
+        onClick={onClick}
       />
       <Atoms.Text
         message="profileHeader"
