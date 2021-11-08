@@ -29,6 +29,12 @@ const types: { [key: string]: StyleProps } = {
     width: "136px",
     height: "36px",
   },
+  Github: {
+    bgColor: "#000",
+    textColor: "#fff",
+    width: "100%",
+    height: "36px",
+  },
 };
 const Button: FunctionComponent<Props> = ({ type, image, text, onClick }) => {
   const buttonProps: StyleProps = types[type];

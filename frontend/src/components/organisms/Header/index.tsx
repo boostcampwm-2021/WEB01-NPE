@@ -2,8 +2,6 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
-import userImg from "./user.png";
-import questionImg from "./question.png";
 
 const Header: FunctionComponent = () => {
   const [isDropdown, setIsDropdown] = useState(false);
@@ -54,7 +52,7 @@ const Header: FunctionComponent = () => {
   return (
     <Styled.HeaderDiv>
       <Styled.LogoAnchor href="">
-        <Atoms.Logo message="long" />
+        <Atoms.Logo type="Default" />
       </Styled.LogoAnchor>
       <Styled.SearchDiv>
         <Atoms.Input text={"Search..."} size={"medium"} />
@@ -79,21 +77,9 @@ const Header: FunctionComponent = () => {
             )}
           </div>
         ) : (
-          <Atoms.Button
-            image={userImg}
-            text={"로그인"}
-            bgColor="#F48024"
-            textColor="white"
-            onClick={onLoginButton}
-          />
+          <Atoms.Button type="Header" text="로그인" onClick={onLoginButton} />
         )}
-        <Atoms.Button
-          image={questionImg}
-          text={"질문하기"}
-          bgColor="#F48024"
-          textColor="white"
-          onClick={() => {}}
-        />
+        <Atoms.Button type={"Header"} text={"질문하기"} onClick={() => {}} />
       </Styled.ButtonDiv>
       {isLoginModal && (
         <Styled.ModalWrapper>

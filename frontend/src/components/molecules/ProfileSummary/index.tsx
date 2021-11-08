@@ -13,11 +13,11 @@ const ProfileSummary: FunctionComponent<Props> = ({ src, name, rank }) => {
   return (
     <Styled.Anchor>
       <Styled.ImageDiv>
-        <Image src={src} width={48} height={48} />
+        <Image type="Large" src={src} />
       </Styled.ImageDiv>
       <Styled.TextDiv>
-        <Text message="profileHeader" text={name} />
-        <Text message="profileContent" text={rank} />
+        <Text type="Header" text={name} />
+        <Text message="Default" text={rank} />
       </Styled.TextDiv>
     </Styled.Anchor>
   );

@@ -8,21 +8,18 @@ const LoginModal: FunctionComponent<{ onClick: () => void }> = ({
 }) => {
   return (
     <Styled.Div>
-      <Atoms.Logo message="short" />
-      <Atoms.TitleText text={"로그인"} />
+      <Atoms.Logo type="Short" />
+      <Atoms.TitleText type={"default"} text={"로그인"} />
       <Styled.Divider />
       <Atoms.Button
-        text={"GitHub 으로 로그인"}
-        bgColor={"#000"}
-        textColor={"#fff"}
+        type="Github"
         image={Github}
-        width={"100%"}
-        height={"40px"}
+        text="GitHub 으로 로그인"
         onClick={onClick}
       />
       <Atoms.Text
-        message="profileHeader"
-        text={"개발자들을 위한 실시간 질문/답변 커뮤니티 NPE"}
+        type="Header"
+        text="개발자들을 위한 실시간 질문/답변 커뮤니티 NPE"
       />
     </Styled.Div>
   );

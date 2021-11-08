@@ -6,10 +6,18 @@ export default {
   component: QuestionTitle,
 };
 
-export const Default = () => {
+export const Online = () => {
   return (
     <>
-      <QuestionTitle text={"hello"} isOnline={false} />
+      <QuestionTitle text={"hello"} type="online" />
+    </>
+  );
+};
+
+export const Offline = () => {
+  return (
+    <>
+      <QuestionTitle text={"hello"} type="offline" />
     </>
   );
 };

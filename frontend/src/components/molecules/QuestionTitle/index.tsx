@@ -7,14 +7,14 @@ interface Props {
   text: string;
 }
 
-const QuestionTitle: FunctionComponent<Props> = ({ text, isOnline }) => {
+const QuestionTitle: FunctionComponent<Props> = ({ text, type }) => {
   return (
     <Styled.QuestionTitle>
       <div className="text__container">
         <Atoms.TitleText text={text} />
       </div>
       <div className="indicator__conatier">
-        <Atoms.Indicator isOnline={isOnline} />
+        <Atoms.Indicator type={type} />
       </div>
     </Styled.QuestionTitle>
   );
