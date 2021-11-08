@@ -5,8 +5,12 @@ import Button from "../../atoms/Button";
 import userImg from "./user.png";
 import logoutImg from "./logout.png";
 
-const ProfileDropDown: FunctionComponent = () => {
-  const onClick = () => {};
+interface Props {
+  onProfile: VoidFunction;
+  onLogout: VoidFunction;
+}
+
+const ProfileDropDown: FunctionComponent<Props> = ({ onProfile, onLogout }) => {
   return (
     <StyledDropdown>
       <Button
@@ -14,7 +18,7 @@ const ProfileDropDown: FunctionComponent = () => {
         text="프로필"
         bgColor="#fff"
         textColor="#000"
-        onClick={onClick}
+        onClick={onProfile}
       ></Button>
       <StyledLine />
       <Button
@@ -22,7 +26,7 @@ const ProfileDropDown: FunctionComponent = () => {
         text="로그아웃"
         bgColor="#fff"
         textColor="#000"
-        onClick={onClick}
+        onClick={onLogout}
       ></Button>
     </StyledDropdown>
   );

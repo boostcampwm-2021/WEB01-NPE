@@ -10,6 +10,7 @@ const StyledDropdown = styled.div`
   align-items: center;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
+  background-color: #fff;
 `;
 
 const StyledLine = styled.div`
