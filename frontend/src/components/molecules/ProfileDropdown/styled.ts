@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledDropdown = styled.div`
+export const Dropdown = styled.div`
   padding: 15px;
   width: 200px;
   height: 129px;
@@ -13,8 +13,7 @@ const StyledDropdown = styled.div`
   background-color: #fff;
 `;
 
-const StyledLine = styled.div`
+export const Line = styled.div`
   border-bottom: 1px solid #c4c4c4;
   width: 150px;
 `;
-export { StyledDropdown, StyledLine };

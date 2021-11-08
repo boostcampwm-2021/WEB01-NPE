@@ -12,6 +12,7 @@ export default class TagService {
   }
 
   public static async findTagByIds(ids: number[]): Promise<Tag[]> {
+    if (ids.length === 0) return [];
     return await Tag.find({
       where: ids.map((id) => ({ id })),
     });
@@ -22,7 +23,7 @@ export default class TagService {
   }
 
   public static async getAllTagIdsByQuestionId(id: number): Promise<number[]> {
-    const question = await PostQuestion.find({ id: id });
+    const question = await PostQuestion.findOne({ id: id });
     const tagRelations = await createQueryBuilder()
       .relation(PostQuestion, "postQuestionHasTags")
       .of(question)

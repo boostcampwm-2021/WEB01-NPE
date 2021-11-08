@@ -5,12 +5,11 @@ export default {
   title: "Atoms/Image",
 };
 
-export const normal = () => {
+export const Default = () => {
   return (
     <Image
+      type="Default"
       src={"https://avatars.githubusercontent.com/u/50866506?v=4"}
-      width={24}
-      height={24}
     />
   );
 };
@@ -18,9 +17,8 @@ export const normal = () => {
 export const large = () => {
   return (
     <Image
+      type="Large"
       src={"https://avatars.githubusercontent.com/u/50866506?v=4"}
-      width={48}
-      height={48}
     />
   );
 };

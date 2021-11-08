@@ -1,19 +1,35 @@
 import React, { FunctionComponent } from "react";
 import Image from "next/image";
 import { StyledIconWithNumber } from "./styled";
-import views from "./views.png";
-import comments from "./comments.png";
+import viewImg from "./views.png";
+import commentImg from "./comments.png";
 
 interface Props {
-  message: string;
-  value?: number;
+  type: string;
+  value: number;
 }
 
-const IconWithNumber: FunctionComponent<Props> = ({ message, value }) => {
+interface StyleProps {
+  src: string | StaticImageData;
+  width: number;
+}
+
+const types: { [key: string]: StyleProps } = {
+  Views: {
+    src: viewImg,
+    width: 50,
+  },
+  Comments: {
+    src: commentImg,
+    width: 50,
+  },
+};
+
+const IconWithNumber: FunctionComponent<Props> = ({ type, value }) => {
+  const styleProps = types[type];
   return (
     <StyledIconWithNumber>
-      {message === "views" && <Image src={views} width={30} />}
-      {message === "comments" && <Image src={comments} width={30} />}
+      <Image {...styleProps} />
       {value}
     </StyledIconWithNumber>
   );
