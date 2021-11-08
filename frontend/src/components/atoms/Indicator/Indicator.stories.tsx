@@ -6,14 +6,10 @@ export default {
   component: Indicator,
 };
 
-export const Default = () => {
-  return <Indicator isOnline={true} />;
+export const online = () => {
+  return <Indicator type="online" />;
 };
 
-export const Offline = () => {
-  return <Indicator isOnline={false} />;
-};
-
-export const BigButton = () => {
-  return <Indicator isOnline={false} width={"30px"} height={"30px"} />;
+export const offline = () => {
+  return <Indicator type="offline" />;
 };
