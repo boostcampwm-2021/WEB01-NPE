@@ -29,7 +29,7 @@ export class PostQuestionHasTag extends BaseEntity {
   @ManyToOne(
     () => PostQuestion,
     (postQuestion) => postQuestion.postQuestionHasTags,
-    { onDelete: "NO ACTION", onUpdate: "NO ACTION" }
+    { onDelete: "CASCADE", onUpdate: "NO ACTION" }
   )
   @JoinColumn([
     { name: "post_question_id", referencedColumnName: "id" },

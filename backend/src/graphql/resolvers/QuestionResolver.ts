@@ -11,7 +11,7 @@ import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
-import AddQuestionInput from "../inputTypes/AddQuestionInput";
+import QuestionInput from "../inputTypes/QuestionInput";
 import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 import PostService from "../services/PostService";
 import TagService from "../services/TagService";
@@ -73,12 +73,38 @@ export default class QuestionResolver {
 
   @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
   async addNewQuestion(
-    @Arg("data") questionData: AddQuestionInput
+    @Arg("data") questionData: QuestionInput
   ): Promise<PostQuestion> {
     const newQuestion = await PostService.addNewQuestion(questionData, {
       id: 1,
     });
 
     return newQuestion;
+  }
+
+  @Mutation(() => PostQuestion, { description: "질문글 수정 Mutation" })
+  async updateQuestion(
+    @Arg("questionId", () => Int, { description: "수정할 질문글의 ID" })
+    questionId: number,
+    @Arg("data", { description: "수정할 질문글 내용" })
+    fieldsToUpdate: QuestionInput
+  ): Promise<PostQuestion> {
+    const updateResult = await PostService.updateQuestion(
+      questionId,
+      fieldsToUpdate
+    );
+
+    return await PostService.findOneQuestionById(questionId);
+  }
+
+  @Mutation(() => Boolean, {
+    description: "질문글 삭제 Mutation, 삭제 여부를 Boolean 으로 반환합니다.",
+  })
+  async deleteQuestion(
+    @Arg("questionId", { description: "삭제할 질문글의 ID" }) questionId: number
+  ): Promise<boolean> {
+    const isDeleted = await PostService.deleteQuestion(questionId);
+
+    return isDeleted;
   }
 }
