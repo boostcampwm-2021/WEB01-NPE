@@ -8,9 +8,9 @@ export default {
 };
 
 export const Comments = () => {
-  return <IconWithNumber message="comments" value={32} />;
+  return <IconWithNumber type="Comments" value={32} />;
 };
 
 export const Views = () => {
-  return <IconWithNumber message="views" value={150} />;
+  return <IconWithNumber type="Views" value={150} />;
 };

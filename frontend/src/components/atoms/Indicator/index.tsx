@@ -1,32 +1,30 @@
 import React, { FunctionComponent } from "react";
-import { StyledIndicator } from "./styled";
-
-interface Props {
-  isOnline: boolean;
-  width?: string;
-  height?: string;
+import * as Styled from "./styled";
+interface StyleProps {
+  title: string;
+  bgColor: string;
+  width: string;
+  height: string;
 }
 
-const Indicator: FunctionComponent<Props> = ({ isOnline, width, height }) => {
-  if (isOnline) {
-    return (
-      <StyledIndicator
-        title="현재 라이브 답변을 대기중에 있습니다."
-        bgColor="#6cc16f"
-        width={width || "16px"}
-        height={height || "16px"}
-      />
-    );
-  } else {
-    return (
-      <StyledIndicator
-        title="현재 질문자가 오프라인 상태입니다."
-        bgColor="#e26a61"
-        width={width || "16px"}
-        height={height || "16px"}
-      />
-    );
-  }
+const types: { [key: string]: StyleProps } = {
+  online: {
+    title: "현재 라이브 답변을 대기중에 있습니다.",
+    bgColor: "#6cc16f",
+    width: "16px",
+    height: "16px",
+  },
+  offline: {
+    title: "현재 질문자가 오프라인 상태입니다.",
+    bgColor: "#e26a61",
+    width: "16px",
+    height: "16px",
+  },
+};
+
+const Indicator: FunctionComponent<{ type: string }> = ({ type }) => {
+  const styleProps = types[type];
+  return <Styled.Indicator {...styleProps} />;
 };
 
 export default Indicator;

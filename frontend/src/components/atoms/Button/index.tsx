@@ -3,33 +3,40 @@ import Image from "next/image";
 import * as Styled from "./styled";
 
 interface Props {
+  type: string;
   image?: string | StaticImageData;
   text: string;
+  onClick: VoidFunction;
+}
+
+interface StyleProps {
   bgColor: string;
   textColor: string;
-  onClick: VoidFunction;
-  width?: string;
-  height?: string;
+  width: string;
+  height: string;
 }
-const Button: FunctionComponent<Props> = ({
-  image,
-  text,
-  bgColor,
-  textColor,
-  width,
-  height,
-  onClick,
-}) => {
+
+const types: { [key: string]: StyleProps } = {
+  Default: {
+    bgColor: "#fff",
+    textColor: "#000",
+    width: "136px",
+    height: "36px",
+  },
+  Header: {
+    bgColor: "#F48024",
+    textColor: "white",
+    width: "136px",
+    height: "36px",
+  },
+};
+const Button: FunctionComponent<Props> = ({ type, image, text, onClick }) => {
+  const buttonProps: StyleProps = types[type];
+
   return (
-    <Styled.StyledButton
-      bgColor={bgColor}
-      textColor={textColor}
-      width={width || "136px"}
-      height={height || "36px"}
-      onClick={onClick}
-    >
+    <Styled.StyledButton {...buttonProps} onClick={onClick}>
       {image && <Image src={image} alt="아이콘" width={24} height={24} />}
-      <Styled.Text textColor={textColor}>{text}</Styled.Text>
+      <Styled.Text textColor={buttonProps.textColor}>{text}</Styled.Text>
     </Styled.StyledButton>
   );
 };
