@@ -1,30 +1,33 @@
 import React, { FunctionComponent } from "react";
-import { StyledDropdown, StyledLine } from "./styled";
 
-import Button from "../../atoms/Button";
+import * as Styled from "./styled";
+import * as Atoms from "../../atoms";
+
 import userImg from "./user.png";
 import logoutImg from "./logout.png";
 
 const ProfileDropDown: FunctionComponent = () => {
   const onClick = () => {};
   return (
-    <StyledDropdown>
-      <Button
+    <Styled.Dropdown>
+      <Atoms.Button
         image={userImg}
         text="프로필"
         bgColor="#fff"
         textColor="#000"
         onClick={onClick}
-      ></Button>
-      <StyledLine />
-      <Button
+        size="small"
+      ></Atoms.Button>
+      <Styled.Line />
+      <Atoms.Button
         image={logoutImg}
         text="로그아웃"
         bgColor="#fff"
         textColor="#000"
         onClick={onClick}
-      ></Button>
-    </StyledDropdown>
+        size="small"
+      ></Atoms.Button>
+    </Styled.Dropdown>
   );
 };
 
