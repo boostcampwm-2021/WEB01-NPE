@@ -4,7 +4,6 @@ export default {
   Component: Text,
   title: "Atoms/Text",
 };
-
 export const Default = () => {
   return <Text type="Default" text="안녕, world!" />;
 };

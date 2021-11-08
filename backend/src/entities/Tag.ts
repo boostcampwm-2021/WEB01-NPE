@@ -1,3 +1,4 @@
+import { Field, ID, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -10,11 +11,14 @@ import {
 import { PostQuestionHasTag } from "./PostQuestionHasTag";
 import { User } from "./User";
 
+@ObjectType("Tag", { description: "태그 Ojbect 입니다." })
 @Entity("tag")
 export class Tag extends BaseEntity {
+  @Field(() => ID, { description: "태그의 ID" })
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;
 
+  @Field({ description: "태그의 이름" })
   @Column("varchar", { name: "name", length: 15 })
   name: string;
 

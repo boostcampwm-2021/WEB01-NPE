@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { StyledText } from "./styled";
+import * as Styled from "./styled";
 
 interface Props {
   type: string;
