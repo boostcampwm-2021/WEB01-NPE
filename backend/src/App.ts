@@ -1,16 +1,16 @@
+import "reflect-metadata";
 import express from "express";
-import { Request, Response } from "express";
 import GraphQLMiddleware from "./graphql";
 import { createConnection } from "typeorm";
 
-const app = express();
-// DB 커넥션 생성
-createConnection();
+(async () => {
+  const app = express();
+  // DB 커넥션 생성
+  createConnection();
 
-app.use("/graphql", GraphQLMiddleware.get());
+  const gqMiddleware = await GraphQLMiddleware.get();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("hi!");
-});
+  app.use("/graphql", gqMiddleware);
 
-app.listen(3000, () => console.log("server is ON at 3000"));
+  app.listen(3000, () => console.log("server is ON at 3000"));
+})();
