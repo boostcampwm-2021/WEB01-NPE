@@ -7,7 +7,7 @@ interface textStyleProps {
   ellipsis?: boolean;
 }
 
-export const StyledText = styled.span<textStyleProps>`
+export const Span = styled.span<textStyleProps>`
   color: ${(props) => props.color};
   font-size: ${(props) => props.fontSize};
   font-weight: ${(props) => props.fontWeight};

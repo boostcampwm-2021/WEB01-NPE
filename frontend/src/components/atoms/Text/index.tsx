@@ -29,7 +29,7 @@ const types: { [key: string]: StyleProps } = {
 
 const Text: FunctionComponent<Props> = ({ type, text }) => {
   const styleProps = types[type];
-  return <StyledText {...styleProps}>{text}</StyledText>;
+  return <Styled.Span {...styleProps}>{text}</Styled.Span>;
 };
 
 export default Text;

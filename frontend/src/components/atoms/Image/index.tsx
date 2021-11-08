@@ -27,7 +27,6 @@ const image: FunctionComponent<Props> = ({ type, src, alt }) => {
   const StyleProps = types[type];
   return (
     <Image
-      loader={() => src}
       src={src}
       {...StyleProps}
       alt={alt || "Profile image"}

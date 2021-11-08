@@ -4,22 +4,26 @@ import Button from "../../atoms/Button";
 import userImg from "./user.png";
 import logoutImg from "./logout.png";
 
-const ProfileDropDown: FunctionComponent = () => {
-  const onClick = () => {};
+interface Props {
+  onProfile: VoidFunction;
+  onLogout: VoidFunction;
+}
+
+const ProfileDropDown: FunctionComponent<Props> = ({ onProfile, onLogout }) => {
   return (
     <Styled.Dropdown>
       <Button
         type="Default"
         image={userImg}
         text="프로필"
-        onClick={onClick}
+        onClick={onProfile}
       ></Button>
       <Styled.Line />
       <Button
         type="Default"
         image={logoutImg}
         text="로그아웃"
-        onClick={onClick}
+        onClick={onLogout}
       ></Button>
     </Styled.Dropdown>
   );

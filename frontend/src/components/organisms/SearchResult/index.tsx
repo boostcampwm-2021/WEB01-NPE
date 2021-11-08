@@ -43,15 +43,22 @@ const SearchResult: FunctionComponent<Props> = ({
         <div className="markdown-container">{markdown}</div>
         <div className="tag-container">
           {tags.map((tag, index) => {
-            return <Tag label={tag.label} onClick={tag.onClick} key={index} />;
+            return (
+              <Tag
+                type="Default"
+                label={tag.label}
+                onClick={tag.onClick}
+                key={index}
+              />
+            );
           })}
         </div>
         <div className="views-comment-container">
           <div className="views-container">
-            <IconWithNumber message="views" value={views} />
+            <IconWithNumber type="Views" value={views} />
           </div>
           <div className="comment-container">
-            <IconWithNumber message="comments" value={comments} />
+            <IconWithNumber type="Comments" value={comments} />
           </div>
         </div>
       </div>
