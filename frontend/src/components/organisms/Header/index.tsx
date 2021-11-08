@@ -1,33 +1,55 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
 import userImg from "./user.png";
 import questionImg from "./question.png";
 
-interface Props {
-  userName?: string;
-  userImage?: string;
-}
-
-const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
+const Header: FunctionComponent = () => {
   const [isDropdown, setIsDropdown] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
+  const [user, setUser] = useState({ name: "", image: "" });
 
-  const onDropdown = () => {
+  const onProfile = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setIsDropdown((props) => !props);
   };
-  const onLoginModal = () => {
-    document.body.style.overflow = "hidden";
-    setIsLoginModal(true);
-  };
-  const offLoginModal = () => {
-    document.body.style.overflow = "auto";
-    setIsLoginModal(false);
-  };
-  const clickLoginModal = (event: React.MouseEvent<HTMLElement>) => {
+  const onDropdown = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
   };
+  const onLoginButton = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsLoginModal(true);
+    document.body.style.overflow = "hidden";
+  };
+  const onLoginModal = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+  };
+
+  const login = () => {
+    const name = "hwangwoojin";
+    const image = "https://avatars.githubusercontent.com/u/50866506?v=4";
+    setUser({ name, image });
+    onReset();
+  };
+  const logout = () => {
+    setUser({ name: "", image: "" });
+    onReset();
+  };
+
+  const onReset = () => {
+    setIsDropdown(false);
+    setIsLoginModal(false);
+    document.body.style.overflow = "auto";
+  };
+
+  useEffect(() => {
+    document.body.addEventListener("click", onReset);
+
+    return () => {
+      document.body.removeEventListener("click", onReset);
+    };
+  }, []);
 
   return (
     <Styled.HeaderDiv>
@@ -38,16 +60,21 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
         <Atoms.Input text={"Search..."} size={"medium"} />
       </Styled.SearchDiv>
       <Styled.ButtonDiv>
-        {userName ? (
+        {user.name !== "" ? (
           <div>
             <Molecules.ProfileHeader
-              src={userImage!}
-              text={userName!}
-              onClick={onDropdown}
+              src={user.image}
+              text={user.name}
+              onClick={onProfile}
             />
             {isDropdown && (
               <Styled.DropdownDiv>
-                <Molecules.ProfileDropdown />
+                <div onClick={onDropdown}>
+                  <Molecules.ProfileDropdown
+                    onProfile={() => {}}
+                    onLogout={logout}
+                  />
+                </div>
               </Styled.DropdownDiv>
             )}
           </div>
@@ -57,7 +84,7 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
             text={"로그인"}
             bgColor="#F48024"
             textColor="white"
-            onClick={onLoginModal}
+            onClick={onLoginButton}
           />
         )}
         <Atoms.Button
@@ -69,9 +96,9 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
         />
       </Styled.ButtonDiv>
       {isLoginModal && (
-        <Styled.ModalWrapper onClick={offLoginModal}>
-          <Styled.Modal onClick={clickLoginModal}>
-            <Molecules.LoginModal />
+        <Styled.ModalWrapper>
+          <Styled.Modal onClick={onLoginModal}>
+            <Molecules.LoginModal onClick={login} />
           </Styled.Modal>
         </Styled.ModalWrapper>
       )}
