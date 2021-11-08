@@ -18,7 +18,7 @@ const Header: FunctionComponent<Props> = ({ userName, userImage }) => {
   return (
     <Styled.HeaderDiv>
       <Styled.LogoAnchor href="">
-        <Atoms.LogoFull />
+        <Atoms.Logo message="long" />
       </Styled.LogoAnchor>
       <Styled.SearchDiv>
         <Atoms.Input text={"Search..."} size={"medium"} />

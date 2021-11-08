@@ -6,10 +6,10 @@ export default {
   component: Logo,
 };
 
-export const Default = () => {
-  return (
-    <>
-      <Logo />
-    </>
-  );
+export const Short = () => {
+  return <Logo message={"short"} />;
+};
+
+export const Long = () => {
+  return <Logo message={"long"} />;
 };

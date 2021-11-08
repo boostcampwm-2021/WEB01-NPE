@@ -28,5 +28,4 @@ export const TextDiv = styled.div`
   flex-direction: column;
   text-align: left;
   width: 72px;
-  height: 24px;
 `;
