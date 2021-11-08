@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import * as Styled from "./styled";
 
+
 import Button from "../../atoms/Button";
 import userImg from "./user.png";
 import logoutImg from "./logout.png";

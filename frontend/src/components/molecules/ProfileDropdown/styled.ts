@@ -19,3 +19,4 @@ export const Line = styled.div`
   border-bottom: 1px solid #c4c4c4;
   width: 150px;
 `;
+
