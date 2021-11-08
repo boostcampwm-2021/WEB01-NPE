@@ -4,7 +4,7 @@ import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
-import AddQuestionInput from "../inputTypes/AddQuestionInput";
+import QuestionInput from "../inputTypes/QuestionInput";
 import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 
 export default class PostService {
@@ -100,7 +100,7 @@ export default class PostService {
   }
 
   public static async addNewQuestion(
-    args: AddQuestionInput,
+    args: QuestionInput,
     // 이후 ctx.user 로 수정
     user: { id: number }
   ): Promise<PostQuestion> {
@@ -121,6 +121,32 @@ export default class PostService {
     }
 
     return newQuestion;
+  }
+
+  public static async updateQuestion(
+    questionId: number,
+    fieldsToUpdate: Partial<QuestionInput>
+  ) {
+    const partialQuestion: PostQuestion = new PostQuestion();
+    const originQuestion = await PostQuestion.findOne({ id: questionId });
+    partialQuestion.id = questionId;
+    partialQuestion.userId = originQuestion.userId;
+    partialQuestion.title = fieldsToUpdate.title;
+    partialQuestion.desc = fieldsToUpdate.desc;
+    partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
+
+    if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
+      await PostQuestionHasTag.delete({ postQuestionId: questionId });
+
+      for (const tagId of fieldsToUpdate.tagIds) {
+        const tagEntity = new PostQuestionHasTag();
+        tagEntity.postQuestion = partialQuestion;
+        tagEntity.tagId = tagId;
+        tagEntity.save();
+      }
+    }
+
+    return await PostQuestion.save(partialQuestion);
   }
 
   public static async deleteQuestion(questionId: number): Promise<boolean> {
