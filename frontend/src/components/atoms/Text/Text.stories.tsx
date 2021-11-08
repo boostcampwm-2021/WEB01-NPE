@@ -5,21 +5,10 @@ export default {
   title: "Atoms/Text",
 };
 
-export const normal = () => {
-  return <Text text="안녕, world!" />;
+export const Default = () => {
+  return <Text type="Default" text="안녕, world!" />;
 };
 
-export const color = () => {
-  return <Text text="안녕, world!" color="red" />;
-};
-
-export const example = () => {
-  return (
-    <>
-      <Text text="조회수" />
-      <Text text="&nbsp;3" color="grey" />
-      <Text text="&nbsp;작성일" />
-      <Text text="&nbsp;2021-10-10" color="grey" />
-    </>
-  );
+export const Header = () => {
+  return <Text type="Header" text="사용자 아이디" />;
 };

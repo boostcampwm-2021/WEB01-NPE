@@ -1,31 +1,35 @@
 import React, { FunctionComponent } from "react";
 import { StyledText } from "./styled";
 
-interface textProps {
+interface Props {
+  type: string;
   text: string;
-  color?: string;
-  fontSize?: number;
-  fontWeight?: string;
-  ellipsis?: boolean;
+}
+interface StyleProps {
+  color: string;
+  fontSize: string;
+  fontWeight: string;
+  ellipsis: boolean;
 }
 
-const Text: FunctionComponent<textProps> = ({
-  text,
-  color,
-  ellipsis,
-  fontSize,
-  fontWeight,
-}) => {
-  return (
-    <StyledText
-      color={color}
-      fontSize={fontSize}
-      fontWeight={fontWeight}
-      ellipsis={ellipsis}
-    >
-      {text}
-    </StyledText>
-  );
+const types: { [key: string]: StyleProps } = {
+  Default: {
+    color: "black",
+    fontSize: "16px",
+    fontWeight: "normal",
+    ellipsis: true,
+  },
+  Header: {
+    color: "black",
+    fontSize: "12px",
+    fontWeight: "bold",
+    ellipsis: true,
+  },
+};
+
+const Text: FunctionComponent<Props> = ({ type, text }) => {
+  const styleProps = types[type];
+  return <StyledText {...styleProps}>{text}</StyledText>;
 };
 
 export default Text;
