@@ -37,7 +37,7 @@ const SearchResult: FunctionComponent<Props> = ({
         <div className="title-container">
           <TitleText text={title} />
           <div className="title-container__indicator">
-            <Indicator isOnline={false} width={"30px"} height={"30px"} />
+            <Indicator type={"offline"} width={"30px"} height={"30px"} />
           </div>
         </div>
         <div className="markdown-container">{markdown}</div>
