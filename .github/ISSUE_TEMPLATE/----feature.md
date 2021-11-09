@@ -1,7 +1,7 @@
 ---
 name: 새로운 Feature
 about: 새로운 Feature를 위한 issue template
-title: "[FE/BE] [Fix/Feature/Design/Refactor/Misc] {Feature Name}"
+title: "[FE/BE] [Fix/Feature/Design/Refactor/Misc/Update] {Feature Name}"
 labels: ''
 assignees: getState, sa02045, hwangwoojin, david02324
 
