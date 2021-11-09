@@ -3,3 +3,7 @@ export { default as ProfileHeader } from "./ProfileHeader";
 export { default as ProfileSummary } from "./ProfileSummary";
 export { default as TagSearch } from "./TagSearch";
 export { default as LoginModal } from "./LoginModal";
+export { default as QuestionTitle } from "./QuestionTitle";
+export { default as IconWithNumber } from "./IconWithNumber";
+export { default as ViewsAndComment } from "./ViewsAndComment";
+export { default as TagList } from "./TagList";

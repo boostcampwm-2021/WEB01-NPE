@@ -1,5 +1,5 @@
 import Tag from "./";
-
+import * as Type from "../../../types";
 export default {
   Component: Tag,
   title: "Atoms/Tag",
@@ -7,10 +7,18 @@ export default {
 
 export const Default = () => {
   const onClick = () => {};
-  return <Tag type="Default" label="javscript" onClick={onClick} />;
+  const tag: Type.Tag = {
+    __typename: "Tag",
+    name: "javascript",
+  };
+  return <Tag type="Default" tag={tag} onClick={onClick} />;
 };
 
 export const Gray = () => {
+  const tag: Type.Tag = {
+    __typename: "Tag",
+    name: "javascript",
+  };
   const onClick = () => {};
-  return <Tag type="Gray" label="javscript" onClick={onClick} />;
+  return <Tag type="Gray" tag={tag} onClick={onClick} />;
 };
