@@ -192,4 +192,10 @@ export default class PostService {
 
     return await PostAnswer.save(answer);
   }
+
+  public static async deleteAnswer(answerId: number): Promise<boolean> {
+    const deleteResult = await PostAnswer.delete({ id: answerId });
+
+    return deleteResult.affected > 0;
+  }
 }
