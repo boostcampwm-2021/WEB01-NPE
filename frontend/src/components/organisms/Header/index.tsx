@@ -24,6 +24,12 @@ const Header: FunctionComponent = () => {
   const onLoginModal = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
   };
+  const onPost = (event: React.MouseEvent<HTMLElement>) => {
+    if (!session) {
+      onLoginButton(event);
+      return;
+    }
+  };
 
   const onReset = () => {
     setIsDropdown(false);
@@ -72,7 +78,7 @@ const Header: FunctionComponent = () => {
           <Atoms.Button type="Header" text="로그인" onClick={onLoginButton} />
         )}
 
-        <Atoms.Button type={"Header"} text={"질문하기"} onClick={() => {}} />
+        <Atoms.Button type={"Header"} text={"질문하기"} onClick={onPost} />
       </Styled.ButtonDiv>
       {isLoginModal && (
         <Styled.ModalWrapper>
