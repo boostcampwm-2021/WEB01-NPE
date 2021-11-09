@@ -176,4 +176,26 @@ export default class PostService {
 
     return await newAnswer.save();
   }
+
+  public static async findOneAnswerById(answerId: number): Promise<PostAnswer> {
+    const answer = await PostAnswer.findOne({ id: answerId });
+
+    return answer;
+  }
+
+  public static async updateAnswer(
+    answerId: number,
+    answerInput: AnswerInput
+  ): Promise<PostAnswer> {
+    const answer = await PostAnswer.findOne({ id: answerId });
+    answer.desc = answerInput.desc;
+
+    return await PostAnswer.save(answer);
+  }
+
+  public static async deleteAnswer(answerId: number): Promise<boolean> {
+    const deleteResult = await PostAnswer.delete({ id: answerId });
+
+    return deleteResult.affected > 0;
+  }
 }
