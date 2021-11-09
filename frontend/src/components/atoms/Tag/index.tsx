@@ -1,9 +1,12 @@
 import React, { FunctionComponent, MouseEventHandler } from "react";
+import Link from "next/link";
 import { StyledTag } from "./styled";
+
+import * as Type from "../../../types";
 
 interface Props {
   type: string;
-  label: string;
+  tag: Type.Tag;
   onClick: MouseEventHandler;
 }
 
@@ -35,12 +38,14 @@ const types: { [key: string]: StyleProps } = {
   },
 };
 
-const Tag: FunctionComponent<Props> = ({ type, label, onClick }) => {
+const Tag: FunctionComponent<Props> = ({ type, tag, onClick }) => {
   const styleProps = types[type];
   return (
-    <StyledTag {...styleProps} className="tag" onClick={onClick}>
-      {label}
-    </StyledTag>
+    <Link href={`tag/${tag.name}`}>
+      <StyledTag {...styleProps} className="tag" onClick={onClick}>
+        {tag.name}
+      </StyledTag>
+    </Link>
   );
 };
 
