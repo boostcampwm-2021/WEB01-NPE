@@ -36,4 +36,16 @@ export default class AnswerResolver {
 
     return author;
   }
+
+  @Mutation(() => PostAnswer, { description: "답변글 수정 Mutation" })
+  async updateAnswer(
+    @Arg("answernId", () => Int, { description: "수정할 답변글의 ID" })
+    answerId: number,
+    @Arg("data", { description: "수정할 답변글 내용" })
+    answerInput: AnswerInput
+  ): Promise<PostAnswer> {
+    const updateResult = await PostService.updateAnswer(answerId, answerInput);
+
+    return await PostService.findOneAnswerById(answerId);
+  }
 }
