@@ -1,29 +1,33 @@
 import React, { FunctionComponent } from "react";
+import Router from "next/router";
+import { signOut } from "next-auth/client";
 import * as Styled from "./styled";
 import Button from "../../atoms/Button";
 import userImg from "./user.png";
 import logoutImg from "./logout.png";
 
-interface Props {
-  onProfile: VoidFunction;
-  onLogout: VoidFunction;
-}
+const ProfileDropDown: FunctionComponent = () => {
+  const onProfileButton = () => {
+    Router.push("/profile");
+  };
+  const onLogoutButton = () => {
+    signOut();
+  };
 
-const ProfileDropDown: FunctionComponent<Props> = ({ onProfile, onLogout }) => {
   return (
     <Styled.Dropdown>
       <Button
         type="Default"
         image={userImg}
         text="프로필"
-        onClick={onProfile}
+        onClick={onProfileButton}
       ></Button>
       <Styled.Line />
       <Button
         type="Default"
         image={logoutImg}
         text="로그아웃"
-        onClick={onLogout}
+        onClick={onLogoutButton}
       ></Button>
     </Styled.Dropdown>
   );
