@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { useState } from "react";
 import { getAllTags } from "../pages/api";
 import { NextPage, GetStaticProps } from "next";
 import styled from "styled-components";
@@ -19,9 +19,11 @@ interface Props {
 
 const MainPage: NextPage<Props> = ({ tagList }) => {
   const [tags, setTags] = useState<string[]>([]);
+  const [texts, setTexts] = useState<string>("");
+
   return (
     <>
-      <Header type="Default" />
+      <Header type="Default" setTexts={setTexts} />
       <MainContainer>
         <SideBar
           selectedTags={tags}
