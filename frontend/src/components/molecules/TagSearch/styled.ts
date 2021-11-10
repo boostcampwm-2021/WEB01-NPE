@@ -9,19 +9,25 @@ export const Container = styled.div`
 
 export const Input = styled.input`
   box-sizing: border-box;
-  height: 35px;
+  height: 40px;
   width: 150px;
   padding: 5px;
-  border-radius: 5px 0 0 5px;
-  border: 1px solid gray;
+  border-radius: 4px 0 0 4px;
+  border: 2px solid #d5d5d5;
+  font-size: 14px;
+  border-right: none;
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const Button = styled.button`
   box-sizing: border-box;
   display: inline-block;
   width: 50px;
-  height: 35px;
+  height: 40px;
   padding: 5px;
+  border-radius: 0px 4px 4px 0px;
   background-color: #53a4de;
   color: white;
   font-weight: 600;
