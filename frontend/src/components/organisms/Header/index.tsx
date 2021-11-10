@@ -1,9 +1,20 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  useState,
+  useEffect,
+  useRef,
+  createRef,
+} from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/client";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
+
+interface Props {
+  type: string;
+  setTexts: (value: string) => void;
+}
 
 interface StyleProps {
   visibility: string;
@@ -18,12 +29,13 @@ const types: { [key: string]: StyleProps } = {
   },
 };
 
-const Header: FunctionComponent<{ type: string }> = ({ type }) => {
+const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
   const headerProps: StyleProps = types[type];
 
   const [session, loading] = useSession();
   const [isDropdown, setIsDropdown] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
+  const searchText = createRef<HTMLInputElement>();
 
   const onProfile = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -53,6 +65,11 @@ const Header: FunctionComponent<{ type: string }> = ({ type }) => {
     document.body.style.overflow = "auto";
   };
 
+  const submitSearch = (event: React.FormEvent<HTMLElement>) => {
+    event.preventDefault();
+    setTexts(searchText!.current!.value);
+  };
+
   useEffect(() => {
     document.body.addEventListener("click", onReset);
 
@@ -69,9 +86,9 @@ const Header: FunctionComponent<{ type: string }> = ({ type }) => {
         </Styled.LogoAnchor>
       </Link>
 
-      <Styled.SearchDiv {...headerProps}>
-        <Atoms.Input text={"Search..."} size={"medium"} />
-      </Styled.SearchDiv>
+      <Styled.SearchForm {...headerProps} onSubmit={submitSearch}>
+        <Atoms.Input text={"Search..."} size={"medium"} ref={searchText} />
+      </Styled.SearchForm>
 
       <Styled.ButtonDiv>
         {session?.user && (
