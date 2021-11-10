@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface SearchProps {
+  visibility: string;
+}
+
 export const HeaderDiv = styled.header`
   position: sticky;
   top: 0px;
@@ -18,10 +22,11 @@ export const HeaderDiv = styled.header`
 
 export const LogoAnchor = styled.a``;
 
-export const SearchDiv = styled.div`
+export const SearchDiv = styled.div<SearchProps>`
   flex-grow: 1;
   min-width: 250px;
   display: flex;
+  visibility: ${(props) => props.visibility};
   justify-content: center;
   width: 643px;
   margin-top: 16px;
