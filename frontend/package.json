@@ -16,6 +16,7 @@
     "@types/chart.js": "^2.9.34",
     "@types/styled-components": "^5.1.15",
     "chart.js": "^3.6.0",
+    "graphql": "^15.7.2",
     "next": "12.0.1",
     "next-auth": "^3.29.0",
     "react": "17.0.2",
