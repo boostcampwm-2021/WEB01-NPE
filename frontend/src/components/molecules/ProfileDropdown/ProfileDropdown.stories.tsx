@@ -7,7 +7,5 @@ export default {
 };
 
 export const Default = () => {
-  const onProfile = () => {};
-  const onLogout = () => {};
-  return <ProfileDropDown onProfile={onProfile} onLogout={onLogout} />;
+  return <ProfileDropDown />;
 };

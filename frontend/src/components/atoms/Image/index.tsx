@@ -21,6 +21,10 @@ const types: { [key: string]: StyleProps } = {
     width: 48,
     height: 48,
   },
+  Profile: {
+    width: 192,
+    height: 192,
+  },
 };
 
 const image: FunctionComponent<Props> = ({ type, src, alt }) => {

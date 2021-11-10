@@ -7,9 +7,9 @@ export default {
 };
 
 export const Default = () => {
-  return (
-    <>
-      <Header />
-    </>
-  );
+  return <Header type="Default" />;
+};
+
+export const Profile = () => {
+  return <Header type="Profile" />;
 };
