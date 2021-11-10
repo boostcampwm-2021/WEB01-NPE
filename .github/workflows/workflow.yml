@@ -36,7 +36,7 @@ jobs:
       - name: Excute deploy script
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: cd deploy && docker-compose up --build
+          command: cd deploy && docker-compose up --build --detach
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
