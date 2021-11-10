@@ -1,0 +1,9 @@
+.github/
+
+frontend/node_modules
+frontend/.storybook
+frontend/test
+frontend/.next
+
+backend/node_modules
+backend/test
