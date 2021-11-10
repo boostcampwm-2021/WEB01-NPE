@@ -7,6 +7,5 @@ export default {
 };
 
 export const Default = () => {
-  const onClick = () => {};
-  return <LoginModal onClick={onClick} />;
+  return <LoginModal />;
 };

@@ -1,12 +1,13 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
+import { signOut, useSession } from "next-auth/client";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
 
 const Header: FunctionComponent = () => {
+  const [session, loading] = useSession();
   const [isDropdown, setIsDropdown] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
-  const [user, setUser] = useState({ name: "", image: "" });
 
   const onProfile = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -23,16 +24,11 @@ const Header: FunctionComponent = () => {
   const onLoginModal = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
   };
-
-  const login = () => {
-    const name = "hwangwoojin";
-    const image = "https://avatars.githubusercontent.com/u/50866506?v=4";
-    setUser({ name, image });
-    onReset();
-  };
-  const logout = () => {
-    setUser({ name: "", image: "" });
-    onReset();
+  const onPost = (event: React.MouseEvent<HTMLElement>) => {
+    if (!session) {
+      onLoginButton(event);
+      return;
+    }
   };
 
   const onReset = () => {
@@ -58,11 +54,11 @@ const Header: FunctionComponent = () => {
         <Atoms.Input text={"Search..."} size={"medium"} />
       </Styled.SearchDiv>
       <Styled.ButtonDiv>
-        {user.name !== "" ? (
+        {session?.user && (
           <div>
             <Molecules.ProfileHeader
-              src={user.image}
-              text={user.name}
+              src={session.user.image!}
+              text={session.user.name!}
               onClick={onProfile}
             />
             {isDropdown && (
@@ -70,21 +66,24 @@ const Header: FunctionComponent = () => {
                 <div onClick={onDropdown}>
                   <Molecules.ProfileDropdown
                     onProfile={() => {}}
-                    onLogout={logout}
+                    onLogout={signOut}
                   />
                 </div>
               </Styled.DropdownDiv>
             )}
           </div>
-        ) : (
+        )}
+
+        {!session && (
           <Atoms.Button type="Header" text="로그인" onClick={onLoginButton} />
         )}
-        <Atoms.Button type={"Header"} text={"질문하기"} onClick={() => {}} />
+
+        <Atoms.Button type={"Header"} text={"질문하기"} onClick={onPost} />
       </Styled.ButtonDiv>
       {isLoginModal && (
         <Styled.ModalWrapper>
           <Styled.Modal onClick={onLoginModal}>
-            <Molecules.LoginModal onClick={login} />
+            <Molecules.LoginModal />
           </Styled.Modal>
         </Styled.ModalWrapper>
       )}
