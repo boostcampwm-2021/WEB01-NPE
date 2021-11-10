@@ -5,7 +5,7 @@ export const Container = styled.aside`
   position: sticky;
   top: 120px;
   z-index: 10;
-  width: 200px;
+  width: 220px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   margin-top: 4px;
