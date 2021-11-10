@@ -40,6 +40,7 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
         ref={inputTag}
       />
       <Styled.Button
+        type="button"
         onClick={() => {
           onSubmit(inputTag.current.value);
           inputTag.current.value = "";

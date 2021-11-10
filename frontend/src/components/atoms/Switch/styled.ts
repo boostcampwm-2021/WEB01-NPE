@@ -3,7 +3,9 @@ interface SliderProps {
   offColor: string;
   onColor: string;
 }
-export const Container = styled.label``;
+export const Container = styled.label`
+  display: block;
+`;
 
 export const Input = styled.input`
   opacity: 0;

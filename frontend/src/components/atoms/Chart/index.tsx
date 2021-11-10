@@ -9,13 +9,13 @@ interface ChartProps {
 }
 
 const Chart: FunctionComponent<ChartProps> = ({ type, data }) => {
-  if (type === "DOUGHNUT")
+  if (type === "Doughnut")
     return (
       <StyledChart>
         <Doughnut data={data} width={50} height={25}></Doughnut>
       </StyledChart>
     );
-  else if (type === "BAR") {
+  else if (type === "Bar") {
     return (
       <StyledChart>
         <Bar data={data} width={50} height={25}></Bar>
