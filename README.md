@@ -1,4 +1,12 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fboostcampwm-2021%2FWEB01-NPE&count_bg=%23F48024&title_bg=%23222426&icon=&icon_color=%23BCBBBB&title=visits&edge_flat=false)](https://hits.seeyoufarm.com)
+![](https://img.shields.io/tokei/lines/github/boostcampwm-2021/WEB01-NPE)
+![](https://img.shields.io/github/issues-raw/boostcampwm-2021/WEB01-NPE?color=green)
+![](https://img.shields.io/github/issues-closed-raw/boostcampwm-2021/WEB01-NPE?color=red)
+![](https://img.shields.io/github/issues-pr-raw/boostcampwm-2021/WEB01-NPE?color=green)
+![](https://img.shields.io/github/issues-pr-closed-raw/boostcampwm-2021/web01-npe?color=red)
+![](https://img.shields.io/github/milestones/all/boostcampwm-2021/web01-npe)
+![](https://img.shields.io/website?url=http%3A%2F%2F118.67.142.132%2F)
+![](https://img.shields.io/github/workflow/status/boostcampwm-2021/WEB01-NPE/Main%20%EB%B8%8C%EB%9E%9C%EC%B9%98%20%EB%B0%B0%ED%8F%AC%20%EC%9E%90%EB%8F%99%ED%99%94)
 
 # NPE - NullPointerException
 
