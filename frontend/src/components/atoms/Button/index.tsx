@@ -6,7 +6,7 @@ interface Props {
   type: string;
   image?: string | StaticImageData;
   text: string;
-  onClick: VoidFunction;
+  onClick?: VoidFunction;
 }
 
 interface StyleProps {
@@ -32,6 +32,12 @@ const types: { [key: string]: StyleProps } = {
   Github: {
     bgColor: "#000",
     textColor: "#fff",
+    width: "100%",
+    height: "36px",
+  },
+  Submit: {
+    bgColor: "#F48024",
+    textColor: "white",
     width: "100%",
     height: "36px",
   },
