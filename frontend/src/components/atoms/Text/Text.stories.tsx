@@ -4,11 +4,10 @@ export default {
   Component: Text,
   title: "Atoms/Text",
 };
-
-export const ProfileHeader = () => {
-  return <Text message="profileHeader" text="Hwangwoojin" />;
+export const Default = () => {
+  return <Text type="Default" text="안녕, world!" />;
 };
 
-export const ProfileContent = () => {
-  return <Text message="profileContent" text="Platinum" />;
+export const Header = () => {
+  return <Text type="Header" text="사용자 아이디" />;
 };

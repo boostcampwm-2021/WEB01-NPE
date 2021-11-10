@@ -5,20 +5,12 @@ export default {
   title: "Atoms/Tag",
 };
 
-export const javascript = () => {
+export const Default = () => {
   const onClick = () => {};
-  return (
-    <>
-      <Tag label="javscript" onClick={onClick} />
-    </>
-  );
+  return <Tag type="Default" label="javscript" onClick={onClick} />;
 };
 
-export const react = () => {
+export const Gray = () => {
   const onClick = () => {};
-  return (
-    <>
-      <Tag label="react" onClick={onClick} />
-    </>
-  );
+  return <Tag type="Gray" label="javscript" onClick={onClick} />;
 };

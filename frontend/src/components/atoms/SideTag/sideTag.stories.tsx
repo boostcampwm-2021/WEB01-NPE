@@ -7,15 +7,5 @@ export default {
 };
 
 export const Default = () => {
-  return <SideTag text="react.js" onDelete={() => {}} />;
-};
-
-export const LongTag = () => {
-  return <SideTag text="javascript webpack" onDelete={() => {}} />;
-};
-
-export const otherColorTag = () => {
-  return (
-    <SideTag text="javascript" tagBgColor="#045D8B" onDelete={() => {}} />
-  );
+  return <SideTag type="Default" text="react.js" onDelete={() => {}} />;
 };

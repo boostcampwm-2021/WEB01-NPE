@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
-const StyledDropdown = styled.div`
-  padding: 15px;
+export const Dropdown = styled.div`
   width: 200px;
   height: 129px;
   display: flex;
@@ -10,10 +9,14 @@ const StyledDropdown = styled.div`
   align-items: center;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
+  background-color: #fff;
+
+  button:hover {
+    box-shadow: none;
+  }
 `;
 
-const StyledLine = styled.div`
+export const Line = styled.div`
   border-bottom: 1px solid #c4c4c4;
   width: 150px;
 `;
-export { StyledDropdown, StyledLine };

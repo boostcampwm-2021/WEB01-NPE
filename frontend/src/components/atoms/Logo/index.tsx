@@ -1,29 +1,36 @@
 import React, { FunctionComponent } from "react";
 import Image from "next/image";
-import logoImage from "./logo.png";
-import fullLogoImage from "./fullLogo.png";
-
+import LogoImg from "./logo.png";
+import ShortLogoImg from "./shortLogo.png";
 interface Props {
-  message: string;
+  type: string;
 }
 
-const Logo: FunctionComponent<Props> = ({ message }) => {
-  return (
-    <>
-      {message === "short" && (
-        <Image src={logoImage} width={48} height={48} alt="logo"></Image>
-      )}
+interface StyleProps {
+  src: StaticImageData;
+  width: number;
+  height: number;
+  alt: string;
+}
 
-      {message === "long" && (
-        <Image
-          src={fullLogoImage}
-          width={321}
-          height={48}
-          alt="full logo"
-        ></Image>
-      )}
-    </>
-  );
+const types: { [key: string]: StyleProps } = {
+  Default: {
+    src: LogoImg,
+    width: 321,
+    height: 48,
+    alt: "Home화면으로 이동",
+  },
+  Short: {
+    src: ShortLogoImg,
+    width: 48,
+    height: 48,
+    alt: "Home화면으로 이동",
+  },
+};
+
+const Logo: FunctionComponent<Props> = ({ type }) => {
+  const styleProps = types[type];
+  return <Image {...styleProps}></Image>;
 };
 
 export default Logo;

@@ -2,24 +2,34 @@ import React, { FunctionComponent } from "react";
 import * as Styled from "./styled";
 
 interface Props {
-  message: string;
+  type: string;
   text: string;
 }
+interface StyleProps {
+  color: string;
+  fontSize: string;
+  fontWeight: string;
+  ellipsis: boolean;
+}
 
-const Text: FunctionComponent<Props> = ({ message, text }) => {
-  return (
-    <>
-      {message === "profileHeader" && (
-        <Styled.Span ellipsis={true} fontSize={12} fontWeight={"bold"}>
-          {text}
-        </Styled.Span>
-      )}
+const types: { [key: string]: StyleProps } = {
+  Default: {
+    color: "black",
+    fontSize: "16px",
+    fontWeight: "normal",
+    ellipsis: true,
+  },
+  Header: {
+    color: "black",
+    fontSize: "12px",
+    fontWeight: "bold",
+    ellipsis: true,
+  },
+};
 
-      {message === "profileContent" && (
-        <Styled.Span fontSize={10}>{text}</Styled.Span>
-      )}
-    </>
-  );
+const Text: FunctionComponent<Props> = ({ type, text }) => {
+  const styleProps = types[type];
+  return <Styled.Span {...styleProps}>{text}</Styled.Span>;
 };
 
 export default Text;
