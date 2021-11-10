@@ -18,7 +18,6 @@ const MainPage: FunctionComponent<Props> = () => {
   const [tags, setTags] = useState<string[]>([]);
   return (
     <>
-      <Header />
       <MainContainer>
         <SideBar selectedTags={tags} setSelectedTags={setTags} />
         <SearchResults />
