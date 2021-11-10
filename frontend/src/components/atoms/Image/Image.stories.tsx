@@ -22,3 +22,12 @@ export const large = () => {
     />
   );
 };
+
+export const Profile = () => {
+  return (
+    <Image
+      type="Profile"
+      src={"https://avatars.githubusercontent.com/u/50866506?v=4"}
+    />
+  );
+};
