@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  scp:
     name: scp iles
     runs-on: ubuntu-latest
     steps:
@@ -19,10 +19,11 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
           source: "*"
-          target: "root/deploy"
+          target: "deploy"
           overwrite: true
 
-  Deploy_temp_storybook:
+  Docker_compose_up_with_build_option:
+    needs: scp
     runs-on: ubuntu-latest
 
     steps:
