@@ -11,13 +11,14 @@ import Image from "../../components/atoms/Image";
 import Chart from "../../components/atoms/Chart";
 import QuestionLists from "../../components/templates/QuestionList";
 import { getUserChartData } from "@src/lib";
+import { Answer, Question } from "@src/types";
 
 interface Props {
   userChartData: {
     username: string;
     score: number;
-    postQuestions: object[];
-    postAnswers: object[];
+    postQuestions: Question[];
+    postAnswers: Partial<Answer>[];
   };
 }
 
@@ -67,14 +68,34 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
               type={"Default"}
               text={`작성한 질문(${userChartData.postQuestions.length})`}
             />
-            <QuestionLists questions={questionsData} />
+            <QuestionLists questions={userChartData.postQuestions} />
           </QuestionDiv>
           <QuestionDiv>
             <TitleText
               type={"Default"}
               text={`작성한 답변(${userChartData.postAnswers.length})`}
             />
-            <QuestionLists questions={questionsData} />
+            {userChartData.postAnswers.map((postAnswer) => {
+              return (
+                <div
+                  style={{
+                    width: "600px",
+                    borderTop: "1px solid black",
+                    margin: "0px",
+                    marginTop: "16px",
+                    padding: "0px 10px",
+                  }}
+                >
+                  <TitleText type={"Default"} text={postAnswer.desc} />
+                  <ContentText
+                    type={"Default"}
+                    text={`좋아요 ${postAnswer.thumbupCount}개 · ${
+                      postAnswer.state === 1 ? "채택됨" : "채택되지 않음"
+                    }`}
+                  />
+                </div>
+              );
+            })}
           </QuestionDiv>
         </QuestionWrapper>
       </MainContainer>
@@ -93,53 +114,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-
-const questionsData = [
-  {
-    __typename: "PostQuestion",
-    id: 1,
-    title: "안녕",
-    realtimeShare: false,
-    author: {
-      id: "1",
-      profileUrl: "https://avatars.githubusercontent.com/u/67536413",
-      score: 23,
-      username: "안녕",
-      __typename: "User",
-    },
-    desc: "내용",
-    tags: [
-      {
-        __typename: "Tag",
-        name: "태그태그",
-      },
-    ],
-    viewCount: 1,
-    thumbupCount: 2,
-  },
-  {
-    __typename: "PostQuestion",
-    id: 1,
-    title: "안녕",
-    realtimeShare: false,
-    author: {
-      id: "1",
-      profileUrl: "https://avatars.githubusercontent.com/u/67536413",
-      score: 23,
-      username: "안녕",
-      __typename: "User",
-    },
-    desc: "내용",
-    tags: [
-      {
-        __typename: "Tag",
-        name: "태그태그",
-      },
-    ],
-    viewCount: 1,
-    thumbupCount: 2,
-  },
-];
 
 const chartData = {
   labels: ["React", "Javascript", "HTML"],

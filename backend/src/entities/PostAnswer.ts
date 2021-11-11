@@ -57,7 +57,6 @@ export class PostAnswer extends BaseEntity {
   @Column("int", { name: "state", default: 0 })
   state: number;
 
-  @Field(() => User, { description: "해당 답변글 작성자의 User Object" })
   @ManyToOne(() => User, (user) => user.postAnswers, {
     onDelete: "NO ACTION",
     onUpdate: "NO ACTION",

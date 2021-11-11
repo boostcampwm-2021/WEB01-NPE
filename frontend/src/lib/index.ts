@@ -70,16 +70,27 @@ export const getUserChartData = async (userId: number) => {
           username
           score
           postQuestions {
+            id
             title
+            realtimeShare
+            author {
+              id
+              profileUrl
+              score
+              username
+            }
             desc
             tags {
-              id
               name
             }
+            viewCount
+            thumbupCount
           }
           postAnswers {
+            id
             desc
             state
+            thumbupCount
           }
         }
       }
