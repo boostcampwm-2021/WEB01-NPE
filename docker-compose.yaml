@@ -12,5 +12,5 @@ services:
       dockerfile: Dockerfile
       context: ./backend
     ports:
-      - "4000:3000"
+      - "4000:4000"
     command: sh -c "npm run start"
