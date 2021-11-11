@@ -1,12 +1,11 @@
-import { Header, SideBar } from "@components/organisms";
-import { QuestionList } from "@components/templates";
+import { Header, SideBar } from "../components/organisms";
+import QuestionList from "../components/templates/QuestionList";
 import { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import { QuestionData } from "../types";
-import { getQuestions } from "../lib/api";
+import { Question } from "../types";
+import { getQuestions } from "../lib/";
 import { useState } from "react";
-
 
 const MainContainer = styled.main`
   display: flex;
@@ -15,19 +14,21 @@ const MainContainer = styled.main`
   margin-left: auto;
   margin-right: auto;
 `;
-  
-  
+
+interface Data {
+  searchQuestions: Question[];
+}
 interface Props {
-  data: QuestionData;
+  data: Data;
   error: any;
 }
 
-const MainPage: NextPage<Props> = ({ data }) => {
+const MainPage: NextPage<Props> = ({ data, error }) => {
   const [tags, setTags] = useState([]);
   const { searchQuestions } = data;
   return (
     <>
-      <Header type="Default"/>
+      <Header type="Default" />
       <MainContainer>
         <SideBar selectedTags={tags} setSelectedTags={setTags} />
         <QuestionList questions={searchQuestions} />
@@ -54,3 +55,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
+export default MainPage;
