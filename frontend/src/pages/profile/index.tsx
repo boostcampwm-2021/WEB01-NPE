@@ -1,5 +1,5 @@
 import React from "react";
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
 import { useSession } from "next-auth/client";
 
@@ -10,8 +10,19 @@ import ContentText from "../../components/atoms/ContentText";
 import Image from "../../components/atoms/Image";
 import Chart from "../../components/atoms/Chart";
 import QuestionLists from "../../components/templates/QuestionList";
+import { getUserChartData } from "@src/lib";
+import { Answer, Question } from "@src/types";
 
-const ProfilePage: NextPage = () => {
+interface Props {
+  userChartData: {
+    username: string;
+    score: number;
+    postQuestions: Question[];
+    postAnswers: Partial<Answer>[];
+  };
+}
+
+const ProfilePage: NextPage<Props> = ({ userChartData }) => {
   const [session, loading] = useSession();
 
   if (!session || !session.user) {
@@ -30,6 +41,10 @@ const ProfilePage: NextPage = () => {
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={session.user.name!} />
+            <TitleText
+              type={"Default"}
+              text={`누적 스코어 : ${String(userChartData.score)}`}
+            />
             <ContentText type={"Default"} text={session.user.email!} />
           </TextDiv>
         </ProfileDiv>
@@ -49,12 +64,38 @@ const ProfilePage: NextPage = () => {
         </ChartWrapper>
         <QuestionWrapper>
           <QuestionDiv>
-            <TitleText type={"Default"} text={"작성한 질문들"} />
-            <QuestionLists questions={questionsData} />
+            <TitleText
+              type={"Default"}
+              text={`작성한 질문(${userChartData.postQuestions.length})`}
+            />
+            <QuestionLists questions={userChartData.postQuestions} />
           </QuestionDiv>
           <QuestionDiv>
-            <TitleText type={"Default"} text={"답변한 질문들"} />
-            <QuestionLists questions={questionsData} />
+            <TitleText
+              type={"Default"}
+              text={`작성한 답변(${userChartData.postAnswers.length})`}
+            />
+            {userChartData.postAnswers.map((postAnswer) => {
+              return (
+                <div
+                  style={{
+                    width: "600px",
+                    borderTop: "1px solid black",
+                    margin: "0px",
+                    marginTop: "16px",
+                    padding: "0px 10px",
+                  }}
+                >
+                  <TitleText type={"Default"} text={postAnswer.desc} />
+                  <ContentText
+                    type={"Default"}
+                    text={`좋아요 ${postAnswer.thumbupCount}개 · ${
+                      postAnswer.state === 1 ? "채택됨" : "채택되지 않음"
+                    }`}
+                  />
+                </div>
+              );
+            })}
           </QuestionDiv>
         </QuestionWrapper>
       </MainContainer>
@@ -62,52 +103,17 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-const questionsData = [
-  {
-    __typename: "PostQuestion",
-    id: 1,
-    title: "안녕",
-    realtimeShare: false,
-    author: {
-      id: "1",
-      profileUrl: "https://avatars.githubusercontent.com/u/67536413",
-      score: 23,
-      username: "안녕",
-      __typename: "User",
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data } = await getUserChartData(
+    1 /* 임시로 1번 유저를 넣음. 이후에 nextSession에서 userID를 가져와야함 */
+  );
+
+  return {
+    props: {
+      userChartData: data.findUserById,
     },
-    desc: "내용",
-    tags: [
-      {
-        __typename: "Tag",
-        name: "태그태그",
-      },
-    ],
-    viewCount: 1,
-    thumbupCount: 2,
-  },
-  {
-    __typename: "PostQuestion",
-    id: 1,
-    title: "안녕",
-    realtimeShare: false,
-    author: {
-      id: "1",
-      profileUrl: "https://avatars.githubusercontent.com/u/67536413",
-      score: 23,
-      username: "안녕",
-      __typename: "User",
-    },
-    desc: "내용",
-    tags: [
-      {
-        __typename: "Tag",
-        name: "태그태그",
-      },
-    ],
-    viewCount: 1,
-    thumbupCount: 2,
-  },
-];
+  };
+};
 
 const chartData = {
   labels: ["React", "Javascript", "HTML"],
