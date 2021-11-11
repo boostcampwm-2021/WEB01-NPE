@@ -10,9 +10,12 @@ interface Props {
 const QuestionTitle: FunctionComponent<Props> = ({ text, type }) => {
   return (
     <Styled.QuestionTitle>
-      <div className="text__container">
+      <Styled.TextContainer>
         <Atoms.TitleText text={text} type="Default" />
-      </div>
+        <Styled.QuestionDate>
+          questioned on 2021년 11월 11일
+        </Styled.QuestionDate>
+      </Styled.TextContainer>
       <div className="indicator__conatier">
         <Atoms.Indicator type={type} />
       </div>

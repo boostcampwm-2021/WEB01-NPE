@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import MDEditor from ".";
 
 export default {
@@ -7,5 +7,6 @@ export default {
 };
 
 export const Default = () => {
-  return <MDEditor />;
+  const ref = useRef();
+  return <MDEditor editorRef={ref} />;
 };

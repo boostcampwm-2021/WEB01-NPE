@@ -10,7 +10,7 @@ export const example = () => {
   const data = {
     __typename: "PostQuestion",
     id: 1,
-    title: "안녕",
+    title: "리액트 관련 질문이 있습니다.",
     realtimeShare: false,
     author: {
       id: "1",
@@ -23,7 +23,7 @@ export const example = () => {
     tags: [
       {
         __typename: "Tag",
-        name: "태그태그",
+        name: "react.js",
       },
     ],
     viewCount: 1,

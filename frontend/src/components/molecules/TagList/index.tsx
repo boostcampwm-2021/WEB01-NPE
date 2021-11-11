@@ -12,9 +12,9 @@ const TagList: FunctionComponent<Props> = ({ tags }) => {
     <Styled.TagList>
       {tags.map((tag: Type.Tag, index: number) => {
         return (
-          <li key={index}>
+          <Styled.Tag key={index}>
             <Atom.Tag type={"Default"} tag={tag} onClick={() => {}} />
-          </li>
+          </Styled.Tag>
         );
       })}
     </Styled.TagList>

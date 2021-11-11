@@ -2,12 +2,13 @@ import styled from "styled-components";
 
 export const Anchor = styled.a`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  // justify-content: space-between;
   align-items: center;
   border-radius: 8px;
-  padding: 0px 8px 0px 8px;
-  width: 144px;
-  height: 72px;
+  padding: 5px 8px 5px 8px;
+  // width: 144px;
+  // height: 72px;
 
   &:hover {
     cursor: pointer;
@@ -26,6 +27,5 @@ export const ImageDiv = styled.div`
 export const TextDiv = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: left;
-  width: 72px;
+  text-align: center;
 `;

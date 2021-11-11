@@ -34,24 +34,27 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
       </Styled.LeftContainer>
 
       <Styled.RightContainer>
-        <Link href={`question/${id}`}>
-          <a>
-            <Molecule.QuestionTitle
-              text={title}
-              type={realtimeShare ? "online" : "offline"}
-            />
-          </a>
-        </Link>
+        <Styled.HeaderContainer>
+          <Link href={`question/${id}`}>
+            <a>
+              <Molecule.QuestionTitle
+                text={title}
+                type={realtimeShare ? "online" : "offline"}
+              />
+            </a>
+          </Link>
+        </Styled.HeaderContainer>
+        <Styled.DescriptContainer>{desc}</Styled.DescriptContainer>
+        <Styled.TagContainer>
+          <Molecule.TagList tags={tags} />
+        </Styled.TagContainer>
 
         <Styled.QusetionDetail>
           <Molecule.ViewsAndComment
             viewCount={viewCount}
             commentCount={thumbupCount}
           />
-          <Molecule.TagList tags={tags} />
         </Styled.QusetionDetail>
-
-        {desc}
       </Styled.RightContainer>
     </Styled.Question>
   );

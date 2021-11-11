@@ -8,18 +8,14 @@ const Editor = dynamic<EditorProps>(
   () => import("@toast-ui/react-editor").then((m) => m.Editor),
   { ssr: false }
 );
-const codeSyntaxHighlight = dynamic(
-  () =>
-    import("@toast-ui/editor-plugin-code-syntax-highlight").then(
-      (m) => m.codeSyntaxHighlight
-    ),
-  { ssr: false }
-);
-const colorSyntax = dynamic(
-  () =>
-    import("@toast-ui/editor-plugin-color-syntax").then((m) => m.colorSyntax),
-  { ssr: false }
-);
+// const codeSyntaxHighlight = dynamic(
+//   () => import("@toast-ui/editor-plugin-code-syntax-highlight"),
+//   { ssr: false }
+// );
+// const colorSyntax = dynamic(
+//   () => import("@toast-ui/editor-plugin-color-syntax").then((m) => m.default),
+//   { ssr: false }
+// );
 interface Props {
   editorRef: any;
 }
@@ -33,7 +29,7 @@ const MDEditor: FunctionComponent<Props> = ({ editorRef }) => {
       height="600px"
       initialEditType="markdown"
       useCommandShortcut={true}
-      plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
+      // plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
     />
   );
 };
