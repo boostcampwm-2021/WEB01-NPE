@@ -22,7 +22,7 @@ export const HeaderDiv = styled.header`
 
 export const LogoAnchor = styled.a``;
 
-export const SearchDiv = styled.div<SearchProps>`
+export const SearchForm = styled.form<SearchProps>`
   flex-grow: 1;
   min-width: 250px;
   display: flex;

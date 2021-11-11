@@ -7,22 +7,13 @@ import * as Styled from "./styled";
 interface Props {
   selectedTags: string[];
   setSelectedTags: (value: string[]) => void;
+  tagList: string[];
 }
-
-const tagList = [
-  "react.js",
-  "javascript",
-  "react-router-dom",
-  "java",
-  "vue.js",
-  "angular.js",
-  "python",
-  "C++",
-];
 
 const SideBar: FunctionComponent<Props> = ({
   selectedTags,
   setSelectedTags,
+  tagList,
 }) => {
   const [isLive, setIsLive] = useState<boolean>(false);
   const onSubmit = (newTag: string) => {

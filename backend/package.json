@@ -18,6 +18,8 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
+    "@types/cors": "^2.8.12",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.7.2",
