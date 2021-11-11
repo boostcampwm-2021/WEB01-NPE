@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { getAllTags } from "../pages/api";
-import { NextPage, GetStaticProps } from "next";
+import { Header, SideBar } from "../components/organisms";
+import QuestionList from "../components/templates/QuestionList";
+import { NextPage } from "next";
+import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import Header from "../components/organisms/Header";
-import SideBar from "../components/organisms/SideBar";
+import { Question } from "../types";
+import { getQuestions } from "../lib/";
+import { useState } from "react";
 
 const MainContainer = styled.main`
   display: flex;
@@ -13,14 +15,18 @@ const MainContainer = styled.main`
   margin-right: auto;
 `;
 
+interface Data {
+  searchQuestions: Question[];
+}
 interface Props {
-  tagList: string[];
+  data: Data;
+  error: any;
 }
 
-const MainPage: NextPage<Props> = ({ tagList }) => {
+const MainPage: NextPage<Props> = ({ data, error }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [texts, setTexts] = useState<string>("");
-
+  const { searchQuestions } = data;
   return (
     <>
       <Header type="Default" setTexts={setTexts} />
@@ -28,30 +34,30 @@ const MainPage: NextPage<Props> = ({ tagList }) => {
         <SideBar
           selectedTags={tags}
           setSelectedTags={setTags}
-          tagList={tagList}
+          tagList={["hello", "world"]}
         />
+        <QuestionList questions={searchQuestions} />
       </MainContainer>
     </>
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  try {
-    const { error, data } = await getAllTags();
-    const tagList = data.getAllTags.map((e: { name: string }) => e.name);
-
-    if (error || !data) {
-      return { notFound: true };
-    }
-
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data } = await getQuestions(5);
+  if (!data) {
     return {
-      props: {
-        tagList,
+      redirect: {
+        destination: "/",
+        permanent: false,
       },
     };
-  } catch {
-    return { notFound: true };
   }
+
+  return {
+    props: {
+      data,
+    },
+  };
 };
 
 export default MainPage;

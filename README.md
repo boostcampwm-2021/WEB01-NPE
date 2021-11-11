@@ -1,4 +1,12 @@
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fboostcampwm-2021%2FWEB01-NPE&count_bg=%23F48024&title_bg=%23222426&icon=&icon_color=%23BCBBBB&title=visits&edge_flat=false)](https://hits.seeyoufarm.com)
+![](https://img.shields.io/tokei/lines/github/boostcampwm-2021/WEB01-NPE)
+![](https://img.shields.io/github/issues-raw/boostcampwm-2021/WEB01-NPE?color=green)
+![](https://img.shields.io/github/issues-closed-raw/boostcampwm-2021/WEB01-NPE?color=red)
+![](https://img.shields.io/github/issues-pr-raw/boostcampwm-2021/WEB01-NPE?color=green)
+![](https://img.shields.io/github/issues-pr-closed-raw/boostcampwm-2021/web01-npe?color=red)
+![](https://img.shields.io/github/milestones/all/boostcampwm-2021/web01-npe)
+![](https://img.shields.io/website?url=http%3A%2F%2F118.67.142.132%2F)
+![](https://img.shields.io/github/workflow/status/boostcampwm-2021/WEB01-NPE/Main%20%EB%B8%8C%EB%9E%9C%EC%B9%98%20%EB%B0%B0%ED%8F%AC%20%EC%9E%90%EB%8F%99%ED%99%94)
 
 # NPE - NullPointerException
 
@@ -13,10 +21,6 @@
 | <img src="https://user-images.githubusercontent.com/49035066/138902384-74aa03f1-e2ad-4584-9f1c-a6168b3cd2ef.jpg" width="500px"> | <img src="https://i.ibb.co/pXTkwJV/image.jpg" width="500px"> | <img src="https://avatars.githubusercontent.com/u/50866506?v=4" width="500px"> | <img src="https://avatars.githubusercontent.com/u/67536413?v=4" width="500px"> | 
 | [@getState](https://github.com/getState) | [@david02324](https://github.com/david02324) | [@sa02045](https://github.com/sa02045)| [@hwangwoojin](https://github.com/hwangwoojin) |
 | 저희 10분만 쉬었다 할까요..? | 네 알겠습니다~ | 그렇게 하면 될 것 같아요 | 작업한거 노션 링크좀 올려주세요 |
-
-## 위키
-
-[https://github.com/boostcampwm-2021/WEB01-NPE/wiki](https://github.com/boostcampwm-2021/WEB01-NPE/wiki)
 
 ## 프로젝트 소개
 
@@ -34,52 +38,20 @@ NPE 는 개발자들을 위한 질문/답변 위주의 커뮤니티 입니다. �
     - 화상,음성, 채팅, 실시간 코드 편집기
     - `WebRtc`, [`sockiet.io`](http://sockiet.io) , 실시간 편집 : socket 기반 라이브러리
 
-## 기술 스택
+## [위키](https://github.com/boostcampwm-2021/WEB01-NPE/wiki)
 
-## **🏛 Web Architecture**
+### [🚩 기술 스택 🚩](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
 
-## **🚩 기술 스택**
+### [🚤 플로우차트 🚤](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
 
-![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/f5109795-595f-4339-ab4d-0cf354de56a4/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211028%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211028T070620Z&X-Amz-Expires=86400&X-Amz-Signature=3710f8c63d4fae0c3c3af61f8e33b043bee6c709d09ceaecc874814fe3e80bab&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
+### [🥨 ERD 🥨](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
 
-## 플로우차트
+### [🖼 와이어프레임 🖼](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
 
-![Untitled Diagram.drawio (4).png](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/2bbdffd7-a037-4691-b652-1f8d4c4af176/Untitled_Diagram.drawio_%285%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211028%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211028T070830Z&X-Amz-Expires=86400&X-Amz-Signature=f2674585deefd8c404c6bba76337aaacaddeb845639be2a5f01666bf2a99d08a&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled%2520Diagram.drawio%2520%285%29.png%22)
+### [😎 그라운드 룰 😎](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
 
-## ERD
+### [🎋 브랜칭 전략 🎋](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EB%B8%8C%EB%9E%9C%EC%B9%AD-%EC%A0%84%EB%9E%B5)
 
-![Untitled](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/33d63296-3e31-4992-a94c-1c95b4d346ac/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20211028%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20211028T070705Z&X-Amz-Expires=86400&X-Amz-Signature=8ad9fdea6c723b366790a2e5aa2cfa6b3bcb761564be678d029f36d48de7c7c9&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22)
+### [☝️ 요구사항 ☝️](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD)
 
-## 와이어프레임
-
-메인 페이지
-
-![](https://user-images.githubusercontent.com/67536413/139359557-7f87cffc-9399-468d-b5f4-6dc94caf78ea.png)
-
-질문조회 페이지
-
-![](https://user-images.githubusercontent.com/67536413/139359552-47224203-2f76-44ce-bb46-759bfc9b490c.png)
-
-질문하기 페이지
-
-![](https://user-images.githubusercontent.com/67536413/139359556-452c4c0f-50cc-407d-8f56-54f020b6583e.png)
-
-프로필 페이지
-
-![](https://user-images.githubusercontent.com/67536413/139359547-6dfc1fbe-42e0-4885-b1a0-5000cc79b883.png)
-
-### 😎 그라운드 룰 😎
-
-[https://github.com/boostcampwm-2021/WEB01-NPE/wiki/그라운드-룰](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EA%B7%B8%EB%9D%BC%EC%9A%B4%EB%93%9C-%EB%A3%B0)
-
-### 🎋 브랜칭 전략 🎋
-
-[https://github.com/boostcampwm-2021/WEB01-NPE/wiki/브랜칭-전략](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EB%B8%8C%EB%9E%9C%EC%B9%AD-%EC%A0%84%EB%9E%B5)
-
-### ☝️ 요구사항 ☝️
-
-[https://github.com/boostcampwm-2021/WEB01-NPE/wiki/요구사항](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD)
-
-### 📄 기획서 📄
-
-[https://docs.google.com/presentation/d/1N2xDlzOrDnR9DSsIhM2_mKLwdTQQFOScb-WeAVDvKA4/edit#slide=id.p](https://docs.google.com/presentation/d/1N2xDlzOrDnR9DSsIhM2_mKLwdTQQFOScb-WeAVDvKA4/edit#slide=id.p)
+### [📄 기획서 📄](https://docs.google.com/presentation/d/1N2xDlzOrDnR9DSsIhM2_mKLwdTQQFOScb-WeAVDvKA4/edit#slide=id.p)
