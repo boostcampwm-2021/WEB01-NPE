@@ -1,4 +1,5 @@
-import React, { FunctionComponent, useRef, useState } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
+import { getAllTags } from "../../../lib";
 import * as Styled from "./styled";
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 
 const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   const [candidateTags, setTags] = useState<string[]>([]);
+
   const inputTag = useRef<HTMLInputElement>(null);
   const onTagClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const tagName = event.target.dataset.tag;
@@ -31,6 +33,7 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
       </Styled.Tag>
     );
   };
+
   return (
     <Styled.Container>
       <Styled.Input

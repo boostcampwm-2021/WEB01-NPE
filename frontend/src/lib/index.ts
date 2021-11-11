@@ -6,6 +6,7 @@ export const getAllTags = async () => {
     query: gql`
       query {
         getAllTags {
+          id
           name
         }
       }
@@ -14,11 +15,55 @@ export const getAllTags = async () => {
   return { loading, error, data };
 };
 
-export const getQuestions = async (take: number) => {
+export const getOneQuestionByID = async (id: number) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
-        searchQuestions(searchQuery: { take: ${take} }) {
+        findOneQuestionById(id: ${id}) {
+          title
+          desc
+          viewCount
+          realtimeShare
+          createdAt
+          thumbupCount
+          score
+          author {
+            username
+            profileUrl
+            score
+          }
+          tags {
+            id
+            name
+          }
+          answers{
+            author{
+             username
+             profileUrl
+             score
+             id
+           }    
+         }
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};
+
+export const getQuestions = async (
+  take: number,
+  title?: string,
+  tagIDs?: number[]
+) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        searchQuestions(searchQuery: {
+          take: ${take}
+          title: ${JSON.stringify(title || "")}
+          tagIDs: ${JSON.stringify(tagIDs || [])}
+        }) {
           id
           viewCount
           thumbupCount
@@ -32,7 +77,8 @@ export const getQuestions = async (take: number) => {
           title
           desc
           tags {
-            id
+            id,
+            name
           }
         }
       }

@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import express from "express";
 import GraphQLMiddleware from "./graphql";
+import cors from "cors";
 import { ConnectionOptions, createConnection, getConnection } from "typeorm";
 const DB_CONN_OPTIONS: Record<
   string,
@@ -17,6 +18,8 @@ const DB_CONN_OPTIONS: Record<
   await createConnection(DB_CONN_OPTIONS[env]);
 
   const gqMiddleware = await GraphQLMiddleware.get();
+
+  app.use(cors());
 
   app.use("/graphql", gqMiddleware);
 
