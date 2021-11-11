@@ -2,18 +2,18 @@ import React, { FunctionComponent, useState } from "react";
 import * as Styled from "./styled";
 import * as Atom from "../../atoms";
 
-import * as Type from "../../../types";
+import { TagType } from "@src/types";
 interface Props {
-  tags: Type.Tag[];
+  tags: TagType[];
 }
 
 const TagList: FunctionComponent<Props> = ({ tags }) => {
   return (
     <Styled.TagList>
-      {tags.map((tag: Type.Tag, index: number) => {
+      {tags.map((tag) => {
         return (
-          <Styled.Tag key={index}>
-            <Atom.Tag type={"Default"} tag={tag} onClick={() => {}} />
+          <Styled.Tag key={tag.id}>
+            <Atom.Tag type={"Default"} name={tag.name} onClick={() => {}} />
           </Styled.Tag>
         );
       })}

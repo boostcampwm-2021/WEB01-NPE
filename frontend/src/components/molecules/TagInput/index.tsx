@@ -2,6 +2,7 @@ import React, { FunctionComponent, useState } from "react";
 import { TagSearch } from "..";
 import { Tag } from "../../atoms";
 import * as Styled from "./styled";
+
 interface Props {
   tagList: string[];
   setTagList: (param: string[]) => void;
@@ -30,7 +31,7 @@ const TagInput: FunctionComponent<Props> = ({ tagList, setTagList }) => {
       <Tag
         key={index}
         type="Default"
-        label={tag}
+        name={tag}
         onClick={() => onDelete(tag)}
       />
     );
