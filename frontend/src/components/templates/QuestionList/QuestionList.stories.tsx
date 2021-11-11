@@ -10,7 +10,7 @@ export const example = () => {
     {
       __typename: "PostQuestion",
       id: 1,
-      title: "안녕",
+      title: "안녕하세요 react관련해서 궁금한 점이 있습니다.",
       realtimeShare: false,
       author: {
         id: "1",
