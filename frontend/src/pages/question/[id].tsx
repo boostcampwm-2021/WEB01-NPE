@@ -1,15 +1,62 @@
 import React from "react";
-import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
+import styled from "styled-components";
 
-const QuestionPage: NextPage = () => {
-  const router = useRouter();
+import { QuestionDetailType, AnswerDetailType } from "@src/types";
+import { getOneQuestionByID } from "@src/lib";
+import { QusetionDetail, AnswerDetail, Header } from "@components/organisms";
+
+const MainContainer = styled.main`
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+interface Props {
+  data: {
+    findOneQuestionById: QuestionDetailType;
+  };
+}
+
+const QuestionPage: NextPage<Props> = ({ data }) => {
+  const { findOneQuestionById: question } = data;
+  const { answers }: { answers: AnswerDetailType[] } = question;
   return (
     <>
-      <h1>{router.query.id}</h1>
-      <p>This is the blog post content.</p>
+      <Header type="Default" />
+      <MainContainer>
+        <QusetionDetail question={question} />
+        {answers.map((answer) => {
+          return <AnswerDetail answer={answer} key={answer.id} />;
+        })}
+      </MainContainer>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id }: { id: string } = context.params;
+  const { data }: { data: QuestionDetailType } = await getOneQuestionByID(
+    Number(id)
+  );
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      data,
+    },
+  };
 };
 
 export default QuestionPage;
