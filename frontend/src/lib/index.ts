@@ -15,6 +15,42 @@ export const getAllTags = async () => {
   return { loading, error, data };
 };
 
+export const getOneQuestionByID = async (id: number) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        findOneQuestionById(id: ${id}) {
+          title
+          desc
+          viewCount
+          realtimeShare
+          createdAt
+          thumbupCount
+          score
+          author {
+            username
+            profileUrl
+            score
+          }
+          tags {
+            id
+            name
+          }
+          answers{
+            author{
+             username
+             profileUrl
+             score
+             id
+           }    
+         }
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};
+
 export const getQuestions = async (
   take: number,
   title?: string,
