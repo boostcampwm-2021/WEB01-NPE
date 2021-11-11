@@ -5,5 +5,5 @@ WORKDIR "/app/frontend"
 
 COPY . .
 
-RUN npm install -f
+RUN npm install
 RUN npm run build
