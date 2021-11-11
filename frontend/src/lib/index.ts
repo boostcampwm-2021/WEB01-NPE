@@ -14,11 +14,14 @@ export const getAllTags = async () => {
   return { loading, error, data };
 };
 
-export const getQuestions = async (take: number) => {
+export const getQuestions = async (take: number, title?: string) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
-        searchQuestions(searchQuery: { take: ${take} }) {
+        searchQuestions(searchQuery: {
+          take: ${take},
+          title: "${title || ""}",
+        }) {
           id
           viewCount
           thumbupCount
@@ -32,7 +35,8 @@ export const getQuestions = async (take: number) => {
           title
           desc
           tags {
-            id
+            id,
+            name
           }
         }
       }

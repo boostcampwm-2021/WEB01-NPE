@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 import styled from "styled-components";
 import { Question } from "../types";
 import { getQuestions } from "../lib/";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MainContainer = styled.main`
   display: flex;
@@ -26,7 +26,19 @@ interface Props {
 const MainPage: NextPage<Props> = ({ data, error }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [texts, setTexts] = useState<string>("");
-  const { searchQuestions } = data;
+  const [searchQuestions, setSearchQuestions] = useState(data.searchQuestions);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const { data } = await getQuestions(5, texts, []);
+
+      if (data) {
+        setSearchQuestions(data.searchQuestions);
+      }
+    };
+    fetchQuestions();
+  }, [tags, texts]);
+
   return (
     <>
       <Header type="Default" setTexts={setTexts} />
