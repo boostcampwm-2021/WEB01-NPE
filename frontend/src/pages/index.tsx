@@ -1,8 +1,12 @@
-import React, { FunctionComponent, useState } from "react";
+import { Header, SideBar } from "@components/organisms";
+import { QuestionList } from "@components/templates";
 import { NextPage } from "next";
+import { GetServerSideProps } from "next";
 import styled from "styled-components";
-import Header from "../components/organisms/Header";
-import SideBar from "../components/organisms/SideBar";
+import { QuestionData } from "../types";
+import { getQuestions } from "../lib/api";
+import { useState } from "react";
+
 
 const MainContainer = styled.main`
   display: flex;
@@ -11,17 +15,42 @@ const MainContainer = styled.main`
   margin-left: auto;
   margin-right: auto;
 `;
+  
+  
+interface Props {
+  data: QuestionData;
+  error: any;
+}
 
-const MainPage: NextPage = () => {
-  const [tags, setTags] = useState<string[]>([]);
+const MainPage: NextPage<Props> = ({ data }) => {
+  const [tags, setTags] = useState([]);
+  const { searchQuestions } = data;
   return (
     <>
-      <Header type="Default" />
+      <Header type="Default"/>
       <MainContainer>
         <SideBar selectedTags={tags} setSelectedTags={setTags} />
+        <QuestionList questions={searchQuestions} />
       </MainContainer>
     </>
   );
 };
 
-export default MainPage;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data } = await getQuestions(5);
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      data,
+    },
+  };
+};
+
