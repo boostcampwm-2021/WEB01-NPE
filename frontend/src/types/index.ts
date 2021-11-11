@@ -6,8 +6,9 @@ export interface Author {
   score: number;
 }
 
-export interface Tag {
+export interface TagType {
   __typename: string;
+  id: string;
   name: string;
 }
 
@@ -17,8 +18,38 @@ export interface Question {
   author: Author;
   desc: string;
   realtimeShare: boolean;
-  tags: Tag[];
+  tags: TagType[];
   title: string;
   viewCount: number;
   thumbupCount: number;
+}
+
+export interface QuestionDetailType {
+  id: number;
+  __typename: string;
+  author: Author;
+  desc: string;
+  realtimeShare: boolean;
+  tags: TagType[];
+  title: string;
+  viewCount: number;
+  thumbupCount: number;
+  createdAt: string;
+  score: number;
+  answers: AnswerDetailType[];
+}
+
+export interface AnswerDetailType {
+  id: string;
+  author: Author;
+  desc: string;
+  thumbupCount: number;
+  createdAt: string;
+}
+
+export interface DetailType {
+  desc: string;
+  tags?: TagType[];
+  thumbupCount: number;
+  author: Author;
 }
