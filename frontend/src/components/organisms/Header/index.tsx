@@ -6,6 +6,7 @@ import React, {
   createRef,
 } from "react";
 import { useSession } from "next-auth/client";
+import Router from "next/router";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
@@ -56,6 +57,7 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
       onLoginButton(event);
       return;
     }
+    Router.push("/WritePage");
   };
 
   const onReset = () => {

@@ -7,3 +7,4 @@ export { default as QuestionTitle } from "./QuestionTitle";
 export { default as IconWithNumber } from "./IconWithNumber";
 export { default as ViewsAndComment } from "./ViewsAndComment";
 export { default as TagList } from "./TagList";
+export { default as Vote } from "./Vote";

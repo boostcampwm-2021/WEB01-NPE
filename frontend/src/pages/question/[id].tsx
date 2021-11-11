@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
 import { getOneQuestionByID } from "@src/lib";
-import { QusetionDetail, AnswerDetail, Header } from "@components/organisms";
+import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 
 const MainContainer = styled.main`
   display: flex;
@@ -28,7 +28,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
     <>
       <Header type="Default" />
       <MainContainer>
-        <QusetionDetail question={question} />
+        <QuestionDetail question={question} />
         {answers.map((answer) => {
           return <AnswerDetail answer={answer} key={answer.id} />;
         })}

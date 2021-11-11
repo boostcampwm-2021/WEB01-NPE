@@ -26,11 +26,7 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
   return (
     <Styled.Question>
       <Styled.LeftContainer>
-        <Molecule.ProfileSummary
-          src={"https://avatars.githubusercontent.com/u/67536413"}
-          name={author.username}
-          rank={author.score.toString()}
-        />
+        <Molecule.ProfileSummary author={author} />
       </Styled.LeftContainer>
 
       <Styled.RightContainer>
