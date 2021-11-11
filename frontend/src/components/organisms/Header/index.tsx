@@ -1,10 +1,26 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import { signOut, useSession } from "next-auth/client";
+import Link from "next/link";
+import { useSession } from "next-auth/client";
 import * as Styled from "./styled";
 import * as Atoms from "../../atoms";
 import * as Molecules from "../../molecules";
 
-const Header: FunctionComponent = () => {
+interface StyleProps {
+  visibility: string;
+}
+
+const types: { [key: string]: StyleProps } = {
+  Default: {
+    visibility: "visible",
+  },
+  Profile: {
+    visibility: "hidden",
+  },
+};
+
+const Header: FunctionComponent<{ type: string }> = ({ type }) => {
+  const headerProps: StyleProps = types[type];
+
   const [session, loading] = useSession();
   const [isDropdown, setIsDropdown] = useState(false);
   const [isLoginModal, setIsLoginModal] = useState(false);
@@ -47,12 +63,16 @@ const Header: FunctionComponent = () => {
 
   return (
     <Styled.HeaderDiv>
-      <Styled.LogoAnchor href="">
-        <Atoms.Logo type="Default" />
-      </Styled.LogoAnchor>
-      <Styled.SearchDiv>
+      <Link href="/">
+        <Styled.LogoAnchor href="/">
+          <Atoms.Logo type="Default" />
+        </Styled.LogoAnchor>
+      </Link>
+
+      <Styled.SearchDiv {...headerProps}>
         <Atoms.Input text={"Search..."} size={"medium"} />
       </Styled.SearchDiv>
+
       <Styled.ButtonDiv>
         {session?.user && (
           <div>
@@ -64,10 +84,7 @@ const Header: FunctionComponent = () => {
             {isDropdown && (
               <Styled.DropdownDiv>
                 <div onClick={onDropdown}>
-                  <Molecules.ProfileDropdown
-                    onProfile={() => {}}
-                    onLogout={signOut}
-                  />
+                  <Molecules.ProfileDropdown />
                 </div>
               </Styled.DropdownDiv>
             )}

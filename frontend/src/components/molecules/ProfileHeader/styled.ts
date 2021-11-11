@@ -6,7 +6,7 @@ export const ProfileDiv = styled.div`
   align-items: center;
   border-radius: 8px;
   padding: 0px 8px 0px 8px;
-  width: 144px;
+  width: 136px;
   height: 36px;
   &:hover {
     cursor: pointer;

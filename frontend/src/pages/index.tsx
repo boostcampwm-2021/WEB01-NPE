@@ -7,13 +7,16 @@ import { QuestionData } from "../types";
 import { getQuestions } from "../lib/api";
 import { useState } from "react";
 
-export const MainContainer = styled.main`
+
+const MainContainer = styled.main`
   display: flex;
   width: 100%;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 `;
+  
+  
 interface Props {
   data: QuestionData;
   error: any;
@@ -24,7 +27,7 @@ const MainPage: NextPage<Props> = ({ data }) => {
   const { searchQuestions } = data;
   return (
     <>
-      <Header />
+      <Header type="Default"/>
       <MainContainer>
         <SideBar selectedTags={tags} setSelectedTags={setTags} />
         <QuestionList questions={searchQuestions} />
@@ -51,4 +54,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default MainPage;
