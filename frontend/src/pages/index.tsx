@@ -41,9 +41,13 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         setTagList(tagList);
       }
     };
+    fetchTags();
+  });
+
+  useEffect(() => {
     const fetchQuestions = async () => {
       const tagIDs = tags.map(
-        (e) => tagList.find((v) => e === v.name)?.id || -1
+        (e) => Number(tagList.find((v) => e === v.name)?.id) || -1
       );
       const { data } = await getQuestions(5, texts, tagIDs);
 
@@ -51,7 +55,6 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         setSearchQuestions(data.searchQuestions);
       }
     };
-    fetchTags();
     fetchQuestions();
   }, [tags, texts]);
 

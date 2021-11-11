@@ -25,8 +25,8 @@ export const getQuestions = async (
       query {
         searchQuestions(searchQuery: {
           take: ${take}
-          title: "${title || ""}"
-          tagIDs: ${tagIDs?.toString() || "[]"}
+          title: ${JSON.stringify(title || "")}
+          tagIDs: ${JSON.stringify(tagIDs || [])}
         }) {
           id
           viewCount
