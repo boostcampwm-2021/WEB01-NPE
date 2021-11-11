@@ -27,7 +27,7 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
     <Styled.Question>
       <Styled.LeftContainer>
         <Molecule.ProfileSummary
-          src={author.profileUrl}
+          src={"https://avatars.githubusercontent.com/u/67536413"}
           name={author.username}
           rank={author.score.toString()}
         />
@@ -38,7 +38,7 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
           <a>
             <Molecule.QuestionTitle
               text={title}
-              realtimeShare={realtimeShare}
+              type={realtimeShare ? "online" : "offline"}
             />
           </a>
         </Link>
@@ -56,31 +56,5 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
     </Styled.Question>
   );
 };
-
-// <div className="title-container__indicator">
-//         <Link href={`/question/${id}`}>
-//           <a>
-//             <Atom.TitleText type={"Default"} text={title} />
-//           </a>
-//         </Link>
-//         <Atom.Indicator type={realtimeShare ? "online" : "offline"} />
-//       </div>
-//       <div className="markdown-container">{desc}</div>
-//       <div className="tag-container">
-//         {tags.map((tag: Type.Tag, index: number) => {
-//           return (
-//             <Atom.Tag
-//               type="Default"
-//               key={index}
-//               name={tag.name}
-//               onClick={onClick}
-//             />
-//           );
-//         })}
-//       </div>
-//       <div>
-//         댓글수{viewCount}
-//         좋아요수{thumbupCount}
-//       </div>
 
 export default SearchResult;
