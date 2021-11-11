@@ -2,10 +2,24 @@ import React, { FunctionComponent } from "react";
 import "prismjs/themes/prism.css";
 import Prism from "prismjs";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/react-editor";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-
+import { EditorProps } from "@toast-ui/react-editor";
+import dynamic from "next/dynamic";
+const Editor = dynamic<EditorProps>(
+  () => import("@toast-ui/react-editor").then((m) => m.Editor),
+  { ssr: false }
+);
+const codeSyntaxHighlight = dynamic(
+  () =>
+    import("@toast-ui/editor-plugin-code-syntax-highlight").then(
+      (m) => m.codeSyntaxHighlight
+    ),
+  { ssr: false }
+);
+const colorSyntax = dynamic(
+  () =>
+    import("@toast-ui/editor-plugin-color-syntax").then((m) => m.colorSyntax),
+  { ssr: false }
+);
 interface Props {
   editorRef: any;
 }
