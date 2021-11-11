@@ -31,11 +31,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
     <>
       <Header type="Default" setTexts={setTexts} />
       <MainContainer>
-        <SideBar
-          selectedTags={tags}
-          setSelectedTags={setTags}
-          tagList={["hello", "world"]}
-        />
+        <SideBar selectedTags={tags} setSelectedTags={setTags} />
         <QuestionList questions={searchQuestions} />
       </MainContainer>
     </>

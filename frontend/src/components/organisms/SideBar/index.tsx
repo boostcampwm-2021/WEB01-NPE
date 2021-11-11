@@ -7,13 +7,11 @@ import * as Styled from "./styled";
 interface Props {
   selectedTags: string[];
   setSelectedTags: (value: string[]) => void;
-  tagList: string[];
 }
 
 const SideBar: FunctionComponent<Props> = ({
   selectedTags,
   setSelectedTags,
-  tagList,
 }) => {
   const [isLive, setIsLive] = useState<boolean>(false);
   const onSubmit = (newTag: string) => {
@@ -26,7 +24,7 @@ const SideBar: FunctionComponent<Props> = ({
   };
   return (
     <Styled.Container>
-      <TagSearch tagList={tagList} onSubmit={onSubmit} />
+      <TagSearch onSubmit={onSubmit} />
       <Styled.LiveContainer>
         <TitleText text="실시간 답변" />
         <Switch type={"SideBar"} isChecked={isLive} setIsChecked={setIsLive} />
