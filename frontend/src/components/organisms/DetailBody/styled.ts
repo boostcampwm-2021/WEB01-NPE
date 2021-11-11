@@ -13,8 +13,10 @@ export const DetailHeaderDetail = styled.div`
 `;
 
 export const DetailBodyDesc = styled.div`
+  width: 700px;
   height: 100%;
   min-height: 200px;
+  border-bottom: 1px solid;
 `;
 export const DetailBody = styled.div`
   width: 100%;

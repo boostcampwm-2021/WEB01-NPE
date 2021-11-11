@@ -10,7 +10,7 @@ import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
-  width: 1200px;
+  width: 800px;
   margin-left: auto;
   margin-right: auto;
 `;
