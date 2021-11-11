@@ -1,9 +1,5 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql",
-  cache: new InMemoryCache(),
-});
+import { gql } from "@apollo/client";
+import client from "./apolloClient";
 
 export const getAllTags = async () => {
   const { loading, error, data } = await client.query({
@@ -22,7 +18,10 @@ export const getQuestions = async (take: number) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
-        searchQuestions(searchQuery: { take: 10 }) {
+        searchQuestions(searchQuery: { take: ${take} }) {
+          id
+          viewCount
+          thumbupCount
           author {
             id
             username
