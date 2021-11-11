@@ -66,7 +66,7 @@ export const getUserChartData = async (userId: number) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
-        findUserById(id: 1) {
+        findUserById(id: ${userId}) {
           username
           score
           postQuestions {

@@ -10,6 +10,7 @@ import {
 import { PostAnswer } from "./PostAnswer";
 import { PostQuestion } from "./PostQuestion";
 import { Tag } from "./Tag";
+import { UserHasTag } from "./UserHasTag";
 
 @ObjectType("User", {
   description:
@@ -55,6 +56,6 @@ export class User extends BaseEntity {
   @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.user)
   postAnswers: PostAnswer[];
 
-  @ManyToMany(() => Tag, (tag) => tag.users)
-  tags: Tag[];
+  @OneToMany(() => UserHasTag, (userHasTag) => userHasTag.user)
+  userHasTags: UserHasTag[];
 }

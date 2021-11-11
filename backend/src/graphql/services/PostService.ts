@@ -4,6 +4,7 @@ import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
+import { UserHasTag } from "../../entities/UserHasTag";
 import AnswerInput from "../inputTypes/AnswerInput";
 import QuestionInput from "../inputTypes/QuestionInput";
 import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
@@ -112,12 +113,29 @@ export default class PostService {
     newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
     await newQuestion.save();
 
+    const author = await User.findOne({ id: user.id });
     if (args.tagIds && args.tagIds.length > 0) {
       for (const tagId of args.tagIds) {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
         await postQuestionHasTag.save();
+
+        // 유저 개인의 태그 저장
+        let userHasTag = await UserHasTag.findOne({
+          userId: user.id,
+          tagId: tagId,
+        });
+        if (!userHasTag) {
+          userHasTag = new UserHasTag();
+          userHasTag.user = author;
+          userHasTag.tagId = tagId;
+          userHasTag.count = 0;
+        } else {
+          userHasTag.count++;
+        }
+
+        await userHasTag.save();
       }
     }
 

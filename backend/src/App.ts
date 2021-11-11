@@ -1,25 +1,26 @@
 import "reflect-metadata";
 import express from "express";
 import GraphQLMiddleware from "./graphql";
-import { createConnection } from "typeorm";
-const DB_CONN_INFO = require("../ormconfig.json");
-let env = null;
-if (process.env.NODE_ENV === "production") {
-  env = "production";
-} else {
-  env = "test";
-}
+import { ConnectionOptions, createConnection, getConnection } from "typeorm";
+const DB_CONN_OPTIONS: Record<
+  string,
+  ConnectionOptions
+> = require("../ormconfig.json");
 
 (async () => {
+  let env = "";
+  if (["production", "test", "development"].includes(process.env.NODE_ENV))
+    env = process.env.NODE_ENV;
+  else process.exit();
+
   const app = express();
-  // DB 커넥션 생성
-  createConnection(DB_CONN_INFO[env]);
+  await createConnection(DB_CONN_OPTIONS[env]);
 
   const gqMiddleware = await GraphQLMiddleware.get();
 
   app.use("/graphql", gqMiddleware);
 
-  if (process.env.NODE_ENV === "production") {
+  if (env === "production") {
     console.info("!!! THIS IS PRODUCTION MODE !!!");
     app.listen(3000, () => console.log("server is ON at 4000(PRODUCTION)"));
   } else {

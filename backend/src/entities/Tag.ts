@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { PostQuestionHasTag } from "./PostQuestionHasTag";
 import { User } from "./User";
+import { UserHasTag } from "./UserHasTag";
 
 @ObjectType("Tag", { description: "태그 Ojbect 입니다." })
 @Entity("tag")
@@ -28,12 +29,6 @@ export class Tag extends BaseEntity {
   )
   postQuestionHasTags: PostQuestionHasTag[];
 
-  @ManyToMany(() => User, (user) => user.tags)
-  @JoinTable({
-    name: "user_has_tag",
-    joinColumns: [{ name: "tag_id", referencedColumnName: "id" }],
-    inverseJoinColumns: [{ name: "user_id", referencedColumnName: "id" }],
-    schema: "mydb",
-  })
-  users: User[];
+  @OneToMany(() => UserHasTag, (userHasTag) => userHasTag.tag)
+  userHasTags: UserHasTag[];
 }
