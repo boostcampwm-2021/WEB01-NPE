@@ -6,6 +6,7 @@ export const getAllTags = async () => {
     query: gql`
       query {
         getAllTags {
+          id
           name
         }
       }
@@ -14,13 +15,18 @@ export const getAllTags = async () => {
   return { loading, error, data };
 };
 
-export const getQuestions = async (take: number, title?: string) => {
+export const getQuestions = async (
+  take: number,
+  title?: string,
+  tagIDs?: number[]
+) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
         searchQuestions(searchQuery: {
-          take: ${take},
-          title: "${title || ""}",
+          take: ${take}
+          title: "${title || ""}"
+          tagIDs: ${tagIDs?.toString() || "[]"}
         }) {
           id
           viewCount

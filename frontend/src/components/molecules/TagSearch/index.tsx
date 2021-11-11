@@ -4,11 +4,11 @@ import * as Styled from "./styled";
 
 interface Props {
   onSubmit: (value: string) => void;
+  tagList: string[];
 }
 
-const TagSearch: FunctionComponent<Props> = ({ onSubmit }) => {
+const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   const [candidateTags, setTags] = useState<string[]>([]);
-  const [tagList, setTagList] = useState<string[]>([]);
 
   const inputTag = useRef<HTMLInputElement>(null);
   const onTagClick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,17 +33,6 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit }) => {
       </Styled.Tag>
     );
   };
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      const { data } = await getAllTags();
-      if (data) {
-        const tagList = data.getAllTags.map((e) => e.name);
-        setTagList(tagList);
-      }
-    };
-    fetchTags();
-  }, []);
 
   return (
     <Styled.Container>
