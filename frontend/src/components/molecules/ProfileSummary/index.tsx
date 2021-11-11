@@ -1,23 +1,25 @@
 import React, { FunctionComponent } from "react";
+
 import * as Styled from "./styled";
-import Image from "../../atoms/Image";
-import Text from "../../atoms/Text";
+import { Image, Text } from "@components/atoms";
+import { Author } from "@src/types";
 
 interface Props {
-  src: string;
-  name: string;
-  rank: string;
+  author: Author;
 }
 
-const ProfileSummary: FunctionComponent<Props> = ({ src, name, rank }) => {
+const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
   return (
     <Styled.Anchor>
       <Styled.ImageDiv>
-        <Image type="Large" src={src} />
+        <Image
+          type="Large"
+          src={"https://avatars.githubusercontent.com/u/67536413"}
+        />
       </Styled.ImageDiv>
       <Styled.TextDiv>
-        <Text type="Header" text={name} />
-        <Text type="Default" text={rank} />
+        <Text type="Header" text={author.username} />
+        <Text type="Default" text={`${author.score}`} />
       </Styled.TextDiv>
     </Styled.Anchor>
   );
