@@ -1,19 +1,19 @@
 import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
-import * as Organism from "../../organisms";
-import * as Type from "../../../types";
+import * as Organism from "@components/organisms";
+import { Question } from "@src/types";
 
 interface Props {
-  questions: Type.Question[];
+  questions: Question[];
 }
 
 const SearchResults: FunctionComponent<Props> = ({ questions }) => {
   return (
     <Styled.QuestionList>
-      {questions.map((question: Type.Question, index: number) => {
+      {questions.map((question) => {
         return (
-          <li key={index}>
+          <li key={question.id}>
             <Organism.Question question={question} />
           </li>
         );
