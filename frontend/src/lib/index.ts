@@ -61,3 +61,29 @@ export const getUserInfo = async (userId: number) => {
   });
   return { loading, error, data };
 };
+
+export const getUserChartData = async (userId: number) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        findUserById(id: 1) {
+          username
+          score
+          postQuestions {
+            title
+            desc
+            tags {
+              id
+              name
+            }
+          }
+          postAnswers {
+            desc
+            state
+          }
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};

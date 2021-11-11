@@ -23,6 +23,6 @@ if (process.env.NODE_ENV === "production") {
     console.info("!!! THIS IS PRODUCTION MODE !!!");
     app.listen(3000, () => console.log("server is ON at 4000(PRODUCTION)"));
   } else {
-    app.listen(3000, () => console.log("server is ON at 3000(TEST/DEV)"));
+    app.listen(4000, () => console.log("server is ON at 3000(TEST/DEV)"));
   }
 })();

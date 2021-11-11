@@ -1,5 +1,5 @@
 import React from "react";
-import type { NextPage } from "next";
+import type { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
 import { useSession } from "next-auth/client";
 
@@ -10,8 +10,18 @@ import ContentText from "../../components/atoms/ContentText";
 import Image from "../../components/atoms/Image";
 import Chart from "../../components/atoms/Chart";
 import QuestionLists from "../../components/templates/QuestionList";
+import { getUserChartData } from "@src/lib";
 
-const ProfilePage: NextPage = () => {
+interface Props {
+  userChartData: {
+    username: string;
+    score: number;
+    postQuestions: object[];
+    postAnswers: object[];
+  };
+}
+
+const ProfilePage: NextPage<Props> = ({ userChartData }) => {
   const [session, loading] = useSession();
 
   if (!session || !session.user) {
@@ -30,6 +40,10 @@ const ProfilePage: NextPage = () => {
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={session.user.name!} />
+            <TitleText
+              type={"Default"}
+              text={`누적 스코어 : ${String(userChartData.score)}`}
+            />
             <ContentText type={"Default"} text={session.user.email!} />
           </TextDiv>
         </ProfileDiv>
@@ -49,17 +63,35 @@ const ProfilePage: NextPage = () => {
         </ChartWrapper>
         <QuestionWrapper>
           <QuestionDiv>
-            <TitleText type={"Default"} text={"작성한 질문들"} />
+            <TitleText
+              type={"Default"}
+              text={`작성한 질문(${userChartData.postQuestions.length})`}
+            />
             <QuestionLists questions={questionsData} />
           </QuestionDiv>
           <QuestionDiv>
-            <TitleText type={"Default"} text={"답변한 질문들"} />
+            <TitleText
+              type={"Default"}
+              text={`작성한 답변(${userChartData.postAnswers.length})`}
+            />
             <QuestionLists questions={questionsData} />
           </QuestionDiv>
         </QuestionWrapper>
       </MainContainer>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data } = await getUserChartData(
+    1 /* 임시로 1번 유저를 넣음. 이후에 nextSession에서 userID를 가져와야함 */
+  );
+
+  return {
+    props: {
+      userChartData: data.findUserById,
+    },
+  };
 };
 
 const questionsData = [
