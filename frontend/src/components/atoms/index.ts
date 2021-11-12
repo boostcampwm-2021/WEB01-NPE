@@ -11,3 +11,5 @@ export { default as Text } from "./Text";
 export { default as TitleText } from "./TitleText";
 export { default as Logo } from "./Logo";
 export { default as Tag } from "./Tag";
+export { default as MDEditor } from "./MDEditor";
+export { default as TitleInput } from "./TitleInput";

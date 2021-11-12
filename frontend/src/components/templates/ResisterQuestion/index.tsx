@@ -1,8 +1,14 @@
 import React, { FormEvent, FunctionComponent, useRef, useState } from "react";
-import { Button, Switch, Text, TitleText } from "../../atoms";
-import MDEditor from "../../atoms/MDEditor";
-import TitleInput from "../../atoms/TitleInput";
-import TagInput from "../../molecules/TagInput";
+
+import {
+  Button,
+  Switch,
+  TitleText,
+  MDEditor,
+  TitleInput,
+} from "@components/atoms";
+
+import { TagInput } from "@components/molecules";
 import * as Styled from "./styled";
 const ResisterQuestion: FunctionComponent = () => {
   const [title, setTitle] = useState<string>("");

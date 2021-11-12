@@ -1,11 +1,11 @@
 import React from "react";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
-import styled from "styled-components";
 
+import styled from "styled-components";
+import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
 import { getOneQuestionByID } from "@src/lib";
-import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 
 const MainContainer = styled.main`
   display: flex;

@@ -3,13 +3,16 @@ import type { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
 import { useSession } from "next-auth/client";
 
-import Header from "../../components/organisms/Header";
-import HeaderText from "../../components/atoms/HeaderText";
-import TitleText from "../../components/atoms/TitleText";
-import ContentText from "../../components/atoms/ContentText";
-import Image from "../../components/atoms/Image";
-import Chart from "../../components/atoms/Chart";
-import QuestionLists from "../../components/templates/QuestionList";
+import { Header } from "@components/organisms";
+import {
+  HeaderText,
+  ContentText,
+  Image,
+  Chart,
+  TitleText,
+} from "@components/atoms";
+
+import { QuestionList } from "@components/templates";
 import { getUserChartData } from "@src/lib";
 import { Answer, Question } from "@src/types";
 
@@ -68,7 +71,7 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
               type={"Default"}
               text={`작성한 질문(${userChartData.postQuestions.length})`}
             />
-            <QuestionLists questions={userChartData.postQuestions} />
+            <QuestionList questions={userChartData.postQuestions} />
           </QuestionDiv>
           <QuestionDiv>
             <TitleText

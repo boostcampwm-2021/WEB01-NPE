@@ -1,7 +1,9 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import ResisterQuestion from "../../components/templates/ResisterQuestion";
-import { Header } from "../../components/organisms";
+
+import { ResisterQuestion } from "@components/templates";
+import { Header } from "@components/organisms";
+
 interface Props {}
 
 const MainContainer = styled.main`
