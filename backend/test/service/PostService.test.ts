@@ -1,6 +1,9 @@
 import { ConnectionOptions, createConnection, getConnection } from "typeorm";
 import { PostQuestion } from "../../src/entities/PostQuestion";
+import { PostQuestionHasTag } from "../../src/entities/PostQuestionHasTag";
+import { User } from "../../src/entities/User";
 import NoSuchQuestionError from "../../src/graphql/errors/NoSuchQuestionError";
+import SearchQuestionInput from "../../src/graphql/inputTypes/SearchQuestionInput";
 import PostService from "../../src/graphql/services/PostService";
 const DB_CONN_OPTIONS: ConnectionOptions = require("../../ormconfig.json")[
   "test"
@@ -71,5 +74,52 @@ describe("findAllQuestionsByUserId", () => {
     expect(questionsByUserId).toMatchObject<PostQuestion[]>(
       questionsByUserIdInDB
     );
+  });
+});
+
+describe("findAllQuestionByArgs", () => {
+  it("TagID를 포함한 검색", async () => {
+    // given
+    const tag1InDB = await PostQuestionHasTag.find({
+      where: { tagId: 1 },
+      select: ["postQuestionId"],
+    });
+    const tag2InDB = await PostQuestionHasTag.find({
+      where: { tagId: 2 },
+      select: ["postQuestionId"],
+    });
+    const tag1InDBArr = tag1InDB.map((obj) => obj.postQuestionId);
+    const tag2InDBArr = tag2InDB.map((obj) => obj.postQuestionId);
+    const tagCombinedArrInDB = tag1InDBArr
+      .filter((id) => tag2InDBArr.includes(id))
+      .sort((a, b) => b - a);
+
+    // when
+    const inputData = new SearchQuestionInput();
+    inputData.tagIDs = [1, 2];
+    const searchResult = await PostService.findAllQuestionByArgs(inputData);
+
+    // then
+    const tagCombinedArr = searchResult.map((obj) => obj.id);
+    expect(tagCombinedArr).toStrictEqual(tagCombinedArrInDB);
+  });
+
+  it("author 인자를 통한 검색", async () => {
+    // given
+    const username = "username_1";
+    const userIdInDB = (
+      await User.findOne({
+        where: { username: username },
+        select: ["id"],
+      })
+    ).id;
+
+    // when
+    const inputData = new SearchQuestionInput();
+    inputData.author = username;
+    const searchResult = await PostService.findAllQuestionByArgs(inputData);
+
+    // then
+    expect(searchResult.every((obj) => obj.userId === userIdInDB)).toBe(true);
   });
 });
