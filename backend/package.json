@@ -7,7 +7,7 @@
     "start": "nodemon --exec ts-node src/App.ts",
     "start:dev": "NODE_ENV=development nodemon --exec ts-node src/App.ts",
     "start:test": "NODE_ENV=test nodemon --exec ts-node src/App.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
   },
   "author": "",
