@@ -1,4 +1,5 @@
 import React from "react";
+import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import styled from "styled-components";
@@ -24,9 +25,10 @@ interface Props {
 const QuestionPage: NextPage<Props> = ({ data }) => {
   const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
+
   return (
     <>
-      <Header type="Default" />
+      <Header type="Default" setTexts={() => {}} />
       <MainContainer>
         <QuestionDetail question={question} />
         {answers.map((answer) => {
@@ -37,8 +39,12 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
   );
 };
 
+interface Params extends ParsedUrlQuery {
+  id: string;
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id }: { id: string } = context.params;
+  const { id }: Params = context.params as Params;
   const { data }: { data: QuestionDetailType } = await getOneQuestionByID(
     Number(id)
   );
