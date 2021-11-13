@@ -2,10 +2,10 @@ import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
 import * as Organism from "@components/organisms";
-import { Question } from "@src/types";
+import { QuestionType } from "@src/types";
 
 interface Props {
-  questions: Question[];
+  questions: QuestionType[];
 }
 
 const SearchResults: FunctionComponent<Props> = ({ questions }) => {

@@ -4,10 +4,10 @@ import Link from "next/link";
 import * as Styled from "./styled";
 import * as Molecule from "../../molecules";
 import * as Organism from "../index";
-import * as Type from "../../../types";
+import { QuestionType } from "@src/types";
 
 interface Props {
-  question: Type.Question;
+  question: QuestionType;
 }
 
 const SearchResult: FunctionComponent<Props> = ({ question }) => {
