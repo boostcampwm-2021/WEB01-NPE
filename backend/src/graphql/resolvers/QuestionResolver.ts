@@ -26,9 +26,13 @@ export default class QuestionResolver {
   async findOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await PostService.findOneQuestionById(id);
-
-    return question;
+    try {
+      const question = await PostService.findOneQuestionById(id);
+      return question;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
   }
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
