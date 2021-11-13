@@ -1,9 +1,4 @@
-import {
-  Connection,
-  ConnectionOptions,
-  createConnection,
-  getConnection,
-} from "typeorm";
+import { ConnectionOptions, createConnection, getConnection } from "typeorm";
 import { PostQuestion } from "../../src/entities/PostQuestion";
 import NoSuchQuestionError from "../../src/graphql/errors/NoSuchQuestionError";
 import PostService from "../../src/graphql/services/PostService";
@@ -12,7 +7,8 @@ const DB_CONN_OPTIONS: ConnectionOptions = require("../../ormconfig.json")[
 ];
 
 /* 
-  Question id 1 번은 존재하지 않아야 함
+  test DB 요구사항
+  Question id -1 번은 존재하지 않아야 함
   Question id 2 번은 존재해야함
 */
 
@@ -42,7 +38,7 @@ describe("findOneQuestionById", () => {
 
   it("없는 id에 대한 조회", async () => {
     // given
-    const questionId = 5434;
+    const questionId = -1;
     const maybeUndefined = await PostQuestion.findOne({ id: questionId });
     expect(maybeUndefined).toBeUndefined();
 
@@ -54,6 +50,26 @@ describe("findOneQuestionById", () => {
     // then
     await expect(gettingNotExistingQuestion()).rejects.toThrow(
       NoSuchQuestionError
+    );
+  });
+});
+
+describe("findAllQuestionsByUserId", () => {
+  it("해당 유저의 글을 모두 가져오는지", async () => {
+    // given
+    const userId = 1;
+    const [questionsByUserIdInDB, count] = await PostQuestion.findAndCount({
+      where: { userId: userId },
+      select: ["id", "userId"],
+    });
+
+    // when
+    const questionsByUserId = await PostService.findAllQuestionByUserId(userId);
+
+    // then
+    expect(questionsByUserId.length).toBe(count);
+    expect(questionsByUserId).toMatchObject<PostQuestion[]>(
+      questionsByUserIdInDB
     );
   });
 });
