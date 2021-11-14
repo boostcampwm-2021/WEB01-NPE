@@ -11,14 +11,14 @@ import Image from "../../components/atoms/Image";
 import Chart from "../../components/atoms/Chart";
 import QuestionLists from "../../components/templates/QuestionList";
 import { getUserChartData } from "@src/lib";
-import { Answer, Question } from "@src/types";
+import { AnswerType, QuestionType } from "@src/types";
 
 interface Props {
   userChartData: {
     username: string;
     score: number;
-    postQuestions: Question[];
-    postAnswers: Partial<Answer>[];
+    postQuestions: QuestionType[];
+    postAnswers: Partial<AnswerType>[];
   };
 }
 

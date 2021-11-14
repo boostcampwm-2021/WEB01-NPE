@@ -31,7 +31,7 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
       <h2>당신의 답변</h2>
       <MDEditor type="Answer" editorRef={editorRef} />
       <Styled.AnswerBtnContainer>
-        <Button type="Submit" text="답변하기" />
+        <Button type="Submit" text="답변하기" onClick={() => {}} />
       </Styled.AnswerBtnContainer>
     </Styled.AnswerRegister>
   );
