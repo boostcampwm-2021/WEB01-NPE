@@ -15,19 +15,16 @@ const DetailBody: FunctionComponent<Props> = ({ detail }) => {
       <Styled.VoteContainer>
         <Vote thumbupCount={thumbupCount} />
       </Styled.VoteContainer>
-
       <Styled.DetailBodyInner>
-        <Styled.DetailBodyDesc>
-          <div>{desc}</div>
-        </Styled.DetailBodyDesc>
-
-        {tags && (
-          <Styled.TagContainer>
-            <TagList tags={tags} />
-          </Styled.TagContainer>
-        )}
-
-        <ProfileSummary author={author} />
+        <Styled.DetailBodyDesc>{desc}</Styled.DetailBodyDesc>
+        <Styled.DetailBodyInfo>
+          <Styled.TagListContainer>
+            {tags && <TagList tags={tags} />}
+          </Styled.TagListContainer>
+          <Styled.ProfileContainer>
+            <ProfileSummary author={author} />
+          </Styled.ProfileContainer>
+        </Styled.DetailBodyInfo>
       </Styled.DetailBodyInner>
     </Styled.DetailBody>
   );
