@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
-import * as Organism from "@components/organisms";
+import { Question } from "@components/organisms";
 import { QuestionType } from "@src/types";
 
 interface Props {
@@ -13,9 +13,9 @@ const SearchResults: FunctionComponent<Props> = ({ questions }) => {
     <Styled.QuestionList>
       {questions.map((question) => {
         return (
-          <li key={question.id}>
-            <Organism.Question question={question} />
-          </li>
+          <Styled.QuestionItem key={question.id}>
+            <Question question={question} />
+          </Styled.QuestionItem>
         );
       })}
     </Styled.QuestionList>

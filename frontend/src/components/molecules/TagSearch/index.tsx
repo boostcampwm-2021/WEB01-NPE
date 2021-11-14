@@ -1,5 +1,5 @@
-import React, { FunctionComponent, useEffect, useRef, useState } from "react";
-import { getAllTags } from "../../../lib";
+import React, { createRef, FunctionComponent, useState } from "react";
+
 import * as Styled from "./styled";
 
 interface Props {
@@ -9,11 +9,9 @@ interface Props {
 
 const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   const [candidateTags, setTags] = useState<string[]>([]);
-
-  const inputTag = useRef<HTMLInputElement>(null);
-  const onTagClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const tagName = event.target.dataset.tag;
-    inputTag.current.value = tagName;
+  const inputTag = createRef<HTMLInputElement>();
+  const onTagClick = (tag: string) => {
+    inputTag!.current!.value = tag;
     setTags([]);
   };
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +26,7 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   };
   const getItem = (tag: string, index: number) => {
     return (
-      <Styled.Tag key={index} data-tag={tag} onClick={onTagClick}>
+      <Styled.Tag key={index} data-tag={tag} onClick={(tag) => onTagClick}>
         {tag}
       </Styled.Tag>
     );
@@ -45,8 +43,8 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
       <Styled.Button
         type="button"
         onClick={() => {
-          onSubmit(inputTag.current.value);
-          inputTag.current.value = "";
+          onSubmit(inputTag!.current!.value);
+          inputTag!.current!.value = "";
         }}
       >
         추가

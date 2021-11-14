@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledSearchInput = styled.input`
+export const SearchInput = styled.input`
   width: 100%;
   border: none;
   border-bottom: 2px solid #f48024;
@@ -9,5 +9,3 @@ const StyledSearchInput = styled.input`
   }
   margin-right: 10px;
 `;
-
-export { StyledSearchInput };

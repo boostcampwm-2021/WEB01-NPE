@@ -1,12 +1,11 @@
 import React, { FunctionComponent } from "react";
-import * as Styled from "./styled";
-import Image from "../../atoms/Image";
-import Text from "../../atoms/Text";
 
+import * as Styled from "./styled";
+import { Image, Text } from "@components/atoms";
 interface Props {
   src: string;
   text: string;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const ProfileHeader: FunctionComponent<Props> = ({ src, text, onClick }) => {

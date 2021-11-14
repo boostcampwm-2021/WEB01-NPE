@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledSearchResult = styled.div`
+export const SearchResult = styled.div`
   display: flex;
   min-width: 500px;
   .profile-container__profile {

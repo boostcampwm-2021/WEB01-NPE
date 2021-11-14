@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import Image from "next/image";
-import { StyledIconWithNumber } from "./styled";
+
+import * as Styled from "./styled";
 import viewImg from "./views.png";
 import commentImg from "./comments.png";
 
@@ -28,10 +29,10 @@ const types: { [key: string]: StyleProps } = {
 const IconWithNumber: FunctionComponent<Props> = ({ type, value }) => {
   const styleProps = types[type];
   return (
-    <StyledIconWithNumber>
+    <Styled.IconWithNumber>
       <Image {...styleProps} />
       {value}
-    </StyledIconWithNumber>
+    </Styled.IconWithNumber>
   );
 };
 

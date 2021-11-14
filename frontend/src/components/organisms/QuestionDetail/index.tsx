@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
-import { QuestionDetailType } from "@src/types";
 import { DetailBody } from "@components/organisms";
-import { QuestionTitle } from "@src/components/molecules";
+import { QuestionTitle } from "@components/molecules";
+import { QuestionDetailType } from "@src/types";
 
 interface Props {
   question: QuestionDetailType;

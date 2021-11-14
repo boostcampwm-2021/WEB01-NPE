@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { TagList, ProfileSummary, Vote } from "@components/molecules";
 
-import { DetailType } from "@src/types";
 import * as Styled from "./styled";
+import { TagList, ProfileSummary, Vote } from "@components/molecules";
+import { DetailType } from "@src/types";
 
 interface Props {
   detail: DetailType;

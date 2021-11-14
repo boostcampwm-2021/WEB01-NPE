@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useState } from "react";
-import { TagSearch } from "..";
-import { Tag } from "../../atoms";
+import React, { FunctionComponent } from "react";
+
 import * as Styled from "./styled";
+import { TagSearch } from "@components/molecules";
+import { Tag } from "@components/atoms";
 
 interface Props {
   tagList: string[];

@@ -1,5 +1,3 @@
 import styled from "styled-components";
 
-const StyledChart = styled.div``;
-
-export { StyledChart };
+export const Chart = styled.div``;
