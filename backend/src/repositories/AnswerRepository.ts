@@ -10,6 +10,18 @@ export default class AnswerRepository extends Repository<PostAnswer> {
     return answer;
   }
 
+  public async findAllAnswerByUserId(userId: number): Promise<PostAnswer[]> {
+    const data = await this.find({ userId });
+
+    return data;
+  }
+
+  public async findAllAnswerByQuestionId(id: number): Promise<PostAnswer[]> {
+    const data = await this.find({ postQuestionId: id });
+
+    return data;
+  }
+
   public async addNewAnswer(
     args: AnswerInput, // 이후 ctx.user 로 수정
     user: { id: number },
