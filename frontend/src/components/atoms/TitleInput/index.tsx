@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { Input, Label, Span } from "./styled";
+
+import * as Styled from "./styled";
 
 interface Props {
   type: string;
@@ -10,10 +11,10 @@ interface Props {
 const TitleInput: FunctionComponent<Props> = ({ type, text, setText }) => {
   return (
     <>
-      <Input required />
-      <Label>
-        <Span>제목을 입력하세요.</Span>
-      </Label>
+      <Styled.Input required />
+      <Styled.Label>
+        <Styled.Span>제목을 입력하세요.</Styled.Span>
+      </Styled.Label>
     </>
   );
 };

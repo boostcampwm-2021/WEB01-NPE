@@ -1,7 +1,8 @@
-import { ChartData } from "chart.js";
 import React, { FunctionComponent } from "react";
+import { ChartData } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { StyledChart } from "./styled";
+
+import * as Styled from "./styled";
 
 interface ChartProps {
   type: String;
@@ -11,15 +12,15 @@ interface ChartProps {
 const Chart: FunctionComponent<ChartProps> = ({ type, data }) => {
   if (type === "Doughnut")
     return (
-      <StyledChart>
+      <Styled.Chart>
         <Doughnut data={data} width={50} height={25}></Doughnut>
-      </StyledChart>
+      </Styled.Chart>
     );
   else if (type === "Bar") {
     return (
-      <StyledChart>
+      <Styled.Chart>
         <Bar data={data} width={50} height={25}></Bar>
-      </StyledChart>
+      </Styled.Chart>
     );
   }
   return <></>;

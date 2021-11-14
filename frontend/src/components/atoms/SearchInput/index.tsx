@@ -1,12 +1,13 @@
 import React, { FunctionComponent } from "react";
-import { StyledSearchInput } from "./styled";
+
+import * as Styled from "./styled";
 
 interface Props {
   placeholder: string;
 }
 
 const SearchInput: FunctionComponent<Props> = ({ placeholder }) => {
-  return <StyledSearchInput placeholder={placeholder} />;
+  return <Styled.SearchInput placeholder={placeholder} />;
 };
 
 export default SearchInput;

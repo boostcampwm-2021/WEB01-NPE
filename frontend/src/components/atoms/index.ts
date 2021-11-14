@@ -13,3 +13,4 @@ export { default as Logo } from "./Logo";
 export { default as Tag } from "./Tag";
 export { default as MDEditor } from "./MDEditor";
 export { default as MDViewer } from "./MDViewer";
+export { default as TitleInput } from "./TitleInput";

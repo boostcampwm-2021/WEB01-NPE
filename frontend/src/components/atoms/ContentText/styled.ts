@@ -4,6 +4,6 @@ interface textStyleProps {
   color: string;
 }
 
-export const StyledText = styled.p<textStyleProps>`
+export const Text = styled.p<textStyleProps>`
   color: ${(props) => props.color};
 `;

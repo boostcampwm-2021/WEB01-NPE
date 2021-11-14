@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import Image from "next/image";
+
 import LogoImg from "./logo.png";
 import ShortLogoImg from "./shortLogo.png";
 interface Props {

@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { StyledText } from "./styled";
+
+import * as Styled from "./styled";
 
 interface Props {
   type: string;
@@ -16,7 +17,7 @@ const types: { [key: string]: StyleProps } = {
 
 const contentText: FunctionComponent<Props> = ({ type, text }) => {
   const styleProps = types[type];
-  return <StyledText {...styleProps}>{text}</StyledText>;
+  return <Styled.Text {...styleProps}>{text}</Styled.Text>;
 };
 
 export default contentText;

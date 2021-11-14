@@ -1,5 +1,6 @@
 import React, { FunctionComponent, MouseEventHandler } from "react";
-import { StyledTag } from "./styled";
+
+import * as Styled from "./styled";
 
 interface Props {
   type: string;
@@ -38,9 +39,9 @@ const types: { [key: string]: StyleProps } = {
 const Tag: FunctionComponent<Props> = ({ type, name, onClick }) => {
   const styleProps = types[type];
   return (
-    <StyledTag {...styleProps} className="tag" onClick={onClick}>
+    <Styled.Tag {...styleProps} className="tag" onClick={onClick}>
       {name}
-    </StyledTag>
+    </Styled.Tag>
   );
 };
 
