@@ -19,15 +19,18 @@ const codeSyntaxHighlight = dynamic(
 // );
 interface Props {
   editorRef: any;
+  type?: string;
 }
 
-const MDEditor: FunctionComponent<Props> = ({ editorRef }) => {
+const MDEditor: FunctionComponent<Props> = ({ type, editorRef }) => {
   return (
     <Editor
       ref={editorRef}
-      initialValue="## 질문을 입력해주세요."
+      initialValue={
+        type === "Answer" ? `## 답변을 입력해주세요` : `## 질문을 입력해주세요.`
+      }
       previewStyle="tab"
-      height="600px"
+      height={type === "Answer" ? "300px" : "600px"}
       initialEditType="markdown"
       useCommandShortcut={true}
       // plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}

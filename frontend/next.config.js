@@ -16,8 +16,7 @@ module.exports = {
       alias: {
         "@src": path.join(__dirname, "src"),
         "@components": path.join(__dirname, "src", "components"),
-        "@api": path.join(__dirname, "src", "lib", "api"),
-        "@types": path.join(__dirname, "src", "types"),
+        "@lib": path.join(__dirname, "src", "lib"),
       },
       ...config.resolve,
     };

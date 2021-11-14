@@ -8,10 +8,10 @@ import {
   TagList,
   ViewsAndComment,
 } from "@components/molecules";
-import * as Type from "../../../types";
+import { QuestionType } from "@src/types";
 
 interface Props {
-  question: Type.Question;
+  question: QuestionType;
 }
 
 const SearchResult: FunctionComponent<Props> = ({ question }) => {

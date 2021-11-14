@@ -10,17 +10,17 @@ const Vote: FunctionComponent<Props> = ({ thumbupCount }) => {
   return (
     <>
       <Styled.Vote>
-        <li>
+        <Styled.UpArrowDiv>
           <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36">
             <path d="M2 26h32L18 10 2 26Z"></path>
           </svg>
-        </li>
-        <li>{thumbupCount}</li>
-        <li>
+        </Styled.UpArrowDiv>
+        <Styled.ThubmUpDiv>{thumbupCount}</Styled.ThubmUpDiv>
+        <Styled.DownArrowDiv>
           <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36">
             <path d="M2 10h32L18 26 2 10Z"></path>
           </svg>
-        </li>
+        </Styled.DownArrowDiv>
       </Styled.Vote>
     </>
   );
