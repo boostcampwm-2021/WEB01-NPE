@@ -1,4 +1,5 @@
-import React, { FunctionComponent, MouseEventHandler } from "react";
+import React, { FunctionComponent } from "react";
+
 import { AnswerDetailType } from "@src/types";
 import { DetailBody } from "@components/organisms";
 

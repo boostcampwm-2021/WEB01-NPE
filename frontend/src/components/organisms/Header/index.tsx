@@ -2,14 +2,18 @@ import React, {
   FunctionComponent,
   useState,
   useEffect,
-  useRef,
   createRef,
 } from "react";
 import { useSession } from "next-auth/client";
 import Router from "next/router";
+
 import * as Styled from "./styled";
-import * as Atoms from "../../atoms";
-import * as Molecules from "../../molecules";
+import { Logo, Input, Button } from "@components/atoms";
+import {
+  ProfileHeader,
+  ProfileDropdown,
+  LoginModal,
+} from "@components/molecules";
 
 interface Props {
   type: string;
@@ -37,14 +41,14 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
   const [isLoginModal, setIsLoginModal] = useState(false);
   const searchText = createRef<HTMLInputElement>();
 
-  const onProfile = (event: React.MouseEvent<HTMLElement>) => {
+  const onProfile = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsDropdown((props) => !props);
   };
   const onDropdown = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
   };
-  const onLoginButton = (event: React.MouseEvent<HTMLElement>) => {
+  const onLoginButton = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsLoginModal(true);
     document.body.style.overflow = "hidden";
@@ -82,17 +86,17 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
   return (
     <Styled.HeaderDiv>
       <Styled.LogoAnchor href="/">
-        <Atoms.Logo type="Default" />
+        <Logo type="Default" />
       </Styled.LogoAnchor>
 
       <Styled.SearchForm {...headerProps} onSubmit={submitSearch}>
-        <Atoms.Input text={"Search..."} size={"medium"} ref={searchText} />
+        <Input text={"Search..."} size={"medium"} ref={searchText} />
       </Styled.SearchForm>
 
       <Styled.ButtonDiv>
         {session?.user && (
           <div>
-            <Molecules.ProfileHeader
+            <ProfileHeader
               src={session.user.image!}
               text={session.user.name!}
               onClick={onProfile}
@@ -100,23 +104,22 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
             {isDropdown && (
               <Styled.DropdownDiv>
                 <div onClick={onDropdown}>
-                  <Molecules.ProfileDropdown />
+                  <ProfileDropdown />
                 </div>
               </Styled.DropdownDiv>
             )}
           </div>
         )}
-
         {!session && (
-          <Atoms.Button type="Header" text="로그인" onClick={onLoginButton} />
+          <Button type="Header" text="로그인" onClick={onLoginButton} />
         )}
 
-        <Atoms.Button type={"Header"} text={"질문하기"} onClick={onPost} />
+        <Button type={"Header"} text={"질문하기"} onClick={onPost} />
       </Styled.ButtonDiv>
       {isLoginModal && (
         <Styled.ModalWrapper>
           <Styled.Modal onClick={onLoginModal}>
-            <Molecules.LoginModal />
+            <LoginModal />
           </Styled.Modal>
         </Styled.ModalWrapper>
       )}

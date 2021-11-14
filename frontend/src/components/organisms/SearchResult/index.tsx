@@ -1,6 +1,6 @@
 import React, { FunctionComponent, MouseEventHandler } from "react";
-import { StyledSearchResult } from "./styled";
 
+import * as Styled from "./styled";
 import { TitleText, Indicator, Tag, IconWithNumber } from "../../atoms";
 import { ProfileSummary } from "../../molecules";
 interface tag {
@@ -23,7 +23,7 @@ const SearchResult: FunctionComponent<Props> = ({
   comments,
 }) => {
   return (
-    <StyledSearchResult>
+    <Styled.SearchResult>
       <div className="profile-container">
         <div className="profile-container__profile">
           <ProfileSummary
@@ -62,7 +62,7 @@ const SearchResult: FunctionComponent<Props> = ({
           </div>
         </div>
       </div>
-    </StyledSearchResult>
+    </Styled.SearchResult>
   );
 };
 
