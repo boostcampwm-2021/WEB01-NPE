@@ -20,3 +20,5 @@ export const QuestionDate = styled.div`
   font-size: 14px;
   color: #586069;
 `;
+
+export const IndicatorContainer = styled.div``;

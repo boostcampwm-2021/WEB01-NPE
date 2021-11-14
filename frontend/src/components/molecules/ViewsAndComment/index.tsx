@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 
-import * as Molecule from "..";
 import * as Styled from "./styled";
+import { IconWithNumber } from "@components/molecules";
 
 interface Props {
   viewCount: number;
@@ -14,12 +14,12 @@ const ViewsAndComment: FunctionComponent<Props> = ({
 }) => {
   return (
     <Styled.ViewsAndComment>
-      <li>
-        <Molecule.IconWithNumber type={"Views"} value={viewCount} />
-      </li>
-      <li>
-        <Molecule.IconWithNumber type={"Comments"} value={commentCount} />
-      </li>
+      <Styled.IconContainer>
+        <IconWithNumber type={"Views"} value={viewCount} />
+      </Styled.IconContainer>
+      <Styled.IconContainer>
+        <IconWithNumber type={"Comments"} value={commentCount} />
+      </Styled.IconContainer>
     </Styled.ViewsAndComment>
   );
 };
