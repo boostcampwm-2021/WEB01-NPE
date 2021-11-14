@@ -12,7 +12,7 @@ export interface TagType {
   name: string;
 }
 
-export interface Question {
+export interface QuestionType {
   id: number;
   __typename: string;
   author: Author;
