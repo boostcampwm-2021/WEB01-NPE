@@ -13,9 +13,9 @@ const SearchResults: FunctionComponent<Props> = ({ questions }) => {
     <Styled.QuestionList>
       {questions.map((question) => {
         return (
-          <Styled.QuestionItem key={question.id}>
+          <li key={question.id}>
             <Question question={question} />
-          </Styled.QuestionItem>
+          </li>
         );
       })}
     </Styled.QuestionList>
