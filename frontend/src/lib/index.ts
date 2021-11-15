@@ -110,7 +110,7 @@ export const getUserInfo = async (userId: number) => {
   return { loading, error, data };
 };
 
-export const getUserChartData = async (userId: number) => {
+export const getUserProfileData = async (userId: number) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
@@ -140,6 +140,15 @@ export const getUserChartData = async (userId: number) => {
             state
             thumbupCount
           }
+        }
+        getUserUsedTagCount(userId: ${userId}) {
+          userId
+          tagId
+          tag {
+            id
+            name
+          }
+          count
         }
       }
     `,
@@ -194,3 +203,22 @@ export const test = async (take: number, skip: number) => {
   });
   return { loading, error, data };
 };
+export const POST_QUESTION = gql`
+  mutation addNewQuestion(
+    $title: String!
+    $desc: String!
+    $tagIds: [Int!]!
+    $realtimeShare: Boolean!
+  ) {
+    addNewQuestion(
+      data: {
+        title: $title
+        desc: $desc
+        tagIds: $tagIds
+        realtimeShare: $realtimeShare
+      }
+    ) {
+      id
+    }
+  }
+`;

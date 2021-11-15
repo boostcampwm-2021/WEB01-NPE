@@ -10,7 +10,7 @@ interface Props {
 
 const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
   return (
-    <Styled.Anchor>
+    <Styled.Anchor href={`profile/${author.id}`}>
       <Styled.ImageDiv>
         <Image
           type="Large"

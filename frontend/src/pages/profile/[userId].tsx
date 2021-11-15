@@ -12,48 +12,56 @@ import {
 } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { QuestionList } from "@components/templates";
-import { getUserChartData } from "@src/lib";
+import { getUserProfileData } from "@src/lib";
 import { AnswerType, QuestionType } from "@src/types";
+import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
+import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
+import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
+import { ChartData } from "chart.js";
 
 interface Props {
-  userChartData: {
+  userProfileData: {
     username: string;
     score: number;
     postQuestions: QuestionType[];
-    postAnswers: Partial<AnswerType>[];
+    postAnswers: AnswerType[];
   };
+  userTagCountData: ChartData<"doughnut"> & ChartData<"bar">;
 }
 
-const ProfilePage: NextPage<Props> = ({ userChartData }) => {
-  const [session, loading] = useSession();
+const ProfilePage: NextPage<Props> = ({
+  userProfileData,
+  userTagCountData,
+}) => {
+  // const [session, loading] = useSession();
 
-  if (!session || !session.user) {
-    return <>error</>;
-  }
+  // if (!session || !session.user) {
+  //   return <>error</>;
+  // }
 
   return (
     <>
-      <Header type="Profile" />
+      <Header type="Profile" setTexts={() => ""} />
       <MainContainer>
         <HeaderText type={"Default"} text={"프로필"} />
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image type={"Profile"} src={session.user.image!} />
+            {/* <Image type={"Profile"} src={session.user.image!} /> */}
           </ImageDiv>
           <TextDiv>
-            <TitleText type={"Default"} text={session.user.name!} />
+            {/* <TitleText type={"Default"} text={session.user.name!} /> */}
             <TitleText
               type={"Default"}
-              text={`누적 스코어 : ${String(userChartData.score)}`}
+              text={`누적 스코어 : ${String(userProfileData.score)}`}
             />
-            <ContentText type={"Default"} text={session.user.email!} />
+            {/* <ContentText type={"Default"} text={session.user.email!} /> */}
           </TextDiv>
         </ProfileDiv>
         <ChartWrapper>
           <ChartDiv>
-            <TitleText type={"Default"} text={"태그별"} />
-            <Chart type={"Doughnut"} data={chartData} />
+            <TitleText type={"Default"} text={"태그 사용 빈도"} />
+            <Chart type={"Doughnut"} data={userTagCountData} />
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"활동"} />
@@ -64,56 +72,58 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
             <Chart type={"Doughnut"} data={chartData} />
           </ChartDiv>
         </ChartWrapper>
-        <QuestionWrapper>
-          <QuestionDiv>
-            <TitleText
-              type={"Default"}
-              text={`작성한 질문(${userChartData.postQuestions.length})`}
-            />
-            <QuestionList questions={userChartData.postQuestions} />
-          </QuestionDiv>
-          <QuestionDiv>
-            <TitleText
-              type={"Default"}
-              text={`작성한 답변(${userChartData.postAnswers.length})`}
-            />
-            {userChartData.postAnswers.map((postAnswer) => {
-              return (
-                <div
-                  style={{
-                    width: "600px",
-                    borderTop: "1px solid black",
-                    margin: "0px",
-                    marginTop: "16px",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <TitleText type={"Default"} text={postAnswer.desc} />
-                  <ContentText
-                    type={"Default"}
-                    text={`좋아요 ${postAnswer.thumbupCount}개 · ${
-                      postAnswer.state === 1 ? "채택됨" : "채택되지 않음"
-                    }`}
-                  />
-                </div>
-              );
-            })}
-          </QuestionDiv>
-        </QuestionWrapper>
+        <SummaryWrapper>
+          <ProfileQuestionSummary
+            postQuestions={userProfileData.postQuestions}
+          ></ProfileQuestionSummary>
+          <ProfileAnswerSummary
+            postAnswers={userProfileData.postAnswers}
+          ></ProfileAnswerSummary>
+        </SummaryWrapper>
       </MainContainer>
     </>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await getUserChartData(
-    1 /* 임시로 1번 유저를 넣음. 이후에 nextSession에서 userID를 가져와야함 */
-  );
+  const userId = Number(context.query.userId);
+  const { data } = await getUserProfileData(userId);
 
   return {
     props: {
-      userChartData: data.findUserById,
+      userProfileData: data.findUserById,
+      userTagCountData: makeTagCountChartData(data.getUserUsedTagCount),
     },
+  };
+};
+
+const makeTagCountChartData = (
+  list: [
+    {
+      userId: number;
+      tagId: number;
+      tag: { id: number; name: string };
+      count: number;
+    }
+  ]
+): ChartData<"doughnut"> & ChartData<"bar"> => {
+  return {
+    labels: list.map((obj) => obj.tag.name),
+    datasets: [
+      {
+        data: list.map((obj) => obj.count),
+        backgroundColor: list.map((_) => {
+          const [c1, c2, c3] = [
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256),
+          ];
+
+          return `rgba(${c1},${c2},${c3},0.2)`;
+        }),
+        borderWidth: 1,
+      },
+    ],
   };
 };
 
@@ -183,18 +193,9 @@ const ChartDiv = styled.div`
   width: 25%;
 `;
 
-const QuestionWrapper = styled.div`
+const SummaryWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const QuestionDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ul {
-    padding-inline-start: 0px;
-  }
 `;
 
 export default ProfilePage;
