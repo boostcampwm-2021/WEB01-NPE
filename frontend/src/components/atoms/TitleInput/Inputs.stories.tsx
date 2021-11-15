@@ -8,5 +8,5 @@ export default {
 
 export const Default = () => {
   const [text, setText] = useState<string>("");
-  return <TitleInput type="Title" text={text} setText={setText} />;
+  return <TitleInput type="Title" setText={setText} />;
 };
