@@ -36,7 +36,7 @@ const ResisterQuestion: FunctionComponent = () => {
         <TitleText type="Default" text="실시간 답변" />
         <Switch type="Default" isChecked={isLive} setIsChecked={setIsLive} />
       </Styled.LiveContainer>
-      <MDEditor editorRef={editorRef} />
+      <MDEditor ref={editorRef} />
       <Styled.SubmitContainer>
         <Button type="Submit" text="질문등록" onClick={() => {}} />
       </Styled.SubmitContainer>
