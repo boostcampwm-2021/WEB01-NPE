@@ -36,9 +36,18 @@ export default class UserResolver {
   }
 
   @Query(() => String, {})
-  async login(@Arg("id", { description: "id" }) id: number) {
+  async login(
+    @Arg("id", { description: "Github ID" }) id: number,
+    @Arg("username", { description: "Github 유저 이름" }) username: string,
+    @Arg("profileUrl", { description: "Github 프로필 URL" }) profileUrl: string,
+    @Arg("socialUrl", { description: "소셜 URL" }) socialUrl: string
+  ) {
+    const data = await UserService.findOneUserById(id);
+    if (!data) {
+      await UserService.addNewUser(id, username, profileUrl, socialUrl);
+    }
+    console.log(data);
     const accessToken = sign(String(id), "jwtprivate");
-    console.log(accessToken);
     return accessToken;
   }
 

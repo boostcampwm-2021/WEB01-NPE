@@ -210,8 +210,10 @@ export const POST_QUESTION = gql`
     $desc: String!
     $tagIds: [Int!]!
     $realtimeShare: Boolean!
+    $accessToken: String!
   ) {
     addNewQuestion(
+      accessToken: $accessToken
       data: {
         title: $title
         desc: $desc
@@ -224,12 +226,20 @@ export const POST_QUESTION = gql`
   }
 `;
 
-export const login = async (id: number) => {
+export const login = async (
+  id: number,
+  username: string,
+  profileUrl: string,
+  socialUrl: string
+) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {
         login (
           id: ${id}
+          username: "${username}"
+          profileUrl: "${profileUrl}"
+          socialUrl: "${socialUrl}"
         )
       }
     `,

@@ -10,16 +10,29 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn(user, account) {
       try {
-        const { data } = await login(Number(account.id));
+        if (!user) return false;
+        const { data } = await login(
+          Number(account.id),
+          user.name as string,
+          user.image as string,
+          `https://github.com/${user.name}`
+        );
         if (!data) return false;
         user.accessToken = data.login;
         return true;
-      } catch (err) {
-        console.log(err);
+      } catch {
         return false;
       }
+    },
+    async jwt(token, user) {
+      if (user) token.accessToken = user.accessToken;
+      return token;
+    },
+    async session(session, user) {
+      if (user) session.accessToken = user.accessToken;
+      return session;
     },
   },
 });
