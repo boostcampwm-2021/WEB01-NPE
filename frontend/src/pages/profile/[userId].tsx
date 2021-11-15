@@ -1,6 +1,5 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
-import { useSession } from "next-auth/client";
 import styled from "styled-components";
 
 import {
@@ -11,16 +10,15 @@ import {
   Chart,
 } from "@components/atoms";
 import { Header } from "@components/organisms/";
-import { QuestionList } from "@components/templates";
 import { getUserProfileData } from "@src/lib";
 import { AnswerType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
-import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
 import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
 import { ChartData } from "chart.js";
 
 interface Props {
   userProfileData: {
+    id: number;
     username: string;
     score: number;
     postQuestions: QuestionType[];
@@ -33,12 +31,6 @@ const ProfilePage: NextPage<Props> = ({
   userProfileData,
   userTagCountData,
 }) => {
-  // const [session, loading] = useSession();
-
-  // if (!session || !session.user) {
-  //   return <>error</>;
-  // }
-
   return (
     <>
       <Header type="Profile" setTexts={() => ""} />
@@ -47,15 +39,18 @@ const ProfilePage: NextPage<Props> = ({
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            {/* <Image type={"Profile"} src={session.user.image!} /> */}
+            <Image
+              type={"Profile"}
+              src={`https://avatars.githubusercontent.com/u/${userProfileData.id}`}
+            />
           </ImageDiv>
           <TextDiv>
-            {/* <TitleText type={"Default"} text={session.user.name!} /> */}
+            <TitleText type={"Default"} text={userProfileData.username} />
             <TitleText
               type={"Default"}
               text={`누적 스코어 : ${String(userProfileData.score)}`}
             />
-            {/* <ContentText type={"Default"} text={session.user.email!} /> */}
+            <ContentText type={"Default"} text={"abcabc@gmail.com"} />
           </TextDiv>
         </ProfileDiv>
         <ChartWrapper>
