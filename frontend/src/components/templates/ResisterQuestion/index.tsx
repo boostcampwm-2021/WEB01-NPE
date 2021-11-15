@@ -28,7 +28,7 @@ const ResisterQuestion: FunctionComponent = () => {
     const { data } = await postQuestion({
       variables: {
         title: title,
-        desc: "마크다운 에디터를 불러오지 못했습니다",
+        desc: getMarkdown(),
         tagIds: [1, 2, 3, 4, 5, 6],
         realtimeShare: isLive,
       },
