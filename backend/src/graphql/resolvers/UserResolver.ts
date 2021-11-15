@@ -1,4 +1,5 @@
 import { Arg, FieldResolver, Int, Query, Resolver, Root } from "type-graphql";
+import { sign } from "jsonwebtoken";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { User } from "../../entities/User";
@@ -36,8 +37,9 @@ export default class UserResolver {
 
   @Query(() => String, {})
   async login(@Arg("id", { description: "id" }) id: number) {
-    console.log(id);
-    return "hello, world!";
+    const accessToken = sign(String(id), "jwtprivate");
+    console.log(accessToken);
+    return accessToken;
   }
 
   @FieldResolver(() => [PostQuestion], { nullable: "items" })

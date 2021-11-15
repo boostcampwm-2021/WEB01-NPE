@@ -14,7 +14,7 @@ export default NextAuth({
       try {
         const { data } = await login(Number(account.id));
         if (!data) return false;
-        console.log(data.login);
+        user.accessToken = data.login;
         return true;
       } catch (err) {
         console.log(err);

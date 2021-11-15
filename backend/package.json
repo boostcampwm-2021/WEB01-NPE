@@ -26,11 +26,13 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.12",
+    "@types/jsonwebtoken": "^8.5.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
     "graphql": "^15.7.2",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.2",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
