@@ -141,6 +141,15 @@ export const getUserProfileData = async (userId: number) => {
             thumbupCount
           }
         }
+        getUserUsedTagCount(userId: ${userId}) {
+          userId
+          tagId
+          tag {
+            id
+            name
+          }
+          count
+        }
       }
     `,
   });

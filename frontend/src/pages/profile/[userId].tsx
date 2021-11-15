@@ -17,6 +17,7 @@ import { AnswerType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
 import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
 import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
+import { ChartData } from "chart.js";
 
 interface Props {
   userProfileData: {
@@ -25,9 +26,13 @@ interface Props {
     postQuestions: QuestionType[];
     postAnswers: AnswerType[];
   };
+  userTagCountData: ChartData<"doughnut"> & ChartData<"bar">;
 }
 
-const ProfilePage: NextPage<Props> = ({ userProfileData }) => {
+const ProfilePage: NextPage<Props> = ({
+  userProfileData,
+  userTagCountData,
+}) => {
   // const [session, loading] = useSession();
 
   // if (!session || !session.user) {
@@ -55,8 +60,8 @@ const ProfilePage: NextPage<Props> = ({ userProfileData }) => {
         </ProfileDiv>
         <ChartWrapper>
           <ChartDiv>
-            <TitleText type={"Default"} text={"태그별"} />
-            <Chart type={"Doughnut"} data={chartData} />
+            <TitleText type={"Default"} text={"태그 사용 빈도"} />
+            <Chart type={"Doughnut"} data={userTagCountData} />
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"활동"} />
@@ -87,7 +92,39 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       userProfileData: data.findUserById,
+      userTagCountData: makeTagCountChartData(data.getUserUsedTagCount),
     },
+  };
+};
+
+const makeTagCountChartData = (
+  list: [
+    {
+      userId: number;
+      tagId: number;
+      tag: { id: number; name: string };
+      count: number;
+    }
+  ]
+): ChartData<"doughnut"> & ChartData<"bar"> => {
+  return {
+    labels: list.map((obj) => obj.tag.name),
+    datasets: [
+      {
+        label: "# of Votes",
+        data: list.map((obj) => obj.count),
+        backgroundColor: list.map((_) => {
+          const [c1, c2, c3] = [
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256),
+            Math.floor(Math.random() * 256),
+          ];
+
+          return `rgba(${c1},${c2},${c3},0.2)`;
+        }),
+        borderWidth: 1,
+      },
+    ],
   };
 };
 
