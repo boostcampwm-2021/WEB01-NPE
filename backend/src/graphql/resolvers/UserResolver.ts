@@ -34,6 +34,12 @@ export default class UserResolver {
     return data;
   }
 
+  @Query(() => String, {})
+  async login(@Arg("id", { description: "id" }) id: number) {
+    console.log(id);
+    return "hello, world!";
+  }
+
   @FieldResolver(() => [PostQuestion], { nullable: "items" })
   async postQuestions(@Root() user: User): Promise<PostQuestion[]> {
     const questions = PostService.findAllQuestionByUserId(user.id);

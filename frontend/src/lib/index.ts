@@ -203,6 +203,7 @@ export const test = async (take: number, skip: number) => {
   });
   return { loading, error, data };
 };
+
 export const POST_QUESTION = gql`
   mutation addNewQuestion(
     $title: String!
@@ -222,3 +223,16 @@ export const POST_QUESTION = gql`
     }
   }
 `;
+
+export const login = async (id: number) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        login (
+          id: ${id}
+        )
+      }
+    `,
+  });
+  return { loading, error, data };
+};

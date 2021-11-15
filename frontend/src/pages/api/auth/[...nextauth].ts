@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Provider from "next-auth/providers";
-import { signToken } from "@src/lib/token";
+import { login } from "@src/lib";
 
 export default NextAuth({
   providers: [
@@ -12,11 +12,12 @@ export default NextAuth({
   callbacks: {
     async signIn(user, account, profile) {
       try {
-        const sign = await (await signToken(account.id)).data;
-        user.accessToken = sign.signToken;
-
+        const { data } = await login(Number(account.id));
+        if (!data) return false;
+        console.log(data.login);
         return true;
-      } catch {
+      } catch (err) {
+        console.log(err);
         return false;
       }
     },
