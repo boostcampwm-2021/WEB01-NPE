@@ -106,9 +106,8 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await getUserChartData(
-    1 /* 임시로 1번 유저를 넣음. 이후에 nextSession에서 userID를 가져와야함 */
-  );
+  const userId = Number(context.query.userId);
+  const { data } = await getUserChartData(userId);
 
   return {
     props: {
