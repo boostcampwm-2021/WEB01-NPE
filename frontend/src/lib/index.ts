@@ -163,3 +163,34 @@ export const POST_ANSWER = gql`
     }
   }
 `;
+
+export const test = async (take: number, skip: number) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        searchQuestions(searchQuery: {
+          take: ${take}
+          skip: ${skip}
+        }) {
+          id
+          viewCount
+          thumbupCount
+          author {
+            id
+            username
+            score
+            profileUrl
+          }
+          realtimeShare
+          title
+          desc
+          tags {
+            id,
+            name
+          }
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};
