@@ -25,11 +25,11 @@ interface Props {
 }
 
 const ProfilePage: NextPage<Props> = ({ userChartData }) => {
-  const [session, loading] = useSession();
+  // const [session, loading] = useSession();
 
-  if (!session || !session.user) {
-    return <>error</>;
-  }
+  // if (!session || !session.user) {
+  //   return <>error</>;
+  // }
 
   return (
     <>
@@ -39,15 +39,15 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image type={"Profile"} src={session.user.image!} />
+            {/* <Image type={"Profile"} src={session.user.image!} /> */}
           </ImageDiv>
           <TextDiv>
-            <TitleText type={"Default"} text={session.user.name!} />
+            {/* <TitleText type={"Default"} text={session.user.name!} /> */}
             <TitleText
               type={"Default"}
               text={`누적 스코어 : ${String(userChartData.score)}`}
             />
-            <ContentText type={"Default"} text={session.user.email!} />
+            {/* <ContentText type={"Default"} text={session.user.email!} /> */}
           </TextDiv>
         </ProfileDiv>
         <ChartWrapper>
