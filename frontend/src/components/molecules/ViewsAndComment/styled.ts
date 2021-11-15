@@ -6,3 +6,5 @@ export const ViewsAndComment = styled.div`
     margin-left: 10px;
   }
 `;
+
+export const IconContainer = styled.li``;

@@ -8,8 +8,7 @@
         "alias": {
           "@src": "./src",
           "@components": "./src/components",
-          "@api": "./src/lib/api",
-          "@types": "./src/types"
+          "@lib": "./src/lib/"
         }
       }
     ],

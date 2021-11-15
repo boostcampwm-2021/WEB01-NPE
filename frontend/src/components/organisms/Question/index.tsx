@@ -2,12 +2,16 @@ import React, { FunctionComponent, MouseEventHandler } from "react";
 import Link from "next/link";
 
 import * as Styled from "./styled";
-import * as Molecule from "../../molecules";
-import * as Organism from "../index";
-import * as Type from "../../../types";
+import {
+  ProfileSummary,
+  QuestionTitle,
+  TagList,
+  ViewsAndComment,
+} from "@components/molecules";
+import { QuestionType } from "@src/types";
 
 interface Props {
-  question: Type.Question;
+  question: QuestionType;
 }
 
 const SearchResult: FunctionComponent<Props> = ({ question }) => {
@@ -26,14 +30,14 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
   return (
     <Styled.Question>
       <Styled.LeftContainer>
-        <Molecule.ProfileSummary author={author} />
+        <ProfileSummary author={author} />
       </Styled.LeftContainer>
 
       <Styled.RightContainer>
         <Styled.HeaderContainer>
           <Link href={`question/${id}`}>
             <a>
-              <Molecule.QuestionTitle
+              <QuestionTitle
                 text={title}
                 type={realtimeShare ? "online" : "offline"}
               />
@@ -42,14 +46,11 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
         </Styled.HeaderContainer>
         <Styled.DescriptContainer>{desc}</Styled.DescriptContainer>
         <Styled.TagContainer>
-          <Molecule.TagList tags={tags} />
+          <TagList tags={tags} />
         </Styled.TagContainer>
 
         <Styled.QusetionDetail>
-          <Molecule.ViewsAndComment
-            viewCount={viewCount}
-            commentCount={thumbupCount}
-          />
+          <ViewsAndComment viewCount={viewCount} commentCount={thumbupCount} />
         </Styled.QusetionDetail>
       </Styled.RightContainer>
     </Styled.Question>

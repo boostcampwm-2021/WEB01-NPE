@@ -2,10 +2,10 @@ import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
 import { Image, Text } from "@components/atoms";
-import { Author } from "@src/types";
+import { AuthorType } from "@src/types";
 
 interface Props {
-  author: Author;
+  author: AuthorType;
 }
 
 const ProfileSummary: FunctionComponent<Props> = ({ author }) => {

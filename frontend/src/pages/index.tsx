@@ -1,11 +1,11 @@
-import { Header, SideBar } from "../components/organisms";
-import QuestionList from "../components/templates/QuestionList";
-import { NextPage } from "next";
-import { GetServerSideProps } from "next";
-import styled from "styled-components";
-import { Question } from "../types";
-import { getQuestions, getAllTags } from "../lib/";
 import { useEffect, useState } from "react";
+import { NextPage, GetServerSideProps } from "next";
+import styled from "styled-components";
+
+import { Header, SideBar } from "@components/organisms";
+import { QuestionList } from "@components/templates";
+import { QuestionType } from "@src/types";
+import { getQuestions, getAllTags } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -16,7 +16,7 @@ const MainContainer = styled.main`
 `;
 
 interface Data {
-  searchQuestions: Question[];
+  searchQuestions: QuestionType[];
 }
 interface Props {
   data: Data;

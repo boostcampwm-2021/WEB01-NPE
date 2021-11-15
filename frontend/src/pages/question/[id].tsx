@@ -1,16 +1,19 @@
 import React from "react";
+import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import styled from "styled-components";
+import { useRouter } from "next/router";
 
+import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
+import { AnswerRegister } from "@components/organisms";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
 import { getOneQuestionByID } from "@src/lib";
-import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 
 const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 880px;
   margin-left: auto;
   margin-right: auto;
 `;
@@ -22,23 +25,38 @@ interface Props {
 }
 
 const QuestionPage: NextPage<Props> = ({ data }) => {
+  const router = useRouter();
+  const questionId = router.query.id;
   const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
+
   return (
     <>
-      <Header type="Default" />
+      <Header type="Default" setTexts={() => {}} />
       <MainContainer>
         <QuestionDetail question={question} />
+
+        <h2>3 답변들</h2>
+
         {answers.map((answer) => {
-          return <AnswerDetail answer={answer} key={answer.id} />;
+          return (
+            <li key={answer.id}>
+              <AnswerDetail answer={answer} />
+            </li>
+          );
         })}
+        <AnswerRegister questionId={Number(questionId)} />
       </MainContainer>
     </>
   );
 };
 
+interface Params extends ParsedUrlQuery {
+  id: string;
+}
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id }: { id: string } = context.params;
+  const { id }: Params = context.params as Params;
   const { data }: { data: QuestionDetailType } = await getOneQuestionByID(
     Number(id)
   );

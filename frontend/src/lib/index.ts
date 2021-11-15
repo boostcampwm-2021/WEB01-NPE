@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import client from "./apolloClient";
 
 export const getAllTags = async () => {
@@ -20,6 +20,7 @@ export const getOneQuestionByID = async (id: number) => {
     query: gql`
       query {
         findOneQuestionById(id: ${id}) {
+          id
           title
           desc
           viewCount
@@ -37,6 +38,7 @@ export const getOneQuestionByID = async (id: number) => {
             name
           }
           answers{
+            desc
             author{
              username
              profileUrl
@@ -144,3 +146,20 @@ export const getUserChartData = async (userId: number) => {
   });
   return { loading, error, data };
 };
+
+export const POST_ANSWER = gql`
+  mutation AddNewAnswer($questionId: Int!, $desc: String!) {
+    addNewAnswer(questionId: $questionId, data: { desc: $desc }) {
+      id
+      desc
+      author {
+        id
+        username
+        profileUrl
+        score
+      }
+      thumbupCount
+      createdAt
+    }
+  }
+`;

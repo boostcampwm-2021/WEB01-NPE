@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface StyledTagProps {
+interface TagProps {
   fontSize: string;
   bgColor: string;
   color: string;
@@ -9,7 +9,7 @@ interface StyledTagProps {
   border: string;
 }
 
-export const StyledTag = styled.a<StyledTagProps>`
+export const Tag = styled.a<TagProps>`
   font-size: ${(props) => props.fontSize};
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color};

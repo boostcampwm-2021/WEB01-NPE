@@ -1,4 +1,5 @@
-import React, { FunctionComponent, forwardRef } from "react";
+import React, { forwardRef } from "react";
+
 import * as Styled from "./styled";
 
 interface Props {

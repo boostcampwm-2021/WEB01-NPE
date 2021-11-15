@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useState } from "react";
-import { SideTag, Switch } from "../../atoms";
-import TitleText from "../../atoms/TitleText";
-import { TagSearch } from "../../molecules";
+
 import * as Styled from "./styled";
+import { SideTag, Switch, TitleText } from "@components/atoms";
+import { TagSearch } from "@components/molecules";
 
 interface Props {
   selectedTags: string[];
@@ -28,7 +28,7 @@ const SideBar: FunctionComponent<Props> = ({
     <Styled.Container>
       <TagSearch tagList={tagList} onSubmit={onSubmit} />
       <Styled.LiveContainer>
-        <TitleText text="실시간 답변" />
+        <TitleText type="Default" text="실시간 답변" />
         <Switch type={"SideBar"} isChecked={isLive} setIsChecked={setIsLive} />
       </Styled.LiveContainer>
       <Styled.UlTags>

@@ -1,12 +1,19 @@
 import React, { FunctionComponent } from "react";
 import Image from "next/image";
+
 import * as Styled from "./styled";
 
-interface Props {
+interface eventProps {
   type: string;
   image?: string | StaticImageData;
   text: string;
-  onClick?: VoidFunction;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+}
+interface voidProps {
+  type: string;
+  image?: string | StaticImageData;
+  text: string;
+  onClick: () => void;
 }
 
 interface StyleProps {
@@ -42,7 +49,12 @@ const types: { [key: string]: StyleProps } = {
     height: "36px",
   },
 };
-const Button: FunctionComponent<Props> = ({ type, image, text, onClick }) => {
+const Button: FunctionComponent<eventProps | voidProps> = ({
+  type,
+  image,
+  text,
+  onClick,
+}) => {
   const buttonProps: StyleProps = types[type];
 
   return (

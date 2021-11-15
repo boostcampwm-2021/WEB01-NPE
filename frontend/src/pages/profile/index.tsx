@@ -1,24 +1,26 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
-import styled from "styled-components";
 import { useSession } from "next-auth/client";
+import styled from "styled-components";
 
-import Header from "../../components/organisms/Header";
-import HeaderText from "../../components/atoms/HeaderText";
-import TitleText from "../../components/atoms/TitleText";
-import ContentText from "../../components/atoms/ContentText";
-import Image from "../../components/atoms/Image";
-import Chart from "../../components/atoms/Chart";
-import QuestionLists from "../../components/templates/QuestionList";
+import {
+  HeaderText,
+  TitleText,
+  ContentText,
+  Image,
+  Chart,
+} from "@components/atoms";
+import { Header } from "@components/organisms/";
+import { QuestionList } from "@components/templates";
 import { getUserChartData } from "@src/lib";
-import { Answer, Question } from "@src/types";
+import { AnswerType, QuestionType } from "@src/types";
 
 interface Props {
   userChartData: {
     username: string;
     score: number;
-    postQuestions: Question[];
-    postAnswers: Partial<Answer>[];
+    postQuestions: QuestionType[];
+    postAnswers: Partial<AnswerType>[];
   };
 }
 
@@ -68,7 +70,7 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
               type={"Default"}
               text={`작성한 질문(${userChartData.postQuestions.length})`}
             />
-            <QuestionLists questions={userChartData.postQuestions} />
+            <QuestionList questions={userChartData.postQuestions} />
           </QuestionDiv>
           <QuestionDiv>
             <TitleText

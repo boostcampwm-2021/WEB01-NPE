@@ -1,4 +1,4 @@
-export interface Author {
+export interface AuthorType {
   __typename: string;
   id: string;
   username: string;
@@ -12,10 +12,10 @@ export interface TagType {
   name: string;
 }
 
-export interface Question {
+export interface QuestionType {
   id: number;
   __typename: string;
-  author: Author;
+  author: AuthorType;
   desc: string;
   realtimeShare: boolean;
   tags: TagType[];
@@ -25,9 +25,9 @@ export interface Question {
 }
 
 export interface QuestionDetailType {
-  id: number;
+  id: string;
   __typename: string;
-  author: Author;
+  author: AuthorType;
   desc: string;
   realtimeShare: boolean;
   tags: TagType[];
@@ -41,7 +41,7 @@ export interface QuestionDetailType {
 
 export interface AnswerDetailType {
   id: string;
-  author: Author;
+  author: AuthorType;
   desc: string;
   thumbupCount: number;
   createdAt: string;
@@ -51,15 +51,15 @@ export interface DetailType {
   desc: string;
   tags?: TagType[];
   thumbupCount: number;
-  author: Author;
+  author: AuthorType;
 }
 
-export interface Answer {
+export interface AnswerType {
   id: number;
   userId: number;
   desc: string;
   thumbupCount: number;
   createdAt: string;
   state: 0 | 1;
-  author: Author;
+  author: AuthorType;
 }
