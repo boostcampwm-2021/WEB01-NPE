@@ -172,3 +172,23 @@ export const POST_ANSWER = gql`
     }
   }
 `;
+
+export const POST_QUESTION = gql`
+  mutation addNewQuestion(
+    $title: String!
+    $desc: String!
+    $tagIds: [Int!]!
+    $realtimeShare: Boolean!
+  ) {
+    addNewQuestion(
+      data: {
+        title: $title
+        desc: $desc
+        tagIds: $tagIds
+        realtimeShare: $realtimeShare
+      }
+    ) {
+      id
+    }
+  }
+`;

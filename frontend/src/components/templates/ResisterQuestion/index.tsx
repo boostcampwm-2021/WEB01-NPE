@@ -1,4 +1,7 @@
 import React, { FormEvent, FunctionComponent, useRef, useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+import { POST_QUESTION } from "@src/lib";
+import router from "next/router";
 
 import {
   Button,
@@ -15,19 +18,29 @@ const ResisterQuestion: FunctionComponent = () => {
   const [tagList, setTagList] = useState<string[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
   const editorRef = useRef<any>(null);
+  const [postQuestion] = useMutation(POST_QUESTION);
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
     return editorInstance.getMarkdown();
   };
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log("폼 Submit");
-    //submit 코드
+    const { data } = await postQuestion({
+      variables: {
+        title: title,
+        desc: getMarkdown(),
+        tagIds: [1, 2, 3, 4, 5, 6],
+        realtimeShare: isLive,
+      },
+    });
+    if (!data) return;
+    const questionId = data.addNewQuestion.id;
+    router.push(`/question/${questionId}`);
   };
   return (
     <Styled.Container onSubmit={onSubmit}>
       <Styled.TitleContainer>
-        <TitleInput type="Default" text={title} setText={setTitle} />
+        <TitleInput type="Default" setText={setTitle} />
       </Styled.TitleContainer>
       <Styled.TagContainer>
         <TagInput tagList={tagList} setTagList={setTagList} />
@@ -45,3 +58,6 @@ const ResisterQuestion: FunctionComponent = () => {
 };
 
 export default ResisterQuestion;
+function variables(variables: any, arg1: {}) {
+  throw new Error("Function not implemented.");
+}
