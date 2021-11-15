@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from "typeorm";
 import { User } from "../entities/User";
 
-@EntityRepository()
+@EntityRepository(User)
 export default class UserRepository extends Repository<User> {
   public async findOneUserById(id: number): Promise<User> {
     const user = await this.findOne({ id });

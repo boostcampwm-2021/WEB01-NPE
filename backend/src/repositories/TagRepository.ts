@@ -2,7 +2,7 @@ import { EntityRepository, getRepository, Repository } from "typeorm";
 import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { Tag } from "../entities/Tag";
 
-@EntityRepository()
+@EntityRepository(Tag)
 export default class TagRepository extends Repository<Tag> {
   private readonly questionHasTagRepository = getRepository(PostQuestionHasTag);
   public async getAllTags(): Promise<Tag[]> {

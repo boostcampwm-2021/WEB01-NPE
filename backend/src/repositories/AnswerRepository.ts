@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from "typeorm";
 import { PostAnswer } from "../entities/PostAnswer";
 import AnswerInput from "../graphql/inputTypes/AnswerInput";
 
-@EntityRepository()
+@EntityRepository(PostAnswer)
 export default class AnswerRepository extends Repository<PostAnswer> {
   public async findOneAnswerById(answerId: number): Promise<PostAnswer> {
     const answer = await this.findOne({ id: answerId });
