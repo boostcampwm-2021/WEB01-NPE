@@ -37,6 +37,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
         <QuestionDetail question={question} />
 
         <h2>3 답변들</h2>
+
         {answers.map((answer) => {
           return (
             <li key={answer.id}>
