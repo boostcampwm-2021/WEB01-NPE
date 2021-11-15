@@ -24,12 +24,14 @@ interface Props {
     postQuestions: QuestionType[];
     postAnswers: AnswerType[];
   };
-  userTagCountData: ChartData<"doughnut"> & ChartData<"bar">;
+  userTagCountChartData: ChartData<"doughnut"> & ChartData<"bar">;
+  answerStateChartData: ChartData<"doughnut"> & ChartData<"bar">;
 }
 
 const ProfilePage: NextPage<Props> = ({
   userProfileData,
-  userTagCountData,
+  userTagCountChartData,
+  answerStateChartData,
 }) => {
   return (
     <>
@@ -56,15 +58,15 @@ const ProfilePage: NextPage<Props> = ({
         <ChartWrapper>
           <ChartDiv>
             <TitleText type={"Default"} text={"태그 사용 빈도"} />
-            <Chart type={"Doughnut"} data={userTagCountData} />
+            <Chart type={"Doughnut"} data={userTagCountChartData} />
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"활동"} />
-            <Chart type={"Bar"} data={chartData} />
+            <Chart type={"Bar"} data={dummyChartData} />
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"채택 비율"} />
-            <Chart type={"Doughnut"} data={chartData} />
+            <Chart type={"Doughnut"} data={answerStateChartData} />
           </ChartDiv>
         </ChartWrapper>
         <SummaryWrapper>
@@ -87,7 +89,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       userProfileData: data.findUserById,
-      userTagCountData: makeTagCountChartData(data.getUserUsedTagCount),
+      userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
+      answerStateChartData: makeAnswerStateChartData(
+        data.findUserById.postAnswers
+      ),
     },
   };
 };
@@ -122,7 +127,31 @@ const makeTagCountChartData = (
   };
 };
 
-const chartData = {
+const makeAnswerStateChartData = (
+  postAnswers: {
+    state: 0 | 1;
+  }[]
+): ChartData<"doughnut"> & ChartData<"bar"> => {
+  const totalAnswerCount = postAnswers.length;
+  const adoptedAnswerCount = postAnswers.filter(
+    (postAnswer) => postAnswer.state === 1
+  ).length;
+  const notAdobptedAnswerCount = totalAnswerCount - adoptedAnswerCount;
+
+  return {
+    labels: ["채택됨", "채택되지 않음"],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [adoptedAnswerCount, notAdobptedAnswerCount],
+        backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+};
+
+const dummyChartData = {
   labels: ["React", "Javascript", "HTML"],
   datasets: [
     {
