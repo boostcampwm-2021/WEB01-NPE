@@ -110,7 +110,7 @@ export const getUserInfo = async (userId: number) => {
   return { loading, error, data };
 };
 
-export const getUserChartData = async (userId: number) => {
+export const getUserProfileData = async (userId: number) => {
   const { loading, error, data } = await client.query({
     query: gql`
       query {

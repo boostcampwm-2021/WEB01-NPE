@@ -12,19 +12,21 @@ import {
 } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { QuestionList } from "@components/templates";
-import { getUserChartData } from "@src/lib";
+import { getUserProfileData } from "@src/lib";
 import { AnswerType, QuestionType } from "@src/types";
+import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
+import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
 
 interface Props {
-  userChartData: {
+  userProfileData: {
     username: string;
     score: number;
     postQuestions: QuestionType[];
-    postAnswers: Partial<AnswerType>[];
+    postAnswers: AnswerType[];
   };
 }
 
-const ProfilePage: NextPage<Props> = ({ userChartData }) => {
+const ProfilePage: NextPage<Props> = ({ userProfileData }) => {
   // const [session, loading] = useSession();
 
   // if (!session || !session.user) {
@@ -33,7 +35,7 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
 
   return (
     <>
-      <Header type="Profile" />
+      <Header type="Profile" setTexts={() => ""} />
       <MainContainer>
         <HeaderText type={"Default"} text={"프로필"} />
         <TitleText type={"Default"} text={"기본 정보"} />
@@ -45,7 +47,7 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
             {/* <TitleText type={"Default"} text={session.user.name!} /> */}
             <TitleText
               type={"Default"}
-              text={`누적 스코어 : ${String(userChartData.score)}`}
+              text={`누적 스코어 : ${String(userProfileData.score)}`}
             />
             {/* <ContentText type={"Default"} text={session.user.email!} /> */}
           </TextDiv>
@@ -64,42 +66,18 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
             <Chart type={"Doughnut"} data={chartData} />
           </ChartDiv>
         </ChartWrapper>
-        <QuestionWrapper>
+        <SummaryWrapper>
           <QuestionDiv>
             <TitleText
               type={"Default"}
-              text={`작성한 질문(${userChartData.postQuestions.length})`}
+              text={`작성한 질문(${userProfileData.postQuestions.length})`}
             />
-            <QuestionList questions={userChartData.postQuestions} />
+            <QuestionList questions={userProfileData.postQuestions} />
           </QuestionDiv>
-          <QuestionDiv>
-            <TitleText
-              type={"Default"}
-              text={`작성한 답변(${userChartData.postAnswers.length})`}
-            />
-            {userChartData.postAnswers.map((postAnswer) => {
-              return (
-                <div
-                  style={{
-                    width: "600px",
-                    borderTop: "1px solid black",
-                    margin: "0px",
-                    marginTop: "16px",
-                    padding: "0px 10px",
-                  }}
-                >
-                  <TitleText type={"Default"} text={postAnswer.desc} />
-                  <ContentText
-                    type={"Default"}
-                    text={`좋아요 ${postAnswer.thumbupCount}개 · ${
-                      postAnswer.state === 1 ? "채택됨" : "채택되지 않음"
-                    }`}
-                  />
-                </div>
-              );
-            })}
-          </QuestionDiv>
-        </QuestionWrapper>
+          <ProfileAnswerSummary
+            postAnswers={userProfileData.postAnswers}
+          ></ProfileAnswerSummary>
+        </SummaryWrapper>
       </MainContainer>
     </>
   );
@@ -107,11 +85,11 @@ const ProfilePage: NextPage<Props> = ({ userChartData }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = Number(context.query.userId);
-  const { data } = await getUserChartData(userId);
+  const { data } = await getUserProfileData(userId);
 
   return {
     props: {
-      userChartData: data.findUserById,
+      userProfileData: data.findUserById,
     },
   };
 };
@@ -182,7 +160,7 @@ const ChartDiv = styled.div`
   width: 25%;
 `;
 
-const QuestionWrapper = styled.div`
+const SummaryWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
