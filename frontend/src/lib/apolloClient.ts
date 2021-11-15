@@ -1,16 +1,17 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
-let client;
-if (process.env.NODE_ENV === "production") {
-  client = new ApolloClient({
-    uri: `http://118.67.142.132:4000/graphql`,
-    cache: new InMemoryCache(),
-  });
-} else {
-  client = new ApolloClient({
-    uri: `http://localhost:4000/graphql`,
-    cache: new InMemoryCache(),
-  });
-}
+const API_ENDPOINT =
+  process.env.NODE_ENV === "production"
+    ? `http://118.67.142.132:4000/graphql`
+    : `http://localhost:4000/graphql`;
+
+const httpLink = createHttpLink({
+  uri: API_ENDPOINT,
+});
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
 
 export default client;
