@@ -5,7 +5,7 @@ import { UserHasTag } from "../entities/UserHasTag";
 import NoSuchQuestionError from "../graphql/errors/NoSuchQuestionError";
 import QuestionInput from "../graphql/inputTypes/QuestionInput";
 
-@EntityRepository()
+@EntityRepository(PostQuestion)
 export default class QuestionRepository extends Repository<PostQuestion> {
   private readonly questionHasTagRepository = getRepository(PostQuestionHasTag);
   private readonly userHasTagRepository = getRepository(UserHasTag);
