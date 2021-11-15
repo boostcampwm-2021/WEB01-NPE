@@ -1,8 +1,8 @@
+import React, { FunctionComponent } from "react";
+
 import { TitleText } from "@src/components/atoms";
 import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
 import { AnswerType } from "@src/types";
-import React, { FunctionComponent } from "react";
-
 import * as Styled from "./styled";
 
 interface Props {

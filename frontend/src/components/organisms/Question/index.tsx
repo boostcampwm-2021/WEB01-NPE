@@ -12,9 +12,13 @@ import { QuestionType } from "@src/types";
 
 interface Props {
   question: QuestionType;
+  showProfile?: boolean;
 }
 
-const SearchResult: FunctionComponent<Props> = ({ question }) => {
+const SearchResult: FunctionComponent<Props> = ({
+  question,
+  showProfile = true,
+}) => {
   const onClick: MouseEventHandler = () => {};
 
   const {
@@ -29,9 +33,13 @@ const SearchResult: FunctionComponent<Props> = ({ question }) => {
   } = question;
   return (
     <Styled.Question>
-      <Styled.LeftContainer>
-        <ProfileSummary author={author} />
-      </Styled.LeftContainer>
+      {showProfile ? (
+        <Styled.LeftContainer>
+          <ProfileSummary author={author} />
+        </Styled.LeftContainer>
+      ) : (
+        ""
+      )}
 
       <Styled.RightContainer>
         <Styled.HeaderContainer>

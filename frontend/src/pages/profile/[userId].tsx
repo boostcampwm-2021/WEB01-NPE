@@ -16,6 +16,7 @@ import { getUserProfileData } from "@src/lib";
 import { AnswerType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
 import ProfileAnswer from "@src/components/molecules/ProfileAnswer";
+import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
 
 interface Props {
   userProfileData: {
@@ -67,13 +68,9 @@ const ProfilePage: NextPage<Props> = ({ userProfileData }) => {
           </ChartDiv>
         </ChartWrapper>
         <SummaryWrapper>
-          <QuestionDiv>
-            <TitleText
-              type={"Default"}
-              text={`작성한 질문(${userProfileData.postQuestions.length})`}
-            />
-            <QuestionList questions={userProfileData.postQuestions} />
-          </QuestionDiv>
+          <ProfileQuestionSummary
+            postQuestions={userProfileData.postQuestions}
+          ></ProfileQuestionSummary>
           <ProfileAnswerSummary
             postAnswers={userProfileData.postAnswers}
           ></ProfileAnswerSummary>
@@ -163,15 +160,6 @@ const ChartDiv = styled.div`
 const SummaryWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const QuestionDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ul {
-    padding-inline-start: 0px;
-  }
 `;
 
 export default ProfilePage;
