@@ -7,6 +7,7 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
+import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { Tag } from "../../entities/Tag";
@@ -73,10 +74,12 @@ export default class QuestionResolver {
 
   @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
   async addNewQuestion(
+    @Arg("accessToken") accessToken: string,
     @Arg("data") questionData: QuestionInput
   ): Promise<PostQuestion> {
+    const id = verify(accessToken, "jwtprivate") as string;
     const newQuestion = await PostService.addNewQuestion(questionData, {
-      id: 1,
+      id: Number(id),
     });
 
     return newQuestion;

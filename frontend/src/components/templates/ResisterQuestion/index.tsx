@@ -1,7 +1,9 @@
 import React, { FormEvent, FunctionComponent, useRef, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { POST_QUESTION } from "@src/lib";
 import router from "next/router";
+import { useSession } from "next-auth/client";
+
+import { POST_QUESTION } from "@src/lib";
 
 import {
   Button,
@@ -17,6 +19,7 @@ const ResisterQuestion: FunctionComponent = () => {
   const [title, setTitle] = useState<string>("");
   const [tagList, setTagList] = useState<string[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
+  const [session] = useSession();
   const editorRef = useRef<any>(null);
   const [postQuestion] = useMutation(POST_QUESTION);
   const getMarkdown = () => {
@@ -25,15 +28,21 @@ const ResisterQuestion: FunctionComponent = () => {
   };
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!session || !session.user || !session.accessToken) return;
+    console.log(session.accessToken);
     const { data } = await postQuestion({
       variables: {
         title: title,
         desc: getMarkdown(),
         tagIds: [1, 2, 3, 4, 5, 6],
         realtimeShare: isLive,
+        accessToken: session.accessToken,
       },
     });
-    if (!data) return;
+    if (!data) {
+      console.log("error!");
+      return;
+    }
     const questionId = data.addNewQuestion.id;
     router.push(`/question/${questionId}`);
   };
