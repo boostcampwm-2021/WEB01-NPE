@@ -111,7 +111,6 @@ const makeTagCountChartData = (
     labels: list.map((obj) => obj.tag.name),
     datasets: [
       {
-        label: "# of Votes",
         data: list.map((obj) => obj.count),
         backgroundColor: list.map((_) => {
           const [c1, c2, c3] = [
