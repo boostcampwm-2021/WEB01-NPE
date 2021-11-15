@@ -5,6 +5,7 @@ import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
 import { UserHasTag } from "../../entities/UserHasTag";
+import NoSuchQuestionError from "../errors/NoSuchQuestionError";
 import AnswerInput from "../inputTypes/AnswerInput";
 import QuestionInput from "../inputTypes/QuestionInput";
 import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
@@ -97,6 +98,8 @@ export default class PostService {
 
   public static async findOneQuestionById(id: number): Promise<PostQuestion> {
     const question = await PostQuestion.findOne({ id: id });
+
+    if (!question) throw new NoSuchQuestionError("Check ID");
 
     return question;
   }

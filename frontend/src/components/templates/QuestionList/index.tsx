@@ -6,16 +6,20 @@ import { QuestionType } from "@src/types";
 
 interface Props {
   questions: QuestionType[];
+  showProfile?: boolean;
 }
 
-const SearchResults: FunctionComponent<Props> = ({ questions }) => {
+const SearchResults: FunctionComponent<Props> = ({
+  questions,
+  showProfile = true,
+}) => {
   return (
     <Styled.QuestionList>
       {questions.map((question) => {
         return (
-          <li key={question.id}>
-            <Question question={question} />
-          </li>
+          <Styled.QuestionItem key={question.id}>
+            <Question question={question} showProfile={showProfile} />
+          </Styled.QuestionItem>
         );
       })}
     </Styled.QuestionList>

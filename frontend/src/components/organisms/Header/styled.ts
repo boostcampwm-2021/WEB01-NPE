@@ -58,6 +58,7 @@ export const ModalWrapper = styled.div`
 
 export const Modal = styled.div`
   position: absolute;
-  top: 25%;
-  left: 40%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
