@@ -63,13 +63,3 @@ export interface AnswerType {
   state: 0 | 1;
   author: AuthorType;
 }
-
-export interface SessionUser {
-  user: {
-    name: string;
-    email: string;
-    iamge: string;
-  };
-  expires: string;
-  userId: number;
-}

@@ -57,11 +57,14 @@ interface Params extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id }: Params = context.params as Params;
-  const { data }: { data: QuestionDetailType } = await getOneQuestionByID(
-    Number(id)
-  );
+  const {
+    data,
+  }: {
+    data: { findOneQuestionById: QuestionDetailType };
+  } = await getOneQuestionByID(Number(id));
 
   if (!data) {
+    console.log("reload");
     return {
       redirect: {
         destination: "/",

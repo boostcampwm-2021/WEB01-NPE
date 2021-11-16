@@ -8,8 +8,8 @@ export const authChecker: AuthChecker<Request> = (
 ): boolean => {
   if (context.headers.authorization) {
     const token = context.headers.authorization.split(" ")[1];
-    const data = verify(token, "jwtprivate");
-    console.log(data);
+    const data: any = verify(token, "jwtprivate");
+    //console.log(data);
   }
   return true;
 };

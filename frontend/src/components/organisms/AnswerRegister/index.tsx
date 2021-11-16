@@ -20,17 +20,17 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
 
   return (
     <Styled.AnswerRegister
-      onSubmit={(e) => {
-        if (!session || !session.accessToken) return false;
+      onSubmit={async (e) => {
+        if (!session || !session.user) return false;
         e.preventDefault();
-        postAnswer({
+        await postAnswer({
           // 마크다운에디터에서 받아온 desc를 넣어주는 작업이 필요합니다
           variables: {
             questionId,
             desc: "TEST test test test",
-            accessToken: session.accessToken,
           },
         });
+
         router.reload();
       }}
     >

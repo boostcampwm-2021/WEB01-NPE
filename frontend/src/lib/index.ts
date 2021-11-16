@@ -157,16 +157,8 @@ export const getUserProfileData = async (userId: number) => {
 };
 
 export const POST_ANSWER = gql`
-  mutation AddNewAnswer(
-    $questionId: Int!
-    $desc: String!
-    $accessToken: String!
-  ) {
-    addNewAnswer(
-      questionId: $questionId
-      accessToken: $accessToken
-      data: { desc: $desc }
-    ) {
+  mutation AddNewAnswer($questionId: Int!, $desc: String!) {
+    addNewAnswer(questionId: $questionId, data: { desc: $desc }) {
       id
       desc
       author {
@@ -218,10 +210,8 @@ export const POST_QUESTION = gql`
     $desc: String!
     $tagIds: [Int!]!
     $realtimeShare: Boolean!
-    $accessToken: String!
   ) {
     addNewQuestion(
-      accessToken: $accessToken
       data: {
         title: $title
         desc: $desc

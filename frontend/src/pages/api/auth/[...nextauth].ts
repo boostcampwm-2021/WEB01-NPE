@@ -10,16 +10,9 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    // async signIn(user) {
-    //   try {
-    //     if (!user) return false;
-    //     return true;
-    //   } catch {
-    //     return false;
-    //   }
-    // },
     async session(session, user) {
       session.userId = Number(user.sub);
+
       return session;
     },
   },

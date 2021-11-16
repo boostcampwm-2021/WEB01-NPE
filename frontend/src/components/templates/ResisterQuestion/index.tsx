@@ -28,15 +28,13 @@ const ResisterQuestion: FunctionComponent = () => {
   };
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (!session || !session.user || !session.accessToken) return;
-    console.log(session.accessToken);
+    if (!session || !session.user) return;
     const { data } = await postQuestion({
       variables: {
         title: title,
         desc: getMarkdown(),
         tagIds: [1, 2, 3, 4, 5, 6],
         realtimeShare: isLive,
-        accessToken: session.accessToken,
       },
     });
     if (!data) {
