@@ -7,7 +7,7 @@ export default {
 };
 
 export const Comments = () => {
-  return <IconWithNumber type="Comments" value={32} />;
+  return <IconWithNumber type="Answers" value={32} />;
 };
 
 export const Views = () => {

@@ -2,8 +2,8 @@ import React, { FunctionComponent } from "react";
 import Image from "next/image";
 
 import * as Styled from "./styled";
-import viewImg from "./views.png";
-import commentImg from "./comments.png";
+import viewImg from "./views.svg";
+import commentImg from "./answers.svg";
 
 interface Props {
   type: string;
@@ -18,11 +18,11 @@ interface StyleProps {
 const types: { [key: string]: StyleProps } = {
   Views: {
     src: viewImg,
-    width: 15,
+    width: 30,
   },
   Comments: {
     src: commentImg,
-    width: 15,
+    width: 30,
   },
 };
 
