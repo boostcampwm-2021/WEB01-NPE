@@ -22,10 +22,6 @@ const types: { [key: string]: StyleProps } = {
     offColor: "#fb4402",
     onColor: "#1f1e26",
   },
-  SideBar: {
-    offColor: "#66bb6a",
-    onColor: "#ccc",
-  },
 };
 
 const Switch: FunctionComponent<Props> = ({
