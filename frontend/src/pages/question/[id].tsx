@@ -36,7 +36,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
       <MainContainer>
         <QuestionDetail question={question} />
 
-        <h2>3 답변들</h2>
+        <h2>{answers.length} 답변들</h2>
 
         {answers.map((answer) => {
           return (
