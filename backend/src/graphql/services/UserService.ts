@@ -12,4 +12,20 @@ export default class UserService {
 
     return user;
   }
+
+  public static async addNewUser(
+    id: number,
+    username: string,
+    profileUrl: string,
+    socialUrl: string
+  ): Promise<User> {
+    const newUser = new User();
+    newUser.id = id;
+    newUser.username = username;
+    newUser.profileUrl = profileUrl;
+    newUser.socialUrl = socialUrl;
+    await newUser.save();
+
+    return newUser;
+  }
 }

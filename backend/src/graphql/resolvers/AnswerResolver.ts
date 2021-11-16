@@ -6,6 +6,7 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
+import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { User } from "../../entities/User";
 import AnswerInput from "../inputTypes/AnswerInput";
@@ -18,12 +19,15 @@ export default class AnswerResolver {
   async addNewAnswer(
     @Arg("questionId", () => Int, { description: "질문글 ID" })
     questionId: number,
+    @Arg("accessToken", () => String, { description: "access token" })
+    accessToken: string,
     @Arg("data") answerData: AnswerInput
   ): Promise<PostAnswer> {
+    const id = verify(accessToken, "jwtprivate") as string;
     const newAnswer = await PostService.addNewAnswer(
       answerData,
       {
-        id: 1,
+        id: Number(id),
       },
       questionId
     );

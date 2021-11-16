@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Provider from "next-auth/providers";
-import { signToken } from "@src/lib/token";
+import { login } from "@src/lib";
 
 export default NextAuth({
   providers: [
@@ -10,15 +10,29 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn(user, account, profile) {
+    async signIn(user, account) {
       try {
-        const sign = await (await signToken(account.id)).data;
-        user.accessToken = sign.signToken;
-
+        if (!user) return false;
+        const { data } = await login(
+          Number(account.id),
+          user.name as string,
+          user.image as string,
+          `https://github.com/${user.name}`
+        );
+        if (!data) return false;
+        user.accessToken = data.login;
         return true;
       } catch {
         return false;
       }
+    },
+    async jwt(token, user) {
+      if (user) token.accessToken = user.accessToken;
+      return token;
+    },
+    async session(session, user) {
+      if (user) session.accessToken = user.accessToken;
+      return session;
     },
   },
 });
