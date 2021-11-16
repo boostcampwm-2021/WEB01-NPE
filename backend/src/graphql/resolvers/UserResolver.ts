@@ -46,8 +46,11 @@ export default class UserResolver {
     if (!data) {
       await UserService.addNewUser(id, username, profileUrl, socialUrl);
     }
-    console.log(data);
-    const accessToken = sign(String(id), "jwtprivate");
+    //console.log(data);
+    const accessToken = sign(String(id), "jwtprivate", {
+      encoding: "base64",
+      algorithm: "HS512",
+    });
     return accessToken;
   }
 

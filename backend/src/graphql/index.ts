@@ -1,6 +1,7 @@
 import { graphqlHTTP } from "express-graphql";
 import { GraphQLSchema, GraphQLObjectType, graphql } from "graphql";
 import { buildSchema } from "type-graphql";
+import { authChecker } from "../middlewares/AuthChecker";
 import AnswerResolver from "./resolvers/AnswerResolver";
 import QuestionResolver from "./resolvers/QuestionResolver";
 import TagResolver from "./resolvers/TagResolver";
@@ -18,6 +19,7 @@ export default class GraphQLMiddleware {
           TagResolver,
           AnswerResolver,
         ],
+        authChecker: authChecker,
       });
 
       this.schema = schema;
