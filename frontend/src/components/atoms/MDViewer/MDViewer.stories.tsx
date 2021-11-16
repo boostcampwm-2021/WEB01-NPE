@@ -7,5 +7,15 @@ export default {
 };
 
 export const Default = () => {
-  return <MDViewer />;
+  return (
+    <MDViewer
+      content="
+    # 안승재
+    ```javascript
+      console.log('sdfg');
+    ```
+  
+  "
+    />
+  );
 };

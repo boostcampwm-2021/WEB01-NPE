@@ -3,12 +3,15 @@ import React, { FunctionComponent } from "react";
 // import Prism from "prismjs";
 // import "@toast-ui/editor/dist/toastui-editor.css";
 // import { Viewer } from "@toast-ui/react-editor";
-import { ViewerProps } from "@toast-ui/react-editor";
+// import { ViewerProps } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
-const Viewer = dynamic<ViewerProps>(
-  () => import("@toast-ui/react-editor").then((m) => m.Viewer),
-  { ssr: false }
-);
+// const Viewer = dynamic<ViewerProps>(
+//   () => import("@toast-ui/react-editor").then((m) => m.Viewer),
+//   { ssr: false }
+// );
+const WrappedViewer = dynamic(() => import("./WrappedViewer"), {
+  ssr: false,
+});
 // const codeSyntaxHighlight = dynamic(
 //   () =>
 //     import("@toast-ui/editor-plugin-code-syntax-highlight").then(
@@ -16,17 +19,21 @@ const Viewer = dynamic<ViewerProps>(
 //     ),
 //   { ssr: false }
 // );
-const MDViewer: FunctionComponent = () => {
-  return (
-    <Viewer
-      // plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-      initialValue="
-  ```javascript 
-    console.log('sdf')
-  ```
-  "
-    />
-  );
+// const MDViewer: FunctionComponent = () => {
+//   return (
+//     <Viewer
+//       // plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
+//       initialValue="
+//   ```javascript
+//     console.log('sdf')
+//   ```
+//   "
+//     />
+//   );
+// };
+
+const MDViewer: FunctionComponent<{ content: string }> = (props) => {
+  return <WrappedViewer {...props} />;
 };
 
 export default MDViewer;
