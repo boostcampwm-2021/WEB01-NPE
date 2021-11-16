@@ -29,6 +29,10 @@ const ResisterQuestion: FunctionComponent = () => {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!session || !session.user) return;
+    if (title && title.length < 5) {
+      window.alert("제목은 5자 이상으로 입력해주세요");
+      return;
+    }
     const { data } = await postQuestion({
       variables: {
         title: title,
