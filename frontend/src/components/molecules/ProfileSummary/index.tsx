@@ -12,10 +12,7 @@ const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
   return (
     <Styled.Anchor href={`profile/${author.id}`}>
       <Styled.ImageDiv>
-        <Image
-          type="Large"
-          src={"https://avatars.githubusercontent.com/u/67536413"}
-        />
+        <Image type="Large" src={author.profileUrl} />
       </Styled.ImageDiv>
       <Styled.TextDiv>
         <Text type="Header" text={author.username} />
