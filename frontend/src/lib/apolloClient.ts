@@ -13,7 +13,9 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(async (_, { headers }) => {
   // next 세션에 접근하여 AccessToken을 Bearer에 추가해야 함
-  const token = ""; //
+  const data = await getSession();
+  if (!data) return {};
+  const token = data.accessToken;
   return {
     headers: {
       //...headers,
