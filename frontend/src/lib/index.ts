@@ -254,3 +254,16 @@ export const login = async (
   });
   return { loading, error, data };
 };
+
+export const getUserIdByUsername = async (username: string) => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        findUserByUsername(username: ${username}){
+          id
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};
