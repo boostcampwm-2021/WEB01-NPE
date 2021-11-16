@@ -8,7 +8,14 @@ export default {
 
 export const Default = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [isLive, setIsLive] = useState(true);
   return (
-    <SideBar selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+    <SideBar
+      selectedTags={selectedTags}
+      setSelectedTags={setSelectedTags}
+      tagList={[]}
+      isLive={isLive}
+      setIsLive={setIsLive}
+    />
   );
 };

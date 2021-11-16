@@ -8,14 +8,17 @@ interface Props {
   selectedTags: string[];
   setSelectedTags: (value: string[]) => void;
   tagList: string[];
+  isLive: boolean;
+  setIsLive: (value: boolean) => void;
 }
 
 const SideBar: FunctionComponent<Props> = ({
   selectedTags,
   setSelectedTags,
   tagList,
+  isLive,
+  setIsLive,
 }) => {
-  const [isLive, setIsLive] = useState<boolean>(false);
   const onSubmit = (newTag: string) => {
     setSelectedTags([...selectedTags, newTag]);
   };

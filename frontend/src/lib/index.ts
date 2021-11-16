@@ -56,7 +56,8 @@ export const getOneQuestionByID = async (id: number) => {
 export const getQuestions = async (
   take: number,
   title?: string,
-  tagIDs?: number[]
+  tagIDs?: number[],
+  realtimeShare?: boolean
 ) => {
   const { loading, error, data } = await client.query({
     query: gql`
@@ -65,6 +66,9 @@ export const getQuestions = async (
           take: ${take}
           title: ${JSON.stringify(title || "")}
           tagIDs: ${JSON.stringify(tagIDs || [])}
+          ${
+            realtimeShare === undefined ? "" : `realtimeShare: ${realtimeShare}`
+          }
         }) {
           id
           viewCount
