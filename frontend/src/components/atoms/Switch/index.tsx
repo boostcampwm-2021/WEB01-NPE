@@ -9,18 +9,18 @@ interface Props {
 }
 
 interface StyleProps {
-  onColor: string;
+  _onColor: string;
   offColor: string;
 }
 
 const types: { [key: string]: StyleProps } = {
   Default: {
     offColor: "#dddddd",
-    onColor: "#6edc5f",
+    _onColor: "#6edc5f",
   },
   DarkMode: {
     offColor: "#fb4402",
-    onColor: "#1f1e26",
+    _onColor: "#1f1e26",
   },
 };
 
