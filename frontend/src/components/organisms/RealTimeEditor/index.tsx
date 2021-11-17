@@ -9,8 +9,13 @@ if (typeof window !== "undefined") {
 }
 
 import * as Styled from "./styled";
+import { QuestionDetailType } from "@src/types";
 
-const RealTimeEditor: FunctionComponent = () => {
+const RealTimeEditor: FunctionComponent<{ question: QuestionDetailType }> = ({
+  question,
+}) => {
+  console.log(question.desc);
+
   return (
     <Styled.Editor>
       <Styled.Tab>
@@ -20,7 +25,7 @@ const RealTimeEditor: FunctionComponent = () => {
         <Styled.Code>버튼1</Styled.Code>
       </Styled.Tab>
       <CodeMirror
-        value="## 테스트"
+        value={question.desc || ""}
         options={{
           mode: "gfm",
           lineNumbers: true,

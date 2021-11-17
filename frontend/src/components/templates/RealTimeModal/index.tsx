@@ -34,7 +34,7 @@ const RealTimeModal: FunctionComponent<{ question: QuestionDetailType }> = ({
       <Styled.Modal>
         <Styled.temp>
           <div>유저마이크</div>
-          <RealTimeEditor />
+          <RealTimeEditor question={question} />
           <div>채팅</div>
         </Styled.temp>
       </Styled.Modal>
