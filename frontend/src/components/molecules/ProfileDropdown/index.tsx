@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import Router from "next/router";
-import { signOut } from "next-auth/client";
+import { signOut, useSession } from "next-auth/client";
 
 import * as Styled from "./styled";
 import { Button } from "@components/atoms";
@@ -8,8 +8,9 @@ import userImg from "./user.png";
 import logoutImg from "./logout.png";
 
 const ProfileDropDown: FunctionComponent = () => {
+  const [session] = useSession();
   const onProfileButton = () => {
-    Router.push("/profile");
+    Router.push(`/profile/${session?.userId}`);
   };
   const onLogoutButton = () => {
     signOut();
