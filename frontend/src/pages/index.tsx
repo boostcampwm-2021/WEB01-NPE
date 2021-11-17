@@ -31,7 +31,7 @@ interface TagProps {
 const MainPage: NextPage<Props> = ({ data, error }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [tagList, setTagList] = useState<TagProps[]>([]);
-
+  const [isLive, setIsLive] = useState<boolean>(false);
   const [texts, setTexts] = useState<string>("");
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
@@ -54,14 +54,15 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
       const tagIDs = tags.map(
         (e) => Number(tagList.find((v) => e === v.name)?.id) || -1
       );
-      const { data } = await getQuestions(5, texts, tagIDs);
+      console.log(isLive);
+      const { data } = await getQuestions(5, texts, tagIDs, isLive);
 
       if (data) {
         setQuestionList(data.searchQuestions);
       }
     };
     fetchQuestions();
-  }, [tags, texts]);
+  }, [tags, texts, isLive]);
 
   const getMorePost = async () => {
     const { data } = await test(5, index);
@@ -82,6 +83,8 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
           selectedTags={tags}
           setSelectedTags={setTags}
           tagList={tagList.map((e) => e.name)}
+          isLive={isLive}
+          setIsLive={setIsLive}
         />
 
         <InfiniteScroll
