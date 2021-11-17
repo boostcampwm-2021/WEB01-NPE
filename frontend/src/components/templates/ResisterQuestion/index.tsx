@@ -44,10 +44,7 @@ const ResisterQuestion: FunctionComponent = () => {
         realtimeShare: isLive,
       },
     });
-    if (!data) {
-      console.log("error!");
-      return;
-    }
+    if (!data) return;
     const questionId = data.addNewQuestion.id;
     router.push(`/question/${questionId}`);
   };

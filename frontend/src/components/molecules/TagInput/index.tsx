@@ -31,7 +31,6 @@ const TagInput: FunctionComponent<Props> = ({ tagList, setTagList }) => {
     setTagList(tagList.filter((tag) => tag.name !== deletedTag));
   };
   const getItem = ({ id, name }: TagType) => {
-    console.log(id, name);
     return (
       <Tag key={id} type="Default" name={name} onClick={() => onDelete(name)} />
     );

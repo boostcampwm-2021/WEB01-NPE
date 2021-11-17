@@ -12,7 +12,6 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   const [candidateTags, setTags] = useState<TagType[]>([]);
   const inputTag = createRef<HTMLInputElement>();
   const onTagClick = (tagname: string) => {
-    console.log(inputTag!.current!.value, tagname);
     inputTag!.current!.value = tagname;
     setTags([]);
   };
