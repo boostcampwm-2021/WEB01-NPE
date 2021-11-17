@@ -11,7 +11,7 @@ import {
 import { PostAnswer } from "./PostAnswer";
 import { User } from "./User";
 import { PostQuestionHasTag } from "./PostQuestionHasTag";
-import { ObjectType, Field, ID, Int, Float } from "type-graphql";
+import { ObjectType, Field, ID, Int, Float, Authorized } from "type-graphql";
 
 @Index("fk_post_question_user_idx", ["userId"], {})
 @Entity("post_question")
@@ -20,6 +20,10 @@ import { ObjectType, Field, ID, Int, Float } from "type-graphql";
     "질문글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 질문을 의미합니다.",
 })
 export class PostQuestion extends BaseEntity {
+  // 인증 전용
+  // 관련 type-graphql 문서
+  // https://typegraphql.com/docs/authorization.html
+  @Authorized()
   @Field(() => ID, {
     description: "해당 글의 고유 id. 글 생성 순으로 지정",
   })

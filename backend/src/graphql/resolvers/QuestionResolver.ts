@@ -1,5 +1,6 @@
 import {
   Arg,
+  Ctx,
   FieldResolver,
   Int,
   Mutation,
@@ -17,6 +18,12 @@ import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
 import PostService from "../services/PostService";
 import TagService from "../services/TagService";
 import UserService from "../services/UserService";
+
+const getUserId = (headers: any): number => {
+  if (!headers.authorization) throw new Error("Auth Error");
+  const token = headers.authorization.split(" ")[1];
+  return (verify(token, "keyboard cat") as any).userId;
+};
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
@@ -74,12 +81,12 @@ export default class QuestionResolver {
 
   @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
   async addNewQuestion(
-    @Arg("accessToken") accessToken: string,
-    @Arg("data") questionData: QuestionInput
+    @Arg("data") questionData: QuestionInput,
+    @Ctx("headers") headers: any
   ): Promise<PostQuestion> {
-    const id = verify(accessToken, "jwtprivate") as string;
+    const userId = getUserId(headers);
     const newQuestion = await PostService.addNewQuestion(questionData, {
-      id: Number(id),
+      id: userId,
     });
 
     return newQuestion;
@@ -90,8 +97,14 @@ export default class QuestionResolver {
     @Arg("questionId", () => Int, { description: "수정할 질문글의 ID" })
     questionId: number,
     @Arg("data", { description: "수정할 질문글 내용" })
-    fieldsToUpdate: QuestionInput
+    fieldsToUpdate: QuestionInput,
+    @Ctx("headers") headers: any
   ): Promise<PostQuestion> {
+    const question = await PostService.findOneQuestionById(questionId);
+    const questionAuthor = question.userId;
+    const userId = getUserId(headers);
+    if (questionAuthor !== userId) throw new Error("Not your Post!");
+
     const updateResult = await PostService.updateQuestion(
       questionId,
       fieldsToUpdate
@@ -104,8 +117,14 @@ export default class QuestionResolver {
     description: "질문글 삭제 Mutation, 삭제 여부를 Boolean 으로 반환합니다.",
   })
   async deleteQuestion(
-    @Arg("questionId", { description: "삭제할 질문글의 ID" }) questionId: number
+    @Arg("questionId", { description: "삭제할 질문글의 ID" })
+    questionId: number,
+    @Ctx("headers") headers: any
   ): Promise<boolean> {
+    const question = await PostService.findOneQuestionById(questionId);
+    const questionAuthor = question.userId;
+    const userId = getUserId(headers);
+    if (questionAuthor !== userId) throw new Error("Not your Post!");
     const isDeleted = await PostService.deleteQuestion(questionId);
 
     return isDeleted;

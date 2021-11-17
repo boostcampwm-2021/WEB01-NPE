@@ -1,4 +1,12 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  DefaultOptions,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
+import { getSession } from "next-auth/client";
+const sign = require("jwt-encode");
 
 const API_ENDPOINT =
   process.env.NODE_ENV === "production"
@@ -9,9 +17,37 @@ const httpLink = createHttpLink({
   uri: API_ENDPOINT,
 });
 
+const authLink = setContext(async (_, { headers }) => {
+  const session = await getSession();
+  if (!session) return {};
+
+  const token = sign(session, "keyboard cat");
+
+  return {
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+const defaultOptions: DefaultOptions = {
+  watchQuery: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all",
+  },
+  query: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all",
+  },
+  mutate: {
+    errorPolicy: "all",
+  },
+};
+
 const client = new ApolloClient({
-  link: httpLink,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
+  defaultOptions: defaultOptions,
 });
 
 export default client;

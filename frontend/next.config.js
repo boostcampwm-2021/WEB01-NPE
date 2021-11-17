@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ["avatars.githubusercontent.com"],
+    domains: ["avatars.githubusercontent.com", "i.ibb.co"],
   },
   typescript: {
     ignoreBuildErrors: true,
