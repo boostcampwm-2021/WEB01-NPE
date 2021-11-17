@@ -25,6 +25,7 @@ const candidates = [
 const TagInput: FunctionComponent<Props> = ({ tagList, setTagList }) => {
   const [allTagList, setAllTagList] = useState<TagType[]>([]);
   const onSubmit = (tagInput: TagType) => {
+    if (tagList.find((tag) => tag.name === tagInput.name)) return;
     setTagList([...tagList, tagInput]);
   };
   const onDelete = (deletedTag: string) => {
