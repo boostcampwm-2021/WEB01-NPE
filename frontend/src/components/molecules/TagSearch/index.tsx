@@ -1,17 +1,19 @@
 import React, { createRef, FunctionComponent, useState } from "react";
 
 import * as Styled from "./styled";
+import { TagType } from "@src/types";
 
 interface Props {
-  onSubmit: (value: string) => void;
-  tagList: string[];
+  onSubmit: (value: TagType) => void;
+  tagList: TagType[];
 }
 
 const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
-  const [candidateTags, setTags] = useState<string[]>([]);
+  const [candidateTags, setTags] = useState<TagType[]>([]);
   const inputTag = createRef<HTMLInputElement>();
-  const onTagClick = (tag: string) => {
-    inputTag!.current!.value = tag;
+  const onTagClick = (tagname: string) => {
+    console.log(inputTag!.current!.value, tagname);
+    inputTag!.current!.value = tagname;
     setTags([]);
   };
   const onInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,15 +21,13 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
     if (value.length === 0) {
       return setTags([]);
     }
-    const tags: string[] = tagList.filter((tag: string) =>
-      tag.startsWith(value)
-    );
+    const tags = tagList.filter((tag) => tag.name.startsWith(value));
     setTags(tags);
   };
-  const getItem = (tag: string, index: number) => {
+  const getItem = ({ id, name }: TagType) => {
     return (
-      <Styled.Tag key={index} data-tag={tag} onClick={(tag) => onTagClick}>
-        {tag}
+      <Styled.Tag key={id} data-tag={name} onClick={(name) => onTagClick}>
+        {name}
       </Styled.Tag>
     );
   };
@@ -43,7 +43,11 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
       <Styled.Button
         type="button"
         onClick={() => {
-          onSubmit(inputTag!.current!.value);
+          const __typename = "tag";
+          const name = inputTag.current?.value!;
+          const id = tagList.find((tag) => tag.name === name)?.id;
+          if (!id) return;
+          onSubmit({ __typename, id, name });
           inputTag!.current!.value = "";
         }}
       >
