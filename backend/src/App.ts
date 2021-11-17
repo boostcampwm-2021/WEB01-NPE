@@ -7,6 +7,9 @@ const DB_CONN_OPTIONS: Record<
   string,
   ConnectionOptions
 > = require("../ormconfig.json");
+import * as socketio from "socket.io";
+import socketModule from "./socket";
+import { Server } from "http";
 
 (async () => {
   let env = "";
@@ -23,10 +26,23 @@ const DB_CONN_OPTIONS: Record<
 
   app.use("/graphql", gqMiddleware);
 
+  let server: Server = null;
   if (env === "production") {
     console.info("!!! THIS IS PRODUCTION MODE !!!");
-    app.listen(4000, () => console.log("server is ON at 4000(PRODUCTION)"));
+    server = app.listen(4000, () =>
+      console.log("server is ON at 4000(PRODUCTION)")
+    );
   } else {
-    app.listen(4000, () => console.log("server is ON at 4000(TEST/DEV)"));
+    server = app.listen(4000, () =>
+      console.log("server is ON at 4000(TEST/DEV)")
+    );
   }
+
+  const io = new socketio.Server(server, {
+    cors: {
+      origin: "*",
+      credentials: true,
+    },
+  });
+  socketModule(io);
 })();

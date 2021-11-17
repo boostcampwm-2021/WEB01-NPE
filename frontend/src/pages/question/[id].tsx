@@ -49,7 +49,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
           );
         })}
         <AnswerRegister questionId={Number(questionId)} />
-        {isModal && <RealTimeModal />}
+        {isModal && <RealTimeModal question={question} />}
       </MainContainer>
     </>
   );
