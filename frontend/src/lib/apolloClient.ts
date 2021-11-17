@@ -21,7 +21,7 @@ const authLink = setContext(async (_, { headers }) => {
   const session = await getSession();
   if (!session) return {};
 
-  const token = sign(session, "jwtprivate");
+  const token = sign(session, "keyboard cat");
 
   return {
     headers: {

@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Provider from "next-auth/providers";
-import { getUserIdByUsername, login } from "@src/lib";
 
 export default NextAuth({
   providers: [

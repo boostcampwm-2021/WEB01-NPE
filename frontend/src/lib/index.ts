@@ -223,37 +223,3 @@ export const POST_QUESTION = gql`
     }
   }
 `;
-
-export const login = async (
-  id: number,
-  username: string,
-  profileUrl: string,
-  socialUrl: string
-) => {
-  const { loading, error, data } = await client.query({
-    query: gql`
-      query {
-        login (
-          id: ${id}
-          username: "${username}"
-          profileUrl: "${profileUrl}"
-          socialUrl: "${socialUrl}"
-        )
-      }
-    `,
-  });
-  return { loading, error, data };
-};
-
-export const getUserIdByUsername = async (username: string) => {
-  const { loading, error, data } = await client.query({
-    query: gql`
-      query {
-        findUserByUsername(username: ${username}){
-          id
-        }
-      }
-    `,
-  });
-  return { loading, error, data };
-};

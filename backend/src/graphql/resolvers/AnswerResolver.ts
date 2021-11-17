@@ -17,7 +17,7 @@ import UserService from "../services/UserService";
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new Error("Auth Error");
   const token = headers.authorization.split(" ")[1];
-  return (verify(token, "jwtprivate") as any).userId;
+  return (verify(token, "keyboard cat") as any).userId;
 };
 
 @Resolver(PostAnswer)
