@@ -25,7 +25,7 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
   };
   const getItem = ({ id, name }: TagType) => {
     return (
-      <Styled.Tag key={id} data-tag={name} onClick={(name) => onTagClick}>
+      <Styled.Tag key={id} data-tag={name} onClick={() => onTagClick(name)}>
         {name}
       </Styled.Tag>
     );
