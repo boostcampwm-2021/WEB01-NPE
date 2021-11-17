@@ -237,9 +237,7 @@ export const registerIfNotExists = async (
   const data = await client.mutate({
     mutation: gql`
     mutation{
-      registerIfNotExists(id: ${id},username: "${username}", socialUrl: "${socialUrl}", profileUrl: "${profileUrl}"){
-        username
-      }
+      registerIfNotExists(id: ${id},username: "${username}", socialUrl: "${socialUrl}", profileUrl: "${profileUrl}")
     }
     `,
   });

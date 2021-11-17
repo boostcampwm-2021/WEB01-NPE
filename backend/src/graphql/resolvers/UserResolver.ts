@@ -57,7 +57,9 @@ export default class UserResolver {
     return answers;
   }
 
-  @Mutation(() => User, { description: "유저 id가 존재하지 않을 시 생성" })
+  @Mutation(() => Boolean, {
+    description: "유저 id가 존재하지 않을 시 생성. 신규 유저인 경우 true 반환",
+  })
   async registerIfNotExists(
     @Arg("id", { description: "Github ID" }) id: number,
     @Arg("username", { description: "Github 유저 이름" }) username: string,
@@ -65,7 +67,9 @@ export default class UserResolver {
     @Arg("socialUrl", { description: "github URL" }) socialUrl: string
   ) {
     let data = await UserService.findOneUserById(id);
+    let isNewUser = false;
     if (!data) {
+      isNewUser = true;
       data = await UserService.registerUser(
         id,
         username,
@@ -74,6 +78,6 @@ export default class UserResolver {
       );
     }
 
-    return data;
+    return isNewUser;
   }
 }
