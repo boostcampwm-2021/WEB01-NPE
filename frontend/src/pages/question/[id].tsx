@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { AnswerRegister } from "@components/organisms";
+import { RealTimeModal } from "@components/templates";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
 import { getOneQuestionByID } from "@src/lib";
 
@@ -26,9 +27,11 @@ interface Props {
 
 const QuestionPage: NextPage<Props> = ({ data }) => {
   const router = useRouter();
+  const [isModal, setIsModal] = useState<boolean>(true);
   const questionId = router.query.id;
   const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
+  document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
 
   return (
     <>
@@ -46,6 +49,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
           );
         })}
         <AnswerRegister questionId={Number(questionId)} />
+        {isModal && <RealTimeModal />}
       </MainContainer>
     </>
   );

@@ -48,6 +48,18 @@ const types: { [key: string]: StyleProps } = {
     width: "100%",
     height: "36px",
   },
+  realtimeShare_active: {
+    bgColor: "var(--orange-primary)",
+    textColor: "white",
+    width: "200px",
+    height: "36px",
+  },
+  realtimeShare_inactive: {
+    bgColor: "var(--grey-primary)",
+    textColor: "white",
+    width: "200px",
+    height: "36px",
+  },
 };
 const Button: FunctionComponent<eventProps | voidProps> = ({
   type,
