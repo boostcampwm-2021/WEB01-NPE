@@ -227,3 +227,21 @@ export const POST_QUESTION = gql`
     }
   }
 `;
+
+export const registerIfNotExists = async (
+  id: number,
+  username: string,
+  profileUrl: string,
+  socialUrl: string
+) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation{
+      registerIfNotExists(id: ${id},username: "${username}", socialUrl: "${socialUrl}", profileUrl: "${profileUrl}"){
+        username
+      }
+    }
+    `,
+  });
+  return data;
+};

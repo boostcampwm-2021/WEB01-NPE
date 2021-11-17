@@ -13,7 +13,7 @@ export default class UserService {
     return user;
   }
 
-  public static async addNewUser(
+  public static async registerUser(
     id: number,
     username: string,
     profileUrl: string,
