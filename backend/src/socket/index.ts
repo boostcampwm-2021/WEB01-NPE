@@ -10,11 +10,13 @@ interface SessionUser {
   };
   expires: string;
 }
+interface UsersType {
+  [roomName: string]: {
+    [socketId: string]: SessionUser;
+  };
+}
 
-// roomId to user Object
-const roomUsers: Record<string, SessionUser[]> = {};
-// userId to roomId
-const usersRoom: Record<string, string> = {};
+const users: UsersType = {};
 
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
@@ -25,46 +27,30 @@ export default (io: socketio.Server) => {
   });
 
   io.on("connection", (socket) => {
-    //console.log(socket.id + " is connected");
-
+    console.log(socket.id + " is connected");
+    let roomName = "";
     socket.on("joinRoom", ({ questionId }: { questionId: string }) => {
+      roomName = questionId;
+      socket.join(roomName);
       const token = socket.handshake.auth.token;
       const user = verify(token, "keyboard cat") as SessionUser;
 
-      const roomName = questionId;
-      // 4명 미만인지 확인. 4명 이상이면 disconnect
-      if (!roomUsers[roomName]) {
-        roomUsers[roomName] = [user];
-        usersRoom[user.userId] = roomName;
-      } else if (roomUsers[roomName].length >= 4) {
-        socket.disconnect();
-        return;
-      } else {
-        roomUsers[roomName].push(user);
-        usersRoom[user.userId] = roomName;
+      if (users[roomName] === undefined) {
+        users[roomName] = {};
       }
-
-      socket.join(roomName);
-      console.log(
-        `${user.user.name} joining ${roomName} -> ${roomUsers[roomName].length}/4`
-      );
+      users[roomName][socket.id] = user;
+      socket.emit("init users", users[roomName]);
+      socket.to(roomName).emit("user join", [socket.id, user]);
+    });
+    socket.on("disconnect", (reason) => {
+      // delete users[roomName][socket!.id];
+      console.log(socket.id + " is disconnected. reason : " + reason);
     });
 
-    socket.on("disconnect", (reason) => {
-      //console.log(socket.id + " is disconnected. reason : " + reason);
-
-      const token = socket.handshake.auth.token;
-      const user = verify(token, "keyboard cat") as SessionUser;
-      const userId = user.userId;
-      const roomName = usersRoom[userId];
-
-      roomUsers[roomName] = roomUsers[roomName].filter(
-        (user) => user.userId !== userId
-      );
-      delete usersRoom[userId];
-      console.log(
-        `${user.user.name} leaving ${roomName} -> ${roomUsers[roomName].length}/4`
-      );
+    socket.on("chat", (chatItem) => {
+      console.log(roomName);
+      console.log(roomName, chatItem);
+      io.to(roomName).emit("chat", chatItem);
     });
   });
 };

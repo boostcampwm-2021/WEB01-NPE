@@ -7,6 +7,7 @@ import { RealTimeEditor } from "@components/organisms";
 import { QuestionDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
+import LiveChat from "@src/components/organisms/LiveChat";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
@@ -14,6 +15,7 @@ const RealTimeModal: FunctionComponent<{
 }> = ({ question, exitModal }) => {
   const [SOCKET, setSOCKET] = useState<Socket.Socket | null>(null);
   const [session] = useSession();
+  console.log(session);
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
@@ -45,9 +47,9 @@ const RealTimeModal: FunctionComponent<{
     <Styled.ModalWrapper>
       <Styled.Modal>
         <Styled.temp>
-          <div>유저마이크</div>
+          <div>마이크</div>
           <RealTimeEditor question={question} />
-          <div>채팅</div>
+          {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.temp>
         <Button
           type="realtime_exit"
