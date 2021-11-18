@@ -3,6 +3,7 @@ import * as Socket from "socket.io-client";
 
 import * as Styled from "./styled";
 import { Button, Logo, TitleText, Text } from "@components/atoms";
+import { RealTimeEditor } from "@components/organisms";
 import { QuestionDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
 
@@ -33,7 +34,7 @@ const RealTimeModal: FunctionComponent<{ question: QuestionDetailType }> = ({
       <Styled.Modal>
         <Styled.temp>
           <div>유저마이크</div>
-          <div>파일</div>
+          <RealTimeEditor question={question} />
           <div>채팅</div>
         </Styled.temp>
       </Styled.Modal>
