@@ -1,30 +1,33 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import * as Socket from "socket.io-client";
 
 import * as Styled from "./styled";
 import { Button, Logo, TitleText, Text } from "@components/atoms";
 import { QuestionDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
+import LiveChat from "@src/components/organisms/LiveChat";
 
 const RealTimeModal: FunctionComponent<{ question: QuestionDetailType }> = ({
   question,
 }) => {
-  let socket: Socket.Socket;
+  const [socket, setSocket] = useState<Socket.Socket>();
   const [session] = useSession();
+  console.log(session);
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
     const token = session.accessToken;
-    socket = Socket.connect("http://localhost:4000/", {
+    const newSocket = Socket.connect("http://localhost:4000/", {
       auth: { token },
     });
-    socket.emit("joinRoom", {
+    setSocket(newSocket);
+    newSocket.emit("joinRoom", {
       questionId: question.id,
     });
     return () => {
-      socket.disconnect();
+      newSocket.disconnect();
     };
-  });
+  }, []);
 
   const yjssocket = "?";
 
@@ -32,9 +35,9 @@ const RealTimeModal: FunctionComponent<{ question: QuestionDetailType }> = ({
     <Styled.ModalWrapper>
       <Styled.Modal>
         <Styled.temp>
-          <div>유저마이크</div>
-          <div>파일</div>
-          <div>채팅</div>
+          <div>마이크</div>
+          <div>코드</div>
+          {socket && <LiveChat socket={socket} />}
         </Styled.temp>
       </Styled.Modal>
     </Styled.ModalWrapper>
