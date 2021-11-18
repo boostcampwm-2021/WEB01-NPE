@@ -1,5 +1,7 @@
 import React from "react";
+
 import TagSearch from "./index";
+import { TagType } from "@src/types";
 
 export default {
   title: "Molecules/TagSearch",
@@ -7,12 +9,11 @@ export default {
 };
 
 export const Default = () => {
-  const tagList = ["react.js", "javascript", "react-router-dom"];
+  const tagList: TagType[] = [
+    { __typename: "tag", id: "1", name: "react.js" },
+    { __typename: "tag", id: "2", name: "javascript" },
+    { __typename: "tag", id: "3", name: "typescript" },
+  ];
 
-  return (
-    <TagSearch 
-      tagList={tagList}
-      onSubmit={() => {}} 
-    />
-  );
-}
+  return <TagSearch onSubmit={() => {}} tagList={tagList} />;
+};
