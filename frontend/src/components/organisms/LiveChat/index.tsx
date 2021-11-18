@@ -94,7 +94,7 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
     <Styled.ChatContainer>
       <Styled.ChatHeader>
         채팅
-        <Styled.UserCount>4</Styled.UserCount>
+        <Styled.UserCount>{Object.keys(users).length}</Styled.UserCount>
       </Styled.ChatHeader>
       <Styled.Messages>{chats.map(showChat)}</Styled.Messages>
       <Styled.InputContainer>

@@ -3,6 +3,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { CodemirrorBinding } from "y-codemirror";
 import { UnControlled as CodeMirror } from "react-codemirror2";
+import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/javascript/javascript";
@@ -70,6 +71,7 @@ const WrappedEditor: FunctionComponent<{ question: QuestionDetailType }> = ({
       <CodeMirror
         options={{
           mode: "gfm",
+          theme: "material",
           lineNumbers: true,
         }}
         onChange={(editor, data, value) => {}}

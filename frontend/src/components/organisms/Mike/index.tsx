@@ -21,12 +21,10 @@ const Mike: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
   const connectionRef = useRef();
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: false, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        myVideo.current.srcObject = stream;
-      });
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      setStream(stream);
+      myVideo.current.srcObject = stream;
+    });
 
     socket.on("me", (id) => {
       setMe(id);

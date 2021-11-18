@@ -52,5 +52,20 @@ export default (io: socketio.Server) => {
       console.log(roomName, chatItem);
       io.to(roomName).emit("chat", chatItem);
     });
+
+    socket.emit("me", socket.id);
+
+    socket.on("callUser", (data) => {
+      console.log("to", data.userToCall);
+      io.to(data.userToCall).emit("callUser", {
+        signal: data.signalData,
+        from: data.from,
+        name: data.name,
+      });
+    });
+
+    socket.on("answerCall", (data) => {
+      io.to(data.to).emit("callAccepted", data.signal);
+    });
   });
 };
