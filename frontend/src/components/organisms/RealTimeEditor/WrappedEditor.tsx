@@ -5,17 +5,20 @@ import { CodemirrorBinding } from "y-codemirror";
 import { UnControlled as CodeMirror } from "react-codemirror2";
 import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/gfm/gfm";
+import { useSession } from "next-auth/client";
+import RandomColor from "randomcolor";
 
 import * as Styled from "./styled";
 import { QuestionDetailType } from "@src/types";
 
-const WrappedEditor: FunctionComponent<{ question: QuestionDetailType }> = ({
-  question,
-}) => {
+const WrappedEditor: FunctionComponent<{
+  question: QuestionDetailType;
+}> = ({ question }) => {
   const [editorRef, setEditorRef] = useState(null);
+  const [session] = useSession();
+
+  const color = RandomColor();
 
   const onEditorDidMount = (editor: CodeMirror.Editor) => {
     setEditorRef(editor);
@@ -36,7 +39,8 @@ const WrappedEditor: FunctionComponent<{ question: QuestionDetailType }> = ({
     const yText = ydoc.getText("codemirror");
     const yUndoManager = new Y.UndoManager(yText);
     provider.awareness.setLocalStateField("user", {
-      name: "Users Name",
+      name: session?.user?.name,
+      color: color,
     });
     if (provider.synced) {
       setDefaultVal(yText);
