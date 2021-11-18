@@ -33,7 +33,11 @@ const Editor: FunctionComponent<{
     if (!editorRef) return;
 
     const ydoc = new Y.Doc();
-    const provider = new WebsocketProvider("ws://localhost:1234", roomId, ydoc);
+    const provider = new WebsocketProvider(
+      "ws://101.101.217.233:1234",
+      roomId,
+      ydoc
+    );
     const yText = ydoc.getText("codemirror");
     const yUndoManager = new Y.UndoManager(yText);
     provider.awareness.setLocalStateField("user", {
