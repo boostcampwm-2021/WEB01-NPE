@@ -1,5 +1,8 @@
 import NextAuth from "next-auth";
 import Provider from "next-auth/providers";
+import sign from "jwt-encode";
+import { signIn } from "next-auth/client";
+import { registerIfNotExists } from "@src/lib";
 
 export default NextAuth({
   providers: [
@@ -9,8 +12,18 @@ export default NextAuth({
     }),
   ],
   callbacks: {
+    async signIn(u, a, profile) {
+      const userId = profile.id as number;
+      const username = profile.login as string;
+      const profileUrl = profile.avatar_url as string;
+      const socialUrl = profile.html_url as string;
+
+      await registerIfNotExists(userId, username, profileUrl, socialUrl);
+      return true;
+    },
     async session(session, user) {
       session.userId = Number(user.sub);
+      session.accessToken = sign(session, "keyboard cat");
 
       return session;
     },

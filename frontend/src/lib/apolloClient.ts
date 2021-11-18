@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { getSession } from "next-auth/client";
-const sign = require("jwt-encode");
+import sign from "jwt-encode";
 
 const API_ENDPOINT =
   process.env.NODE_ENV === "production"

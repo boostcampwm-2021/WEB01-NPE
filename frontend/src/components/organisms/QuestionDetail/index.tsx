@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 
+import { Button } from "@components/atoms";
 import { DetailBody } from "@components/organisms";
 import { QuestionTitle } from "@components/molecules";
 import { QuestionDetailType } from "@src/types";
@@ -28,6 +29,19 @@ const QuestionDetail: FunctionComponent<Props> = ({ question }) => {
           text={title}
           type={realtimeShare ? "online" : "offline"}
         />
+        {realtimeShare ? (
+          <Button
+            type="realtimeShare_active"
+            text="실시간 답변 요청"
+            onClick={() => {}}
+          />
+        ) : (
+          <Button
+            type="realtimeShare_inactive"
+            text="실시간 답변 요청"
+            onClick={() => {}}
+          />
+        )}
         <Styled.QuestionHeaderInfo>
           Asked {createdAt.slice(0, 10)} View {viewCount}
         </Styled.QuestionHeaderInfo>

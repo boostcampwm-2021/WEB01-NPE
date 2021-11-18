@@ -1,4 +1,12 @@
-import { Arg, FieldResolver, Int, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  FieldResolver,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { sign } from "jsonwebtoken";
 import { PostAnswer } from "../../entities/PostAnswer";
 import { PostQuestion } from "../../entities/PostQuestion";
@@ -47,5 +55,29 @@ export default class UserResolver {
     const answers = PostService.findAllAnswerByUserId(user.id);
 
     return answers;
+  }
+
+  @Mutation(() => Boolean, {
+    description: "유저 id가 존재하지 않을 시 생성. 신규 유저인 경우 true 반환",
+  })
+  async registerIfNotExists(
+    @Arg("id", { description: "Github ID" }) id: number,
+    @Arg("username", { description: "Github 유저 이름" }) username: string,
+    @Arg("profileUrl", { description: "Github 프로필 URL" }) profileUrl: string,
+    @Arg("socialUrl", { description: "github URL" }) socialUrl: string
+  ) {
+    let data = await UserService.findOneUserById(id);
+    let isNewUser = false;
+    if (!data) {
+      isNewUser = true;
+      data = await UserService.registerUser(
+        id,
+        username,
+        profileUrl,
+        socialUrl
+      );
+    }
+
+    return isNewUser;
   }
 }

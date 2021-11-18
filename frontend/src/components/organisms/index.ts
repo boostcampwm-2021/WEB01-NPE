@@ -5,3 +5,4 @@ export { default as AnswerDetail } from "./AnswerDetail";
 export { default as DetailBody } from "./DetailBody";
 export { default as QuestionDetail } from "./QuestionDetail";
 export { default as AnswerRegister } from "./AnswerRegister";
+export { default as RealTimeEditor } from "./RealTimeEditor";
