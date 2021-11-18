@@ -17,3 +17,7 @@ export const QuestionHeaderInfo = styled.div`
   font-size: 14px;
   color: hsl(210deg 8% 45%);
 `;
+
+export const RealTimeRequest = styled.div`
+  float: right;
+`;
