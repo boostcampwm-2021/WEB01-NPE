@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import TagInput from ".";
+import { TagType } from "@src/types";
 
 export default {
   title: "Molecules/TagInput",
@@ -7,6 +9,11 @@ export default {
 };
 
 export const Default = () => {
-  const [tags, setTags] = useState<string[]>(["react.js"]);
-  return <TagInput tagList={tags} setTagList={setTags} />;
+  const tagList: TagType[] = [
+    { __typename: "tag", id: "1", name: "react.js" },
+    { __typename: "tag", id: "2", name: "javascript" },
+    { __typename: "tag", id: "3", name: "typescript" },
+  ];
+
+  return <TagInput tagList={[]} setTagList={() => {}} />;
 };

@@ -14,10 +14,11 @@ import {
 } from "@components/atoms";
 import { TagInput } from "@components/molecules";
 import * as Styled from "./styled";
+import { TagType } from "@src/types";
 
 const ResisterQuestion: FunctionComponent = () => {
   const [title, setTitle] = useState<string>("");
-  const [tagList, setTagList] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<TagType[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
   const [session] = useSession();
   const editorRef = useRef<any>(null);
@@ -37,14 +38,13 @@ const ResisterQuestion: FunctionComponent = () => {
       variables: {
         title: title,
         desc: getMarkdown(),
-        tagIds: [1, 2, 3, 4, 5, 6],
+        tagIds: tagList
+          .filter((tag) => tag.id !== "-1")
+          .map((tag) => Number(tag.id)),
         realtimeShare: isLive,
       },
     });
-    if (!data) {
-      console.log("error!");
-      return;
-    }
+    if (!data) return;
     const questionId = data.addNewQuestion.id;
     router.push(`/question/${questionId}`);
   };

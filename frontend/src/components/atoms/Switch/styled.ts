@@ -1,7 +1,7 @@
 import styled from "styled-components";
 interface SliderProps {
   offColor: string;
-  onColor: string;
+  _onColor: string;
 }
 export const Container = styled.label`
   display: block;
@@ -26,7 +26,7 @@ export const Slider = styled.div<SliderProps>`
   transform: scale(1.5);
   transition: background-color 0.4s ease-in-out;
   ${Input}:checked + & {
-    background-color: ${(props) => props.onColor};
+    background-color: ${(props) => props._onColor};
   }
 `;
 

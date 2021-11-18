@@ -8,6 +8,7 @@ import { QuestionDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
+import Mike from "@src/components/organisms/Mike";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
@@ -47,7 +48,8 @@ const RealTimeModal: FunctionComponent<{
     <Styled.ModalWrapper>
       <Styled.Modal>
         <Styled.temp>
-          <div>마이크</div>
+          {SOCKET && <Mike socket={SOCKET} />}
+
           <RealTimeEditor question={question} />
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.temp>
