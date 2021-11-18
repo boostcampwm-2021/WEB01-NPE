@@ -10,6 +10,30 @@ export const Editor = styled.div`
     width: 100%;
     min-height: 670px;
   }
+
+  .remote-caret {
+    position: absolute;
+    border-left: black;
+    border-left-style: solid;
+    border-left-width: 2px;
+    height: 1em;
+  }
+  .remote-caret > div {
+    position: relative;
+    top: -0.4em;
+    font-size: 13px;
+    background-color: rgb(250, 129, 0);
+    font-family: serif;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    user-select: none;
+    color: white;
+    padding-left: 2px;
+    padding-right: 2px;
+    z-index: 3;
+    border-radius: 10px;
+  }
 `;
 
 export const Tab = styled.div`
