@@ -70,7 +70,7 @@ const WrappedEditor: FunctionComponent<{ question: QuestionDetailType }> = ({
       </Styled.Tab>
       <CodeMirror
         options={{
-          mode: "gfm",
+          mode: "javascript",
           theme: "material",
           lineNumbers: true,
         }}

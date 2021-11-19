@@ -31,6 +31,7 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
       setChats((chatList: ChatType[]) => [...chatList, chatItem]);
     });
     socket.on("user join", ([socketId, user]) => {
+      console.log("user join");
       users[socketId] = user;
     });
     socket.on("init users", (initUsers) => {
