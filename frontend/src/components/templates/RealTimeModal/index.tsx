@@ -22,9 +22,14 @@ const RealTimeModal: FunctionComponent<{
   React.useEffect(() => {
     if (!SOCKET) {
       const token = session.accessToken;
-      const socket = Socket.connect("http://localhost:4000/", {
-        auth: { token },
-      });
+      const socket = Socket.connect(
+        process.env.NODE_ENV === "production"
+          ? `http://118.67.142.132:4000`
+          : `http://localhost:4000/`,
+        {
+          auth: { token },
+        }
+      );
       socket.emit("joinRoom", {
         questionId: question.id,
       });
