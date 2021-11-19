@@ -29,6 +29,7 @@ export const getOneQuestionByID = async (id: number) => {
           thumbupCount
           score
           author {
+            id
             username
             profileUrl
             score

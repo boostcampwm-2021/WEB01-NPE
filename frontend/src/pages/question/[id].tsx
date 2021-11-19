@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
@@ -27,17 +27,29 @@ interface Props {
 
 const QuestionPage: NextPage<Props> = ({ data }) => {
   const router = useRouter();
-  const [isModal, setIsModal] = useState<boolean>(true);
+  const [isModal, setIsModal] = useState<boolean>(false);
   const questionId = router.query.id;
   const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
-  document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
+
+  const exitModal = () => {
+    setIsModal(false);
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
+  });
 
   return (
     <>
       <Header type="Default" setTexts={() => {}} />
       <MainContainer>
-        <QuestionDetail question={question} />
+        <QuestionDetail
+          question={question}
+          realtimeModalHandler={() => {
+            setIsModal(true);
+          }}
+        />
 
         <h2>{answers.length} 답변들</h2>
 
@@ -49,7 +61,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
           );
         })}
         <AnswerRegister questionId={Number(questionId)} />
-        {isModal && <RealTimeModal question={question} />}
+        {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
       </MainContainer>
     </>
   );

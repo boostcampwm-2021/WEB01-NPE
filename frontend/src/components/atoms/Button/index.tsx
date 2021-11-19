@@ -60,6 +60,12 @@ const types: { [key: string]: StyleProps } = {
     width: "200px",
     height: "36px",
   },
+  realtime_exit: {
+    bgColor: "tomato",
+    textColor: "white",
+    width: "136px",
+    height: "36px",
+  },
 };
 const Button: FunctionComponent<eventProps | voidProps> = ({
   type,
