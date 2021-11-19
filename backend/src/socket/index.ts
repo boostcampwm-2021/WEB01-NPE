@@ -16,7 +16,7 @@ interface UsersType {
   };
 }
 
-const users: UsersType = {};
+let users: UsersType = {};
 
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
@@ -29,7 +29,9 @@ export default (io: socketio.Server) => {
   io.on("connection", (socket) => {
     console.log(socket.id + " is connected");
     let roomName = "";
+
     socket.on("joinRoom", ({ questionId }: { questionId: string }) => {
+      console.log("joinRoom", questionId);
       roomName = questionId;
       socket.join(roomName);
       const token = socket.handshake.auth.token;
@@ -38,12 +40,20 @@ export default (io: socketio.Server) => {
       if (users[roomName] === undefined) {
         users[roomName] = {};
       }
-      users[roomName][socket.id] = user;
-      socket.emit("init users", users[roomName]);
-      socket.to(roomName).emit("user join", [socket.id, user]);
+      if (Object.values(users[roomName]).length < 3) {
+        users[roomName][socket.id] = user;
+        io.emit("init users", users[roomName]);
+        socket.to(roomName).emit("user join", [socket.id, user]);
+
+        if (Object.values(users[roomName]).length === 2) {
+          socket.broadcast.to(roomName).emit("two", socket.id);
+        }
+      }
     });
+
     socket.on("disconnect", (reason) => {
-      // delete users[roomName][socket!.id];
+      console.log("delete", socket.id);
+      if (users?.[roomName]?.[socket.id]) delete users[roomName][socket.id];
       console.log(socket.id + " is disconnected. reason : " + reason);
     });
 
