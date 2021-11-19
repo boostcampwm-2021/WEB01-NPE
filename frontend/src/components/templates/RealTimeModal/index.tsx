@@ -8,7 +8,7 @@ import { QuestionDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
-import Mic from "@src/components/organisms/Mic";
+import Mike from "@src/components/organisms/Mike";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
@@ -16,6 +16,7 @@ const RealTimeModal: FunctionComponent<{
 }> = ({ question, exitModal }) => {
   const [SOCKET, setSOCKET] = useState<Socket.Socket | null>(null);
   const [session] = useSession();
+  console.log(session);
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
@@ -47,7 +48,8 @@ const RealTimeModal: FunctionComponent<{
     <Styled.ModalWrapper>
       <Styled.Modal>
         <Styled.temp>
-          {SOCKET && <Mic socket={SOCKET} />}
+          {SOCKET && <Mike socket={SOCKET} />}
+
           <RealTimeEditor question={question} />
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.temp>

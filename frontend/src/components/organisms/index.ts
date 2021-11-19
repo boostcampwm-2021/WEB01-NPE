@@ -6,4 +6,4 @@ export { default as DetailBody } from "./DetailBody";
 export { default as QuestionDetail } from "./QuestionDetail";
 export { default as AnswerRegister } from "./AnswerRegister";
 export { default as RealTimeEditor } from "./RealTimeEditor";
-export { default as Mic } from "./Mic";
+export { default as Mike } from "./Mike";

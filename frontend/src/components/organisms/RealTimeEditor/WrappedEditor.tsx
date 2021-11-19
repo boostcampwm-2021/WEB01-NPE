@@ -35,7 +35,6 @@ const WrappedEditor: FunctionComponent<{
           답변
         </Styled.Code>
       </Styled.Tab>
-
       <div>
         {currentEditor === "question" && (
           <Editor
