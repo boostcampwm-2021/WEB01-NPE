@@ -77,7 +77,16 @@ const ProfilePage: NextPage<Props> = ({
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"채택 비율"} />
-            <Chart type={"Doughnut"} data={answerStateChartData} />
+            {userProfileData.postAnswers.length !== 0 ? (
+              <Chart type={"Doughnut"} data={answerStateChartData} />
+            ) : (
+              <NoChartData>
+                <TitleText
+                  type="Default"
+                  text="아직 데이터가 없습니다"
+                ></TitleText>
+              </NoChartData>
+            )}
           </ChartDiv>
         </ChartWrapper>
         <SummaryWrapper>
@@ -153,7 +162,6 @@ const makeAnswerStateChartData = (
     labels: ["채택됨", "채택되지 않음"],
     datasets: [
       {
-        label: "# of Votes",
         data: [adoptedAnswerCount, notAdobptedAnswerCount],
         backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
         borderWidth: 1,
