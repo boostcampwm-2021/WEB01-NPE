@@ -11,11 +11,10 @@ import { useSession } from "next-auth/client";
 import { QuestionDetailType } from "@src/types";
 
 const Editor: FunctionComponent<{
-  question: QuestionDetailType;
   roomId: string;
   color: string;
   value?: string;
-}> = ({ question, roomId, color, value }) => {
+}> = ({ roomId, color, value }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
