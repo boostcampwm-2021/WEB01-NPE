@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import Router from "next/router";
 
 import * as Styled from "./styled";
 import { Image, Text } from "@components/atoms";
@@ -9,8 +10,12 @@ interface Props {
 }
 
 const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
+  const onProfileButton = () => {
+    Router.push(`/profile/${author.id}`);
+  };
+
   return (
-    <Styled.Anchor href={`profile/${author.id}`}>
+    <Styled.Anchor onClick={onProfileButton}>
       <Styled.ImageDiv>
         <Image type="Large" src={author.profileUrl} />
       </Styled.ImageDiv>

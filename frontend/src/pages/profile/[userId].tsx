@@ -11,7 +11,7 @@ import {
 } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { getUserProfileData } from "@src/lib";
-import { AnswerType, QuestionType } from "@src/types";
+import { AnswerType, AuthorType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
 import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
 import { ChartData } from "chart.js";
@@ -21,6 +21,8 @@ interface Props {
     id: number;
     username: string;
     score: number;
+    profileUrl: string;
+    author: AuthorType;
     postQuestions: QuestionType[];
     postAnswers: AnswerType[];
   };
@@ -41,10 +43,7 @@ const ProfilePage: NextPage<Props> = ({
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image
-              type={"Profile"}
-              src={`https://avatars.githubusercontent.com/u/${userProfileData.id}`}
-            />
+            <Image type={"Profile"} src={`${userProfileData.profileUrl}`} />
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />
@@ -58,15 +57,36 @@ const ProfilePage: NextPage<Props> = ({
         <ChartWrapper>
           <ChartDiv>
             <TitleText type={"Default"} text={"태그 사용 빈도"} />
-            <Chart type={"Doughnut"} data={userTagCountChartData} />
+            {userTagCountChartData.labels?.length !== 0 ? (
+              <Chart type={"Doughnut"} data={userTagCountChartData} />
+            ) : (
+              <NoChartData>
+                <TitleText
+                  type="Default"
+                  text="아직 데이터가 없습니다"
+                ></TitleText>
+              </NoChartData>
+            )}
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"활동"} />
-            <Chart type={"Bar"} data={dummyChartData} />
+            <NoChartData>
+              <TitleText type="Default" text="준비중입니다"></TitleText>
+            </NoChartData>
+            {/* <Chart type={"Bar"} data={dummyChartData} /> */}
           </ChartDiv>
           <ChartDiv>
             <TitleText type={"Default"} text={"채택 비율"} />
-            <Chart type={"Doughnut"} data={answerStateChartData} />
+            {userProfileData.postAnswers.length !== 0 ? (
+              <Chart type={"Doughnut"} data={answerStateChartData} />
+            ) : (
+              <NoChartData>
+                <TitleText
+                  type="Default"
+                  text="아직 데이터가 없습니다"
+                ></TitleText>
+              </NoChartData>
+            )}
           </ChartDiv>
         </ChartWrapper>
         <SummaryWrapper>
@@ -142,7 +162,6 @@ const makeAnswerStateChartData = (
     labels: ["채택됨", "채택되지 않음"],
     datasets: [
       {
-        label: "# of Votes",
         data: [adoptedAnswerCount, notAdobptedAnswerCount],
         backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)"],
         borderWidth: 1,
@@ -151,26 +170,11 @@ const makeAnswerStateChartData = (
   };
 };
 
-const dummyChartData = {
-  labels: ["React", "Javascript", "HTML"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+const NoChartData = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const MainContainer = styled.main`
   display: flex;
