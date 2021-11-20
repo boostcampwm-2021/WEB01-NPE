@@ -31,16 +31,20 @@ const WrappedEditor: FunctionComponent<{
     </Styled.Code>
   ));
   const codeBlockEditor =
-    codeBlock?.map(
-      (code, i) =>
+    codeBlock?.map((code, i) => {
+      const codeOnly = code.split("\n").slice(1).join("\n").slice(0, -3);
+      const mode = code.split("\n")[0].slice(3).trim();
+      return (
         currentEditor === `Code ${i}` && (
           <Editor
-            roomId={`${question.id}-code-${i}`}
+            roomId={`${question.id}-test-${i}`}
             color={color}
-            value={code}
+            value={codeOnly}
+            mode={mode}
           />
         )
-    ) || "";
+      );
+    }) || "";
 
   return (
     <Styled.Editor>
