@@ -8,6 +8,7 @@ import {
   TagList,
   ViewsAndComment,
 } from "@components/molecules";
+import { MDViewer } from "@components/atoms";
 import { QuestionType } from "@src/types";
 
 interface Props {
@@ -52,7 +53,9 @@ const SearchResult: FunctionComponent<Props> = ({
             </a>
           </Link>
         </Styled.HeaderContainer>
-        <Styled.DescriptContainer>{desc}</Styled.DescriptContainer>
+        <Styled.DescriptContainer>
+          <MDViewer content={desc} />
+        </Styled.DescriptContainer>
         <Styled.TagContainer>
           <TagList tags={tags} />
         </Styled.TagContainer>

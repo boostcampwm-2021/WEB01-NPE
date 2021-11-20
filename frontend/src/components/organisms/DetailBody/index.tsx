@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 
 import * as Styled from "./styled";
 import { TagList, ProfileSummary, Vote } from "@components/molecules";
+import { MDViewer } from "@components/atoms";
 import { DetailType } from "@src/types";
 
 interface Props {
@@ -16,14 +17,14 @@ const DetailBody: FunctionComponent<Props> = ({ detail }) => {
         <Vote thumbupCount={thumbupCount} />
       </Styled.VoteContainer>
       <Styled.DetailBodyInner>
-        <Styled.DetailBodyDesc>{desc}</Styled.DetailBodyDesc>
+        <Styled.DetailBodyDesc>
+          <MDViewer content={desc} />
+        </Styled.DetailBodyDesc>
         <Styled.DetailBodyInfo>
-          <Styled.TagListContainer>
-            {tags && <TagList tags={tags} />}
-          </Styled.TagListContainer>
-          <Styled.ProfileContainer>
+          <div>{tags && <TagList tags={tags} />}</div>
+          <div>
             <ProfileSummary author={author} />
-          </Styled.ProfileContainer>
+          </div>
         </Styled.DetailBodyInfo>
       </Styled.DetailBodyInner>
     </Styled.DetailBody>
