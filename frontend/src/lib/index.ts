@@ -122,16 +122,17 @@ export const getUserProfileData = async (userId: number) => {
         findUserById(id: ${userId}) {
           username
           score
+          profileUrl
           postQuestions {
             id
             title
             realtimeShare
-            author {
-              id
-              profileUrl
-              score
-              username
-            }
+              author {
+                id
+                profileUrl
+                score
+                username
+              }
             desc
             tags {
               name

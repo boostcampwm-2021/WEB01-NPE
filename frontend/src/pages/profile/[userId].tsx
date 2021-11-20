@@ -11,7 +11,7 @@ import {
 } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { getUserProfileData } from "@src/lib";
-import { AnswerType, QuestionType } from "@src/types";
+import { AnswerType, AuthorType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
 import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
 import { ChartData } from "chart.js";
@@ -21,6 +21,8 @@ interface Props {
     id: number;
     username: string;
     score: number;
+    profileUrl: string;
+    author: AuthorType;
     postQuestions: QuestionType[];
     postAnswers: AnswerType[];
   };
@@ -41,10 +43,7 @@ const ProfilePage: NextPage<Props> = ({
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image
-              type={"Profile"}
-              src={`https://avatars.githubusercontent.com/u/${userProfileData.id}`}
-            />
+            <Image type={"Profile"} src={`${userProfileData.profileUrl}`} />
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />
