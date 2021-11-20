@@ -6,16 +6,15 @@ import { UnControlled as CodeMirror } from "react-codemirror2";
 import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
+import "codemirror/mode/javascript/javascript";
 import { useSession } from "next-auth/client";
 
-import { QuestionDetailType } from "@src/types";
-
 const Editor: FunctionComponent<{
-  question: QuestionDetailType;
   roomId: string;
   color: string;
   value?: string;
-}> = ({ question, roomId, color, value }) => {
+  mode?: string;
+}> = ({ roomId, color, value, mode }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
@@ -68,7 +67,7 @@ const Editor: FunctionComponent<{
   return (
     <CodeMirror
       options={{
-        mode: "gfm",
+        mode: mode || "gfm",
         theme: "material",
         lineNumbers: true,
       }}
