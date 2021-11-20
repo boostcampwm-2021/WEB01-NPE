@@ -5,8 +5,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { Header, SideBar } from "@components/organisms";
 import { QuestionList } from "@components/templates";
-import { QuestionType } from "@src/types";
-import { test, getQuestions, getAllTags } from "@src/lib";
+import { QuestionType, TagType } from "@src/types";
+import { test, getQuestions } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -23,52 +23,46 @@ interface Props {
   data: Data;
   error: any;
 }
-interface TagProps {
-  id: number;
-  name: string;
-}
 
 const MainPage: NextPage<Props> = ({ data, error }) => {
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagList, setTagList] = useState<TagProps[]>([]);
+  const [tagList, setTagList] = useState<TagType[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
   const [texts, setTexts] = useState<string>("");
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(5);
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      const { data } = await getAllTags();
-      if (data) {
-        const tagList = data.getAllTags;
-        setTagList(tagList);
-      }
-    };
-    fetchTags();
-  });
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const tagIDs = tags.map(
-        (e) => Number(tagList.find((v) => e === v.name)?.id) || -1
+      const { data } = await getQuestions(
+        5,
+        0,
+        texts,
+        tagList.map((tag) => Number(tag.id)),
+        isLive
       );
-      console.log(isLive);
-      const { data } = await getQuestions(5, texts, tagIDs, isLive);
 
       if (data) {
         setQuestionList(data.searchQuestions);
+        setIndex(data.searchQuestions.length);
+        window.scrollTo(0, 0);
       }
     };
     fetchQuestions();
-  }, [tags, texts, isLive]);
+  }, [tagList, texts, isLive]);
 
   const getMorePost = async () => {
-    const { data } = await test(5, index);
+    const { data } = await getQuestions(
+      5,
+      index,
+      texts,
+      tagList.map((tag) => Number(tag.id)),
+      isLive
+    );
     if (data) {
       const { searchQuestions: fetchData } = data;
-      setIndex(index + 5);
+      setIndex(index + fetchData.length);
       setQuestionList([...questionList, ...fetchData]);
     } else {
       setHasMore(false);
@@ -80,9 +74,8 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
       <Header type="Default" setTexts={setTexts} />
       <MainContainer>
         <SideBar
-          selectedTags={tags}
-          setSelectedTags={setTags}
-          tagList={tagList.map((e) => e.name)}
+          selectedTags={tagList}
+          setSelectedTags={setTagList}
           isLive={isLive}
           setIsLive={setIsLive}
         />
@@ -102,7 +95,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await getQuestions(5);
+  const { data } = await getQuestions(5, 0);
   if (!data) {
     return {
       redirect: {

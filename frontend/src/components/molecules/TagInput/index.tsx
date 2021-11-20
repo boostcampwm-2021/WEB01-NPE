@@ -11,17 +11,6 @@ interface Props {
   setTagList: (value: TagType[]) => void;
 }
 
-const candidates = [
-  "react.js",
-  "javascript",
-  "react-router-dom",
-  "java",
-  "vue.js",
-  "angular.js",
-  "python",
-  "C++",
-];
-
 const TagInput: FunctionComponent<Props> = ({ tagList, setTagList }) => {
   const [allTagList, setAllTagList] = useState<TagType[]>([]);
   const onSubmit = (tagInput: TagType) => {
