@@ -56,6 +56,7 @@ export const getOneQuestionByID = async (id: number) => {
 
 export const getQuestions = async (
   take: number,
+  skip: number,
   title?: string,
   tagIDs?: number[],
   realtimeShare?: boolean
@@ -65,6 +66,7 @@ export const getQuestions = async (
       query {
         searchQuestions(searchQuery: {
           take: ${take}
+          skip: ${skip}
           title: ${JSON.stringify(title || "")}
           tagIDs: ${JSON.stringify(tagIDs || [])}
           ${

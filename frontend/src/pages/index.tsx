@@ -31,12 +31,13 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(5);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       const { data } = await getQuestions(
         5,
+        0,
         texts,
         tagList.map((tag) => Number(tag.id)),
         isLive
@@ -44,16 +45,24 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
       if (data) {
         setQuestionList(data.searchQuestions);
+        setIndex(data.searchQuestions.length);
+        window.scrollTo(0, 0);
       }
     };
     fetchQuestions();
   }, [tagList, texts, isLive]);
 
   const getMorePost = async () => {
-    const { data } = await test(5, index);
+    const { data } = await getQuestions(
+      5,
+      index,
+      texts,
+      tagList.map((tag) => Number(tag.id)),
+      isLive
+    );
     if (data) {
       const { searchQuestions: fetchData } = data;
-      setIndex(index + 5);
+      setIndex(index + fetchData.length);
       setQuestionList([...questionList, ...fetchData]);
     } else {
       setHasMore(false);
@@ -86,7 +95,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await getQuestions(5);
+  const { data } = await getQuestions(5, 0);
   if (!data) {
     return {
       redirect: {
