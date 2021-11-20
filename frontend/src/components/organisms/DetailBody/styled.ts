@@ -6,8 +6,6 @@ export const DetailHeader = styled.div`
   width: 100%;
 `;
 
-export const TagContainer = styled.div``;
-
 export const DetailHeaderDetail = styled.div`
   font-size: 14px;
   color: hsl(210deg 8% 45%);
@@ -49,8 +47,6 @@ export const DetailBodyInfo = styled.div`
   width: 100%;
   display: flex;
 `;
-
-export const ProfileContainer = styled.div``;
 
 export const TagListContainer = styled.div`
   width: 100%;
