@@ -17,6 +17,10 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
   const router = useRouter();
 
   const [postAnswer, { data, loading, error }] = useMutation(POST_ANSWER);
+  const getMarkdown = () => {
+    const editorInstance = editorRef.current.getInstance();
+    return editorInstance.getMarkdown();
+  };
 
   return (
     <Styled.AnswerRegister
@@ -24,10 +28,9 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
         if (!session || !session.user) return false;
         e.preventDefault();
         await postAnswer({
-          // 마크다운에디터에서 받아온 desc를 넣어주는 작업이 필요합니다
           variables: {
             questionId,
-            desc: "TEST test test test",
+            desc: getMarkdown(),
           },
         });
 
@@ -35,7 +38,7 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
       }}
     >
       <h2>당신의 답변</h2>
-      <MDEditor type="Answer" editorRef={editorRef} />
+      <MDEditor type="Answer" ref={editorRef} />
       <Styled.AnswerBtnContainer>
         <Button type="Submit" text="답변하기" onClick={() => {}} />
       </Styled.AnswerBtnContainer>
