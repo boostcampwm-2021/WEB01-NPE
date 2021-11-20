@@ -5,8 +5,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { Header, SideBar } from "@components/organisms";
 import { QuestionList } from "@components/templates";
-import { QuestionType } from "@src/types";
-import { test, getQuestions, getAllTags } from "@src/lib";
+import { QuestionType, TagType } from "@src/types";
+import { test, getQuestions } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -23,14 +23,9 @@ interface Props {
   data: Data;
   error: any;
 }
-interface TagProps {
-  id: number;
-  name: string;
-}
 
 const MainPage: NextPage<Props> = ({ data, error }) => {
-  const [tags, setTags] = useState<string[]>([]);
-  const [tagList, setTagList] = useState<TagProps[]>([]);
+  const [tagList, setTagList] = useState<TagType[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
   const [texts, setTexts] = useState<string>("");
 
@@ -39,30 +34,20 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
   const [index, setIndex] = useState(5);
 
   useEffect(() => {
-    const fetchTags = async () => {
-      const { data } = await getAllTags();
-      if (data) {
-        const tagList = data.getAllTags;
-        setTagList(tagList);
-      }
-    };
-    fetchTags();
-  });
-
-  useEffect(() => {
     const fetchQuestions = async () => {
-      const tagIDs = tags.map(
-        (e) => Number(tagList.find((v) => e === v.name)?.id) || -1
+      const { data } = await getQuestions(
+        5,
+        texts,
+        tagList.map((tag) => Number(tag.id)),
+        isLive
       );
-      console.log(isLive);
-      const { data } = await getQuestions(5, texts, tagIDs, isLive);
 
       if (data) {
         setQuestionList(data.searchQuestions);
       }
     };
     fetchQuestions();
-  }, [tags, texts, isLive]);
+  }, [tagList, texts, isLive]);
 
   const getMorePost = async () => {
     const { data } = await test(5, index);
@@ -80,9 +65,8 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
       <Header type="Default" setTexts={setTexts} />
       <MainContainer>
         <SideBar
-          selectedTags={tags}
-          setSelectedTags={setTags}
-          tagList={tagList.map((e) => e.name)}
+          selectedTags={tagList}
+          setSelectedTags={setTagList}
           isLive={isLive}
           setIsLive={setIsLive}
         />
