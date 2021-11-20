@@ -8,8 +8,6 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
 import { useSession } from "next-auth/client";
 
-import { QuestionDetailType } from "@src/types";
-
 const Editor: FunctionComponent<{
   roomId: string;
   color: string;
