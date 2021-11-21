@@ -9,3 +9,4 @@ export { default as ViewsAndComment } from "./ViewsAndComment";
 export { default as TagList } from "./TagList";
 export { default as Vote } from "./Vote";
 export { default as TagInput } from "./TagInput";
+export { default as Modal } from "./Modal";
