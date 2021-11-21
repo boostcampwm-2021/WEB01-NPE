@@ -30,12 +30,9 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<PostAnswer> {
     const userId = getUserId(headers);
-    console.log(userId);
     const newAnswer = await PostService.addNewAnswer(
       answerData,
-      {
-        id: userId,
-      },
+      userId,
       questionId
     );
     return newAnswer;

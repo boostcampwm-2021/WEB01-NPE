@@ -180,7 +180,7 @@ export default class PostService {
 
   public static async addNewAnswer(
     args: AnswerInput, // 이후 ctx.user 로 수정
-    user: { id: number },
+    userId: number,
     questionId: number
   ): Promise<PostAnswer> {
     const question = await PostQuestion.findOne(
@@ -192,7 +192,7 @@ export default class PostService {
     const newAnswer = new PostAnswer();
     newAnswer.postQuestionId = question.id;
     newAnswer.postQuestionUserId = question.userId;
-    newAnswer.userId = user.id;
+    newAnswer.userId = userId;
     newAnswer.desc = args.desc;
 
     return await newAnswer.save();
