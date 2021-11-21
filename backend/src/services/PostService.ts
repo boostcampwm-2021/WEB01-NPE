@@ -69,7 +69,8 @@ export default class PostService {
       .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
       .orderBy("id", "DESC");
 
-    return await builder.getMany();
+    const rows = await builder.getMany();
+    return rows;
   }
 
   public static async findAllQuestionByUserId(
@@ -84,7 +85,6 @@ export default class PostService {
     userId: number
   ): Promise<PostAnswer[]> {
     const data = await PostAnswer.find({ userId });
-
     return data;
   }
 

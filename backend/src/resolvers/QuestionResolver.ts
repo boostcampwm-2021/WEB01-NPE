@@ -18,6 +18,8 @@ import SearchQuestionInput from "../dto/SearchQuestionInput";
 import PostService from "../services/PostService";
 import TagService from "../services/TagService";
 import UserService from "../services/UserService";
+import "reflect-metadata";
+import { Container } from "typeorm-typedi-extensions";
 
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new Error("Auth Error");
@@ -27,6 +29,8 @@ const getUserId = (headers: any): number => {
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
+  private userService: UserService = Container.get(UserService);
+
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",
     nullable: true,
@@ -41,7 +45,7 @@ export default class QuestionResolver {
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() question: PostQuestion): Promise<User> {
-    const author = await UserService.findById(question.userId);
+    const author = await this.userService.findById(question.userId);
 
     return author;
   }

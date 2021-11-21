@@ -13,6 +13,7 @@ import { User } from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
 import PostService from "../services/PostService";
 import UserService from "../services/UserService";
+import { Container } from "typeorm-typedi-extensions";
 
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new Error("Auth Error");
@@ -22,6 +23,8 @@ const getUserId = (headers: any): number => {
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
+  private readonly userService: UserService = Container.get(UserService);
+
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
   async addNewAnswer(
     @Arg("questionId", () => Int, { description: "질문글 ID" })
@@ -40,7 +43,7 @@ export default class AnswerResolver {
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() answer: PostAnswer): Promise<User> {
-    const author = await UserService.findById(answer.userId);
+    const author = await this.userService.findById(answer.userId);
 
     return author;
   }

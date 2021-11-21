@@ -13,6 +13,10 @@ import { buildSchema } from "type-graphql";
 import * as Resolver from "./resolvers";
 import { authChecker } from "./middlewares/AuthChecker";
 import { graphqlHTTP } from "express-graphql";
+import { useContainer } from "typeorm";
+import { Container as typeDiContainer } from "typeorm-typedi-extensions";
+
+useContainer(typeDiContainer);
 
 (async () => {
   let env = "";
@@ -23,10 +27,9 @@ import { graphqlHTTP } from "express-graphql";
   const app = express();
   await createConnection(DB_CONN_OPTIONS[env]);
 
-  const gqMiddleware = await graphQLMiddleware();
-
   app.use(cors());
 
+  const gqMiddleware = await graphQLMiddleware();
   app.use("/graphql", gqMiddleware);
 
   let server: Server = null;
