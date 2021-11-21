@@ -15,6 +15,8 @@ const WrappedEditor: FunctionComponent<{
   question: QuestionDetailType;
 }> = ({ question }) => {
   const [currentEditor, setCurrentEditor] = useState("question");
+  const [tabList, setTabList] = useState<string[]>([]);
+  const [tabListIndex, setTabListIndex] = useState<number>(0);
 
   const codeBlock = question.desc.match(gfmCodeReg);
 
@@ -23,12 +25,12 @@ const WrappedEditor: FunctionComponent<{
   };
 
   const codeBlockTab = codeBlock?.map((_, i) => (
-    <Styled.Code
+    <Styled.Tab
       focused={currentEditor === `Code ${i}`}
       onClick={onTabClick(`Code ${i}`)}
     >
       Code {i}
-    </Styled.Code>
+    </Styled.Tab>
   ));
   const codeBlockEditor =
     codeBlock?.map((code, i) => {
@@ -48,21 +50,49 @@ const WrappedEditor: FunctionComponent<{
 
   return (
     <Styled.Editor>
-      <Styled.Tab>
-        <Styled.Code
+      <Styled.TabWrapper>
+        <Styled.Tab
           focused={currentEditor === "question"}
           onClick={onTabClick("question")}
         >
           질문
-        </Styled.Code>
+        </Styled.Tab>
         {codeBlockTab}
-        <Styled.Code
+        <Styled.Tab
           focused={currentEditor === "answer"}
           onClick={onTabClick("answer")}
         >
           답변
-        </Styled.Code>
-      </Styled.Tab>
+        </Styled.Tab>
+        {tabList.map((tab) => (
+          <Styled.Tab
+            focused={currentEditor === tab}
+            onClick={onTabClick(tab)}
+            key={tab}
+          >
+            Code {tab}
+            <Styled.closeTab
+              onClick={(e) => {
+                e.stopPropagation();
+                setTabList(tabList.filter((_tab) => _tab !== tab));
+                setCurrentEditor("question");
+              }}
+            >
+              x
+            </Styled.closeTab>
+          </Styled.Tab>
+        ))}
+        <Styled.Tab
+          focused={false}
+          onClick={() => {
+            setTabList([...tabList, String(tabListIndex)]);
+            setTabListIndex(tabListIndex + 1);
+            setCurrentEditor(String(tabListIndex));
+          }}
+        >
+          +
+        </Styled.Tab>
+      </Styled.TabWrapper>
       <div>
         {currentEditor === "question" && (
           <Editor
@@ -74,6 +104,17 @@ const WrappedEditor: FunctionComponent<{
         {codeBlockEditor}
         {currentEditor === "answer" && (
           <Editor roomId={`${question.id}-answer`} color={color} />
+        )}
+        {tabList.map(
+          (tab) =>
+            currentEditor === tab && (
+              <Editor
+                roomId={`${question.id}-${tab}`}
+                color={color}
+                value=""
+                overwrite={true}
+              />
+            )
         )}
       </div>
     </Styled.Editor>
