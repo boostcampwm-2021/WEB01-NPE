@@ -5,11 +5,13 @@ import type { NextPage } from "next";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
+import { Modal } from "@components/molecules";
 import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { AnswerRegister } from "@components/organisms";
 import { RealTimeModal } from "@components/templates";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
 import { getOneQuestionByID } from "@src/lib";
+import { useSession } from "next-auth/client";
 
 const MainContainer = styled.main`
   display: flex;
@@ -28,12 +30,22 @@ interface Props {
 const QuestionPage: NextPage<Props> = ({ data }) => {
   const router = useRouter();
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [session, loading] = useSession();
   const questionId = router.query.id;
   const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
 
   const exitModal = () => {
     setIsModal(false);
+  };
+
+  const modalHandler = () => {
+    if (session) {
+      setIsModal(true);
+    } else {
+      setShow(true);
+    }
   };
 
   useEffect(() => {
@@ -46,9 +58,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
       <MainContainer>
         <QuestionDetail
           question={question}
-          realtimeModalHandler={() => {
-            setIsModal(true);
-          }}
+          realtimeModalHandler={modalHandler}
         />
 
         <h2>{answers.length} 답변들</h2>
@@ -63,6 +73,17 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
         <AnswerRegister questionId={Number(questionId)} />
         {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
       </MainContainer>
+      {show && (
+        <Modal
+          show={show}
+          onClose={() => {
+            setShow(false);
+          }}
+          title="sdf"
+        >
+          로그인해주세요
+        </Modal>
+      )}
     </>
   );
 };
