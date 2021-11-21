@@ -3,7 +3,7 @@ import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 
 import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { AnswerRegister } from "@components/organisms";
@@ -27,6 +27,7 @@ interface Props {
 
 const QuestionPage: NextPage<Props> = ({ data }) => {
   const router = useRouter();
+  const [anwerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
   const questionId = router.query.id;
   const { findOneQuestionById: question } = data;
@@ -39,6 +40,15 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
   });
+
+  // 실시간 모달에서 '답변달고 나가기'를 선택하면 실행되는 핸들러 입니다.
+  const disconnectAndPostAnswer = () => {
+    exitModal();
+    // 해당 함수를 통해 AnswerInput을 갱신해도 실제 MDEditor의 입력값이 바뀌지 않음
+    // 아마 MDEditor는 CSR을 사용하기 때문에 갱신되지 않는 것 같음
+    router.reload();
+    setAnswerInput("abcd");
+  };
 
   return (
     <>
@@ -54,15 +64,23 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
         <h2>{answers.length}개의 답변</h2>
 
         {answers.map((answer) => {
-          console.log(answer.id);
           return (
             <li key={answer.id}>
               <AnswerDetail answer={answer} />
             </li>
           );
         })}
-        <AnswerRegister questionId={Number(questionId)} />
-        {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
+        <AnswerRegister
+          questionId={Number(questionId)}
+          initialValue={anwerInput}
+        />
+        {isModal && (
+          <RealTimeModal
+            question={question}
+            exitModal={exitModal}
+            disconnectAndPostAnswer={disconnectAndPostAnswer}
+          />
+        )}
       </MainContainer>
     </>
   );

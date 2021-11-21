@@ -9,9 +9,13 @@ import * as Styled from "./styled";
 
 interface Props {
   questionId: number;
+  initialValue?: string;
 }
 
-const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
+const AnswerRegister: FunctionComponent<Props> = ({
+  questionId,
+  initialValue,
+}) => {
   const editorRef = useRef<any>(null);
   const [session] = useSession();
   const router = useRouter();
@@ -38,7 +42,7 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
       }}
     >
       <h2>당신의 답변</h2>
-      <MDEditor type="Answer" ref={editorRef} />
+      {<MDEditor type="Answer" ref={editorRef} initialValue={initialValue} />}
       <Styled.AnswerBtnContainer>
         <Button type="Submit" text="답변하기" onClick={() => {}} />
       </Styled.AnswerBtnContainer>

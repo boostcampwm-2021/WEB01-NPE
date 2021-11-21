@@ -15,21 +15,16 @@ interface Props {
 const WrappedEditor: FunctionComponent<Props> = (props) => {
   let height = "0";
   let initialValue = "";
-  if (!props.initialValue) {
-    switch (props.type) {
-      case "Answer":
-        initialValue = `## 답변을 입력해주세요`;
-        height = "300px";
-        break;
-      case "Question":
-        initialValue = `## 질문을 입력해주세요`;
-        height = "600px";
-        break;
-    }
-  } else {
-    initialValue = props.initialValue;
+
+  if (props.type === "Answer") {
+    initialValue = props.initialValue ?? `## 답변을 입력해주세요`;
+    height = "300px";
+  } else if (props.type === "Question") {
+    initialValue = props.initialValue ?? `## 질문을 입력해주세요`;
+    height = "600px";
   }
 
+  console.log(initialValue);
   return (
     <Editor
       ref={props.editorRef}

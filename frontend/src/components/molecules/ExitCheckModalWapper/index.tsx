@@ -8,11 +8,13 @@ import { QuestionDetailType } from "@src/types";
 interface IExitCheckModalWarpperProps {
   question: QuestionDetailType;
   disconnectAndExit: VoidFunction;
+  disconnectAndPostAnswer: VoidFunction;
 }
 
 const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps> = ({
   question,
   disconnectAndExit,
+  disconnectAndPostAnswer,
 }) => {
   const [session] = useSession();
   if (!session || !session.accessToken) throw new Error("Something wrong!");
@@ -52,7 +54,7 @@ const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps
                 <Button
                   type="realtime_exit"
                   text="답변달기"
-                  onClick={disconnectAndExit}
+                  onClick={disconnectAndPostAnswer}
                 ></Button>
                 <Button
                   type="realtime_exit"

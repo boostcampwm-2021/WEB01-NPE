@@ -1,11 +1,11 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useRef, useState } from "react";
 import * as Socket from "socket.io-client";
+import { useSession } from "next-auth/client";
 
 import * as Styled from "./styled";
-import { Button, Logo, TitleText, Text, ContentText } from "@components/atoms";
+import { Button } from "@components/atoms";
 import { RealTimeEditor } from "@components/organisms";
 import { QuestionDetailType } from "@src/types";
-import { useSession } from "next-auth/client";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
 import Mike from "@src/components/organisms/Mike";
@@ -13,10 +13,10 @@ import Mike from "@src/components/organisms/Mike";
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
   exitModal: VoidFunction;
-}> = ({ question, exitModal }) => {
+  disconnectAndPostAnswer: VoidFunction;
+}> = ({ question, exitModal, disconnectAndPostAnswer }) => {
   const [SOCKET, setSOCKET] = useState<Socket.Socket | null>(null);
   const [session] = useSession();
-  console.log(session);
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
@@ -36,8 +36,6 @@ const RealTimeModal: FunctionComponent<{
       setSOCKET(socket);
     }
   });
-
-  const yjssocket = "?";
 
   const onExitClick = () => {
     const exitModalDiv = document.getElementById("exitModal");
@@ -66,6 +64,7 @@ const RealTimeModal: FunctionComponent<{
         <ExitCheckModalWarpper
           question={question}
           disconnectAndExit={disconnectAndExit}
+          disconnectAndPostAnswer={disconnectAndPostAnswer}
         />
       </Styled.Modal>
     </Styled.ModalWrapper>
