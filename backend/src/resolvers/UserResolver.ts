@@ -26,7 +26,7 @@ export default class UserResolver {
   async findUserById(
     @Arg("id", () => Int, { description: "User의 고유 ID" }) id: number
   ) {
-    const data = await UserService.findOneUserById(id);
+    const data = await UserService.findById(id);
 
     return data;
   }
@@ -38,7 +38,7 @@ export default class UserResolver {
   async findUserByUsername(
     @Arg("username", { description: "유저명" }) username: string
   ) {
-    const data = await UserService.findOneUserByUsername(username);
+    const data = await UserService.findByUsername(username);
 
     return data;
   }
@@ -66,16 +66,11 @@ export default class UserResolver {
     @Arg("profileUrl", { description: "Github 프로필 URL" }) profileUrl: string,
     @Arg("socialUrl", { description: "github URL" }) socialUrl: string
   ) {
-    let data = await UserService.findOneUserById(id);
+    let data = await UserService.findById(id);
     let isNewUser = false;
     if (!data) {
       isNewUser = true;
-      data = await UserService.registerUser(
-        id,
-        username,
-        profileUrl,
-        socialUrl
-      );
+      data = await UserService.register(id, username, profileUrl, socialUrl);
     }
 
     return isNewUser;

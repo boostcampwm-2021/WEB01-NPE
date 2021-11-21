@@ -40,7 +40,7 @@ export default class AnswerResolver {
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() answer: PostAnswer): Promise<User> {
-    const author = await UserService.findOneUserById(answer.userId);
+    const author = await UserService.findById(answer.userId);
 
     return author;
   }

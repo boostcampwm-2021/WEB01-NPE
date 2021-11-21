@@ -1,19 +1,19 @@
 import { User } from "../entities/User";
 
 export default class UserService {
-  public static async findOneUserById(id: number): Promise<User> {
+  public static async findById(id: number): Promise<User> {
     const user = await User.findOne(id);
 
     return user;
   }
 
-  public static async findOneUserByUsername(username: string): Promise<User> {
+  public static async findByUsername(username: string): Promise<User> {
     const user = await User.findOne(username);
 
     return user;
   }
 
-  public static async registerUser(
+  public static async register(
     id: number,
     username: string,
     profileUrl: string,
