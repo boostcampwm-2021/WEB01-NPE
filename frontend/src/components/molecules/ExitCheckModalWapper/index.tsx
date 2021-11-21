@@ -15,15 +15,12 @@ const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps
   disconnectAndExit,
 }) => {
   const [session] = useSession();
-  const [visibility, setVisibility] = React.useState("hidden");
   if (!session || !session.accessToken) throw new Error("Something wrong!");
 
-  React.useEffect(() => {
+  const turnoffModal = () => {
     const exitModalDiv = document.getElementById("exitModal");
-    exitModalDiv!.style.visibility = visibility;
-  }, [visibility]);
-
-  const turnoffModal = () => setVisibility("hidden");
+    exitModalDiv!.style.visibility = "hidden";
+  };
 
   return (
     <>
