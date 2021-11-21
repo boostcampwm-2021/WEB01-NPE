@@ -79,7 +79,6 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
           onClose={() => {
             setShow(false);
           }}
-          title="sdf"
         >
           로그인해주세요
         </Modal>
