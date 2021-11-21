@@ -30,6 +30,7 @@ const getUserId = (headers: any): number => {
 @Resolver(PostQuestion)
 export default class QuestionResolver {
   private userService: UserService = Container.get(UserService);
+  private tagService: TagService = Container.get(TagService);
 
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",
@@ -65,8 +66,8 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async tags(@Root() question: PostQuestion): Promise<Tag[]> {
-    const tagIds = await TagService.getAllTagIdsByQuestionId(question.id);
-    const tags = await TagService.findTagByIds(tagIds);
+    const tagIds = await this.tagService.findAllIdsByQuestionId(question.id);
+    const tags = await this.tagService.findByIds(tagIds);
 
     return tags;
   }

@@ -1,28 +1,31 @@
 import { Tag } from "../entities/Tag";
 import { PostQuestion } from "../entities/PostQuestion";
 import { createQueryBuilder } from "typeorm";
+import "reflect-metadata";
+import { Service } from "typedi";
 
+@Service()
 export default class TagService {
-  public static async getAllTags(): Promise<Tag[]> {
+  public async findAll(): Promise<Tag[]> {
     return Tag.find();
   }
 
-  public static async findTagById(id: number): Promise<Tag> {
+  public async findById(id: number): Promise<Tag> {
     return Tag.findOne({ id });
   }
 
-  public static async findTagByIds(ids: number[]): Promise<Tag[]> {
+  public async findByIds(ids: number[]): Promise<Tag[]> {
     if (ids.length === 0) return [];
     return await Tag.find({
       where: ids.map((id) => ({ id })),
     });
   }
 
-  public static async findTagByName(name: string): Promise<Tag> {
+  public async findByName(name: string): Promise<Tag> {
     return Tag.findOne({ name });
   }
 
-  public static async getAllTagIdsByQuestionId(id: number): Promise<number[]> {
+  public async findAllIdsByQuestionId(id: number): Promise<number[]> {
     const question = await PostQuestion.findOne({ id: id });
     const tagRelations = await createQueryBuilder()
       .relation(PostQuestion, "postQuestionHasTags")

@@ -1,7 +1,10 @@
+import "reflect-metadata";
+import { Service } from "typedi";
 import { EntityRepository, getRepository, Repository } from "typeorm";
 import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { Tag } from "../entities/Tag";
 
+@Service()
 @EntityRepository(Tag)
 export default class TagRepository extends Repository<Tag> {
   private readonly questionHasTagRepository = getRepository(PostQuestionHasTag);
