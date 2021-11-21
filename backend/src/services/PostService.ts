@@ -1,14 +1,14 @@
 import { createQueryBuilder, In, Like, SelectQueryBuilder } from "typeorm";
-import { PostAnswer } from "../../entities/PostAnswer";
-import { PostQuestion } from "../../entities/PostQuestion";
-import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
-import { Tag } from "../../entities/Tag";
-import { User } from "../../entities/User";
-import { UserHasTag } from "../../entities/UserHasTag";
+import { PostAnswer } from "../entities/PostAnswer";
+import { PostQuestion } from "../entities/PostQuestion";
+import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
+import { Tag } from "../entities/Tag";
+import { User } from "../entities/User";
+import { UserHasTag } from "../entities/UserHasTag";
 import NoSuchQuestionError from "../errors/NoSuchQuestionError";
-import AnswerInput from "../inputTypes/AnswerInput";
-import QuestionInput from "../inputTypes/QuestionInput";
-import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
+import AnswerInput from "../dto/AnswerInput";
+import QuestionInput from "../dto/QuestionInput";
+import SearchQuestionInput from "../dto/SearchQuestionInput";
 
 export default class PostService {
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;

@@ -2,8 +2,8 @@ import { EntityRepository, getRepository, Repository } from "typeorm";
 import { PostQuestion } from "../entities/PostQuestion";
 import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { UserHasTag } from "../entities/UserHasTag";
-import NoSuchQuestionError from "../graphql/errors/NoSuchQuestionError";
-import QuestionInput from "../graphql/inputTypes/QuestionInput";
+import NoSuchQuestionError from "../errors/NoSuchQuestionError";
+import QuestionInput from "../dto/QuestionInput";
 
 @EntityRepository(PostQuestion)
 export default class QuestionRepository extends Repository<PostQuestion> {

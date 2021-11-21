@@ -1,5 +1,5 @@
-import { Tag } from "../../entities/Tag";
-import { PostQuestion } from "../../entities/PostQuestion";
+import { Tag } from "../entities/Tag";
+import { PostQuestion } from "../entities/PostQuestion";
 import { createQueryBuilder } from "typeorm";
 
 export default class TagService {

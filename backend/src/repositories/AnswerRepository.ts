@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import { PostAnswer } from "../entities/PostAnswer";
-import AnswerInput from "../graphql/inputTypes/AnswerInput";
+import AnswerInput from "../dto/AnswerInput";
 
 @EntityRepository(PostAnswer)
 export default class AnswerRepository extends Repository<PostAnswer> {

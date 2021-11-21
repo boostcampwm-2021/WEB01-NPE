@@ -8,9 +8,9 @@ import {
   Root,
 } from "type-graphql";
 import { sign } from "jsonwebtoken";
-import { PostAnswer } from "../../entities/PostAnswer";
-import { PostQuestion } from "../../entities/PostQuestion";
-import { User } from "../../entities/User";
+import { PostAnswer } from "../entities/PostAnswer";
+import { PostQuestion } from "../entities/PostQuestion";
+import { User } from "../entities/User";
 import PostService from "../services/PostService";
 //import instanceUserService from "../services/instanceUserService";
 import UserService from "../services/UserService";

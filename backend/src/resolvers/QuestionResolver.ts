@@ -9,12 +9,12 @@ import {
   Root,
 } from "type-graphql";
 import { verify } from "jsonwebtoken";
-import { PostAnswer } from "../../entities/PostAnswer";
-import { PostQuestion } from "../../entities/PostQuestion";
-import { Tag } from "../../entities/Tag";
-import { User } from "../../entities/User";
-import QuestionInput from "../inputTypes/QuestionInput";
-import SearchQuestionInput from "../inputTypes/SearchQuestionInput";
+import { PostAnswer } from "../entities/PostAnswer";
+import { PostQuestion } from "../entities/PostQuestion";
+import { Tag } from "../entities/Tag";
+import { User } from "../entities/User";
+import QuestionInput from "../dto/QuestionInput";
+import SearchQuestionInput from "../dto/SearchQuestionInput";
 import PostService from "../services/PostService";
 import TagService from "../services/TagService";
 import UserService from "../services/UserService";

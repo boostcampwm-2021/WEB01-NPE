@@ -1,8 +1,8 @@
 import { Arg, Int, Query, Resolver } from "type-graphql";
 import { getCustomRepository } from "typeorm";
-import { Tag } from "../../entities/Tag";
-import { UserHasTag } from "../../entities/UserHasTag";
-import UserHasTagRepository from "../../repositories/UserHasTagRepository";
+import { Tag } from "../entities/Tag";
+import { UserHasTag } from "../entities/UserHasTag";
+import UserHasTagRepository from "../repositories/UserHasTagRepository";
 import TagService from "../services/TagService";
 
 @Resolver(Tag)
