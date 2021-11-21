@@ -51,7 +51,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
           }}
         />
 
-        <h2>{answers.length} 답변들</h2>
+        <h2>{answers.length}개의 답변</h2>
 
         {answers.map((answer) => {
           console.log(answer.id);
