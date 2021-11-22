@@ -1,6 +1,12 @@
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { FormEvent, FunctionComponent, useEffect, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useSession } from "next-auth/client";
 
 import { MDEditor, Button } from "@components/atoms";
@@ -14,7 +20,7 @@ interface Props {
   value?: string;
   onNewAnswer: (newAnswer: AnswerDetailType) => void;
 }
-  
+
 const AnswerRegister: FunctionComponent<Props> = ({
   questionId,
   value,
@@ -35,12 +41,17 @@ const AnswerRegister: FunctionComponent<Props> = ({
     if (!session || !session.user) {
       return setIsModal(true);
     }
-    await postAnswer({
-      variables: {
-        questionId,
-        desc: getMarkdown(),
-      },
-    });
+    const newAnswer = (
+      await postAnswer({
+        variables: {
+          questionId,
+          desc: getMarkdown(),
+        },
+      })
+    ).data.addNewAnswer as AnswerDetailType;
+
+    onNewAnswer(newAnswer);
+  };
 
   useEffect(() => {
     if (!editorRef || !editorRef.current) return;
@@ -48,25 +59,6 @@ const AnswerRegister: FunctionComponent<Props> = ({
     const editorInstance = editorRef.current.getInstance();
     editorInstance.setHTML(value);
   }, [value]);
-
-  return (
-    <Styled.AnswerRegister
-      onSubmit={async (e) => {
-        if (!session || !session.user) return false;
-        e.preventDefault();
-        const newAnswer = (
-          await postAnswer({
-            variables: {
-              questionId,
-              desc: getMarkdown(),
-            },
-          })
-        ).data.addNewAnswer as AnswerDetailType;
-
-        onNewAnswer(newAnswer);
-      }}
-    >
-  };
 
   return (
     <Styled.AnswerRegister onSubmit={onSubmit}>
