@@ -13,9 +13,8 @@ const Editor: FunctionComponent<{
   roomId: string;
   color: string;
   value?: string;
-  overwrite?: boolean;
   mode?: string;
-}> = ({ roomId, color, value, overwrite, mode }) => {
+}> = ({ roomId, color, value, mode }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
@@ -24,7 +23,6 @@ const Editor: FunctionComponent<{
   };
 
   const setDefaultVal = (ytext: Y.Text) => {
-    if (overwrite) ytext.delete(0, Number.MAX_VALUE);
     if (value && ytext.toString() === "") ytext.insert(0, value);
   };
 

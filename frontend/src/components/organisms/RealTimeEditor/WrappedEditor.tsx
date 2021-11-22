@@ -138,7 +138,6 @@ const WrappedEditor: FunctionComponent<{
                 roomId={`${question.id}-${tab}`}
                 color={color}
                 value=""
-                overwrite={true}
                 key={tab}
               />
             )
