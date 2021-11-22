@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { FormEvent, FunctionComponent, useRef } from "react";
+import React, { FormEvent, FunctionComponent, useEffect, useRef } from "react";
 import { useSession } from "next-auth/client";
 
 import { MDEditor, Button } from "@components/atoms";
@@ -9,13 +9,10 @@ import * as Styled from "./styled";
 
 interface Props {
   questionId: number;
-  initialValue?: string;
+  value?: string;
 }
 
-const AnswerRegister: FunctionComponent<Props> = ({
-  questionId,
-  initialValue,
-}) => {
+const AnswerRegister: FunctionComponent<Props> = ({ questionId, value }) => {
   const editorRef = useRef<any>(null);
   const [session] = useSession();
   const router = useRouter();
@@ -25,6 +22,13 @@ const AnswerRegister: FunctionComponent<Props> = ({
     const editorInstance = editorRef.current.getInstance();
     return editorInstance.getMarkdown();
   };
+
+  useEffect(() => {
+    if (!editorRef || !editorRef.current) return;
+
+    const editorInstance = editorRef.current.getInstance();
+    editorInstance.setHTML(value);
+  }, [value]);
 
   return (
     <Styled.AnswerRegister
@@ -42,7 +46,7 @@ const AnswerRegister: FunctionComponent<Props> = ({
       }}
     >
       <h2>당신의 답변</h2>
-      {<MDEditor type="Answer" ref={editorRef} initialValue={initialValue} />}
+      {<MDEditor type="Answer" ref={editorRef} />}
       <Styled.AnswerBtnContainer>
         <Button type="Submit" text="답변하기" onClick={() => {}} />
       </Styled.AnswerBtnContainer>

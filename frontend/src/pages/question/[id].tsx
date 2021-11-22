@@ -41,12 +41,8 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
     document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
   });
 
-  // 실시간 모달에서 '답변달고 나가기'를 선택하면 실행되는 핸들러 입니다.
   const disconnectAndPostAnswer = () => {
     exitModal();
-    // 해당 함수를 통해 AnswerInput을 갱신해도 실제 MDEditor의 입력값이 바뀌지 않음
-    // 아마 MDEditor는 CSR을 사용하기 때문에 갱신되지 않는 것 같음
-    router.reload();
     setAnswerInput("abcd");
   };
 
@@ -70,10 +66,7 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
             </li>
           );
         })}
-        <AnswerRegister
-          questionId={Number(questionId)}
-          initialValue={anwerInput}
-        />
+        <AnswerRegister questionId={Number(questionId)} value={anwerInput} />
         {isModal && (
           <RealTimeModal
             question={question}

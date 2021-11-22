@@ -12,30 +12,16 @@ interface Props {
   initialValue?: string;
 }
 
-const WrappedEditor: FunctionComponent<Props> = (props) => {
-  let height = "0";
-  let initialValue = "";
-
-  if (props.type === "Answer") {
-    initialValue = props.initialValue ?? `## 답변을 입력해주세요`;
-    height = "300px";
-  } else if (props.type === "Question") {
-    initialValue = props.initialValue ?? `## 질문을 입력해주세요`;
-    height = "600px";
-  }
-
-  console.log(initialValue);
-  return (
-    <Editor
-      ref={props.editorRef}
-      initialValue={initialValue}
-      previewStyle="tab"
-      height={height}
-      initialEditType="markdown"
-      useCommandShortcut={true}
-      plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
-    />
-  );
-};
-
+const WrappedEditor: FunctionComponent<Props> = (props) => (
+  <Editor
+    ref={props.editorRef}
+    previewStyle="tab"
+    initialValue={props.initialValue}
+    placeholder="질문을 입력해주세요"
+    height={props.type === "Answer" ? "300px" : "600px"}
+    initialEditType="markdown"
+    useCommandShortcut={true}
+    plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
+  />
+);
 export default WrappedEditor;
