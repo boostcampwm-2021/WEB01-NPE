@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Editor = styled.div`
   display: flex;
   flex-direction: column;
-  min-width 500px;
+  width 500px;
   border: 1px solid;
 
   .CodeMirror {
