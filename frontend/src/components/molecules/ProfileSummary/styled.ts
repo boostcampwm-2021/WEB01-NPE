@@ -3,12 +3,9 @@ import styled from "styled-components";
 export const Anchor = styled.a`
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
   align-items: center;
   border-radius: 8px;
-  padding: 5px 8px 5px 8px;
-  // width: 144px;
-  // height: 72px;
+  padding: 10px 8px 10px 8px;
 
   &:hover {
     cursor: pointer;
@@ -28,4 +25,7 @@ export const TextDiv = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+  & > span {
+    width: 95px;
+  }
 `;

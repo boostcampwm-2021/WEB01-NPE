@@ -183,11 +183,6 @@ const MainContainer = styled.main`
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-
-  div {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
 `;
 
 const ProfileDiv = styled.div`
