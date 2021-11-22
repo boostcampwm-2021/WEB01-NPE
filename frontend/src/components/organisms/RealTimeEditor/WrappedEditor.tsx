@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  MouseEvent,
+  useEffect,
+  useState,
+} from "react";
 import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
@@ -30,6 +35,31 @@ const WrappedEditor: FunctionComponent<{
   const onTabClick = (target: string) => () => {
     setCurrentEditor(target);
   };
+  const closeTab = (tab: string) => (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    const newTabList = tabList.filter((_tab) => _tab !== tab);
+    socket.emit("code", {
+      tabList: newTabList,
+      index: tabListIndex,
+    });
+    setCurrentEditor("question");
+  };
+  const addNewTab = () => {
+    const newTabList = [...tabList, String(tabListIndex)];
+    socket.emit("code", {
+      tabList: newTabList,
+      index: tabListIndex + 1,
+    });
+    setCurrentEditor(String(tabListIndex));
+  };
+
+  useEffect(() => {
+    socket.on("code", (code: CodeType) => {
+      setTabList(code.tabList);
+      setTabListIndex(Number(code.index));
+    });
+    socket.emit("code", {});
+  }, []);
 
   const codeBlockTab = codeBlock?.map((_, i) => (
     <Styled.Tab
@@ -54,14 +84,27 @@ const WrappedEditor: FunctionComponent<{
         )
       );
     }) || "";
-
-  useEffect(() => {
-    socket.on("code", (code: CodeType) => {
-      setTabList(code.tabList);
-      setTabListIndex(Number(code.index));
-    });
-    socket.emit("code", {});
-  }, []);
+  const newCodeBlockTab = tabList.map((tab) => (
+    <Styled.Tab
+      focused={currentEditor === tab}
+      onClick={onTabClick(tab)}
+      key={tab}
+    >
+      Code {tab}
+      <Styled.closeTab onClick={closeTab(tab)}>x</Styled.closeTab>
+    </Styled.Tab>
+  ));
+  const newCodeBlockEditor = tabList.map(
+    (tab) =>
+      currentEditor === tab && (
+        <Editor
+          roomId={`${question.id}-${tab}`}
+          color={color}
+          value=""
+          key={tab}
+        />
+      )
+  );
 
   return (
     <Styled.Editor>
@@ -81,44 +124,12 @@ const WrappedEditor: FunctionComponent<{
         >
           답변
         </Styled.Tab>
-        {tabList.map((tab) => (
-          <Styled.Tab
-            focused={currentEditor === tab}
-            onClick={onTabClick(tab)}
-            key={tab}
-          >
-            Code {tab}
-            <Styled.closeTab
-              onClick={(e) => {
-                e.stopPropagation();
-                const newTabList = tabList.filter((_tab) => _tab !== tab);
-                socket.emit("code", {
-                  tabList: newTabList,
-                  index: tabListIndex,
-                });
-                setCurrentEditor("question");
-              }}
-            >
-              x
-            </Styled.closeTab>
-          </Styled.Tab>
-        ))}
-        <Styled.Tab
-          focused={false}
-          onClick={() => {
-            const newTabList = [...tabList, String(tabListIndex)];
-            socket.emit("code", {
-              tabList: newTabList,
-              index: tabListIndex + 1,
-            });
-            setCurrentEditor(String(tabListIndex));
-          }}
-          key="add"
-        >
+        {newCodeBlockTab}
+        <Styled.Tab focused={false} onClick={addNewTab} key="add">
           +
         </Styled.Tab>
       </Styled.TabWrapper>
-      <div>
+      <>
         {currentEditor === "question" && (
           <Editor
             roomId={`${question.id}-question`}
@@ -131,18 +142,8 @@ const WrappedEditor: FunctionComponent<{
         {currentEditor === "answer" && (
           <Editor roomId={`${question.id}-answer`} color={color} key="answer" />
         )}
-        {tabList.map(
-          (tab) =>
-            currentEditor === tab && (
-              <Editor
-                roomId={`${question.id}-${tab}`}
-                color={color}
-                value=""
-                key={tab}
-              />
-            )
-        )}
-      </div>
+        {newCodeBlockEditor}
+      </>
     </Styled.Editor>
   );
 };
