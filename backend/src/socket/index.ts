@@ -15,8 +15,13 @@ interface UsersType {
     [socketId: string]: SessionUser;
   };
 }
+interface CodeType {
+  tabList: string[];
+  index: string;
+}
 
 const users: UsersType = {};
+const codes: CodeType = { tabList: [], index: "0" };
 
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
@@ -66,6 +71,14 @@ export default (io: socketio.Server) => {
 
     socket.on("answerCall", (data) => {
       io.to(data.to).emit("callAccepted", data.signal);
+    });
+
+    socket.on("code", (code) => {
+      if (code.tabList !== undefined) {
+        codes.tabList = [...code.tabList];
+        codes.index = code.index;
+      }
+      io.to(roomName).emit("code", codes);
     });
   });
 };
