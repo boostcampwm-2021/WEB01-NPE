@@ -19,7 +19,7 @@ import { ObjectType, Field, ID, Int, Float, Authorized } from "type-graphql";
   description:
     "질문글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 질문을 의미합니다.",
 })
-export class PostQuestion extends BaseEntity {
+export class PostQuestion {
   // 인증 전용
   // 관련 type-graphql 문서
   // https://typegraphql.com/docs/authorization.html

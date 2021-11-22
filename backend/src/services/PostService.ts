@@ -132,7 +132,7 @@ export default class PostService {
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
     newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
-    await newQuestion.save();
+    await this.questionRepository.save(newQuestion);
 
     const author = await this.userRepository.findById(userId);
     if (args.tagIds && args.tagIds.length > 0) {
@@ -178,7 +178,9 @@ export default class PostService {
     partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
 
     if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
-      await PostQuestionHasTag.delete({ postQuestionId: questionId });
+      await this.postQuestionHasTagRepository.delete({
+        postQuestionId: questionId,
+      });
 
       for (const tagId of fieldsToUpdate.tagIds) {
         const tagEntity = new PostQuestionHasTag();

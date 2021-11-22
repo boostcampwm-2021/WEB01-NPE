@@ -31,7 +31,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
     newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
-    await newQuestion.save();
+    await this.save(newQuestion);
 
     if (args.tagIds && args.tagIds.length > 0) {
       for (const tagId of args.tagIds) {
@@ -89,7 +89,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     fieldsToUpdate: Partial<QuestionInput>
   ) {
     const partialQuestion: PostQuestion = new PostQuestion();
-    const originQuestion = await PostQuestion.findOne({ id: questionId });
+    const originQuestion = await this.findOneQuestionById(questionId);
     partialQuestion.id = questionId;
     partialQuestion.userId = originQuestion.userId;
     partialQuestion.title = fieldsToUpdate.title;

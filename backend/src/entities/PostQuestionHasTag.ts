@@ -16,7 +16,7 @@ import { Tag } from "./Tag";
 )
 @Index("fk_post_question_has_tag_tag1_idx", ["tagId"], {})
 @Entity("post_question_has_tag")
-export class PostQuestionHasTag extends BaseEntity {
+export class PostQuestionHasTag {
   @Column("int", { primary: true, name: "post_question_id" })
   postQuestionId: number;
 
