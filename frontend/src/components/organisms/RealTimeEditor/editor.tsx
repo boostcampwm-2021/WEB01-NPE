@@ -7,15 +7,19 @@ import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
 import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/clike/clike";
+import "codemirror/mode/python/python";
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/swift/swift";
+import "codemirror/mode/css/css";
 import { useSession } from "next-auth/client";
 
 const Editor: FunctionComponent<{
   roomId: string;
   color: string;
   value?: string;
-  overwrite?: boolean;
   mode?: string;
-}> = ({ roomId, color, value, overwrite, mode }) => {
+}> = ({ roomId, color, value, mode }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
@@ -24,7 +28,6 @@ const Editor: FunctionComponent<{
   };
 
   const setDefaultVal = (ytext: Y.Text) => {
-    if (overwrite) ytext.delete(0, Number.MAX_VALUE);
     if (value && ytext.toString() === "") ytext.insert(0, value);
   };
 
@@ -60,7 +63,6 @@ const Editor: FunctionComponent<{
     return () => {
       if (provider) {
         provider.disconnect();
-        ydoc.destroy();
       }
     };
   }, [editorRef]);

@@ -15,9 +15,15 @@ interface UsersType {
     [socketId: string]: SessionUser;
   };
 }
+interface CodeType {
+  tabList: string[];
+  index: string;
+}
 
 const users: UsersType = {};
+const codes: CodeType = { tabList: [], index: "0" };
 let streamUserList: string[] = [];
+
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
@@ -84,6 +90,14 @@ export default (io: socketio.Server) => {
         sdp: data.sdp,
         sendSocketId: data.sendSocketId,
       });
+    });
+
+    socket.on("code", (code) => {
+      if (code.tabList !== undefined) {
+        codes.tabList = [...code.tabList];
+        codes.index = code.index;
+      }
+      io.to(roomName).emit("code", codes);
     });
   });
 };
