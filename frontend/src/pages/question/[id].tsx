@@ -26,8 +26,8 @@ interface Props {
 const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const questionId = router.query.id;
-  const { answers }: { answers: AnswerDetailType[] } = question;
 
   const exitModal = () => {
     setIsModal(false);
@@ -36,6 +36,10 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
   });
+
+  const onNewAnswer = (newAnswer: AnswerDetailType) => {
+    setAnswers((prev) => [...prev, newAnswer]);
+  };
 
   return (
     <>
@@ -57,7 +61,10 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
             </li>
           );
         })}
-        <AnswerRegister questionId={Number(questionId)} />
+        <AnswerRegister
+          questionId={Number(questionId)}
+          onNewAnswer={onNewAnswer}
+        />
         {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
       </MainContainer>
     </>
