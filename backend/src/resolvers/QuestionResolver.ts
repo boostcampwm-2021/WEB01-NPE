@@ -93,9 +93,10 @@ export default class QuestionResolver {
     @Ctx("headers") headers: any
   ): Promise<PostQuestion> {
     const userId = getUserId(headers);
-    const newQuestion = await this.postService.addNewQuestion(questionData, {
-      id: userId,
-    });
+    const newQuestion = await this.postService.addNewQuestion(
+      questionData,
+      userId
+    );
 
     return newQuestion;
   }

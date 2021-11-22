@@ -12,7 +12,6 @@ import { PostAnswer } from "../entities/PostAnswer";
 import { PostQuestion } from "../entities/PostQuestion";
 import { User } from "../entities/User";
 import PostService from "../services/PostService";
-//import instanceUserService from "../services/instanceUserService";
 import UserService from "../services/UserService";
 import Container, { Service } from "typedi";
 
