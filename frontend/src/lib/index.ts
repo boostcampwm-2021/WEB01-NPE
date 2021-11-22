@@ -120,6 +120,7 @@ export const getQuestions = async (
             score
             profileUrl
           }
+          answerCount
           realtimeShare
           title
           desc
@@ -179,6 +180,7 @@ export const getUserProfileData = async (userId: number) => {
             }
             viewCount
             thumbupCount
+            answerCount
           }
           postAnswers {
             id
