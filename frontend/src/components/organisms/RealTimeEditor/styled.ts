@@ -42,6 +42,11 @@ export const TabWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.1);
   height: 40px;
   border-bottom: 1px solid;
+`;
+
+export const TabList = styled.div`
+  display: flex;
+  width: 450px;
   overflow-x: scroll;
   white-space: nowrap;
 `;
@@ -57,6 +62,11 @@ export const Tab = styled.div<{ focused: boolean }>`
   :hover {
     cursor: pointer;
   }
+`;
+
+export const AddTab = styled.div`
+  display: flex;
+  border-left: 1px solid;
 `;
 
 export const closeTab = styled.div`

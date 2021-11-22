@@ -109,25 +109,29 @@ const WrappedEditor: FunctionComponent<{
   return (
     <Styled.Editor>
       <Styled.TabWrapper>
-        <Styled.Tab
-          focused={currentEditor === "question"}
-          onClick={onTabClick("question")}
-          key="question"
-        >
-          질문
-        </Styled.Tab>
-        {codeBlockTab}
-        <Styled.Tab
-          key="answer"
-          focused={currentEditor === "answer"}
-          onClick={onTabClick("answer")}
-        >
-          답변
-        </Styled.Tab>
-        {newCodeBlockTab}
-        <Styled.Tab focused={false} onClick={addNewTab} key="add">
-          +
-        </Styled.Tab>
+        <Styled.TabList>
+          <Styled.Tab
+            focused={currentEditor === "question"}
+            onClick={onTabClick("question")}
+            key="question"
+          >
+            질문
+          </Styled.Tab>
+          {codeBlockTab}
+          <Styled.Tab
+            key="answer"
+            focused={currentEditor === "answer"}
+            onClick={onTabClick("answer")}
+          >
+            답변
+          </Styled.Tab>
+          {newCodeBlockTab}
+        </Styled.TabList>
+        <Styled.AddTab>
+          <Styled.Tab focused={false} onClick={addNewTab} key="add">
+            +
+          </Styled.Tab>
+        </Styled.AddTab>
       </Styled.TabWrapper>
       <>
         {currentEditor === "question" && (
