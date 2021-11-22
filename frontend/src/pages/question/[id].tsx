@@ -12,8 +12,7 @@ import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { AnswerRegister } from "@components/organisms";
 import { RealTimeModal } from "@components/templates";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
-import { getOneQuestionByID } from "@src/lib";
-import Logo from "./logo.png";
+import { viewOneQuestionByID } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -24,19 +23,16 @@ const MainContainer = styled.main`
 `;
 
 interface Props {
-  data: {
-    findOneQuestionById: QuestionDetailType;
-  };
+  question: QuestionDetailType;
 }
 
-const QuestionPage: NextPage<Props> = ({ data }) => {
+const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
   const [session, loading] = useSession();
   const questionId = router.query.id;
-  const { findOneQuestionById: question } = data;
-  const { answers }: { answers: AnswerDetailType[] } = question;
 
   const exitModal = () => {
     setIsModal(false);
@@ -53,6 +49,10 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
   });
+
+  const onNewAnswer = (newAnswer: AnswerDetailType) => {
+    setAnswers((prev) => [...prev, newAnswer]);
+  };
 
   return (
     <>
@@ -105,7 +105,10 @@ const QuestionPage: NextPage<Props> = ({ data }) => {
             </li>
           );
         })}
-        <AnswerRegister questionId={Number(questionId)} />
+        <AnswerRegister
+          questionId={Number(questionId)}
+          onNewAnswer={onNewAnswer}
+        />
         {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
       </MainContainer>
       {show && (
@@ -128,13 +131,10 @@ interface Params extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id }: Params = context.params as Params;
-  const {
-    data,
-  }: {
-    data: { findOneQuestionById: QuestionDetailType };
-  } = await getOneQuestionByID(Number(id));
+  const viewedQuestion = await viewOneQuestionByID(Number(id));
+  const question = viewedQuestion.data.viewOneQuestionById;
 
-  if (!data) {
+  if (!question) {
     console.log("reload");
     return {
       redirect: {
@@ -146,7 +146,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      data,
+      question,
     },
   };
 };

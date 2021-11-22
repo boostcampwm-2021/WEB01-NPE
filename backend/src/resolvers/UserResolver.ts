@@ -8,16 +8,18 @@ import {
   Root,
 } from "type-graphql";
 import { sign } from "jsonwebtoken";
-import { PostAnswer } from "../../entities/PostAnswer";
-import { PostQuestion } from "../../entities/PostQuestion";
-import { User } from "../../entities/User";
+import { PostAnswer } from "../entities/PostAnswer";
+import { PostQuestion } from "../entities/PostQuestion";
+import { User } from "../entities/User";
 import PostService from "../services/PostService";
-//import instanceUserService from "../services/instanceUserService";
 import UserService from "../services/UserService";
+import Container, { Service } from "typedi";
 
+@Service()
 @Resolver(User)
 export default class UserResolver {
-  //constructor(private userService: instanceUserService) {}
+  private userService: UserService = Container.get(UserService);
+  private postService: PostService = Container.get(PostService);
 
   @Query(() => User, {
     description: "User의 고유 ID를 통해 유저를 검색",
@@ -26,9 +28,9 @@ export default class UserResolver {
   async findUserById(
     @Arg("id", () => Int, { description: "User의 고유 ID" }) id: number
   ) {
-    const data = await UserService.findOneUserById(id);
+    const user = await this.userService.findById(id);
 
-    return data;
+    return user;
   }
 
   @Query(() => User, {
@@ -38,21 +40,21 @@ export default class UserResolver {
   async findUserByUsername(
     @Arg("username", { description: "유저명" }) username: string
   ) {
-    const data = await UserService.findOneUserByUsername(username);
+    const user = await this.userService.findByUsername(username);
 
-    return data;
+    return user;
   }
 
   @FieldResolver(() => [PostQuestion], { nullable: "items" })
   async postQuestions(@Root() user: User): Promise<PostQuestion[]> {
-    const questions = PostService.findAllQuestionByUserId(user.id);
+    const questions = await this.postService.findAllQuestionByUserId(user.id);
 
     return questions;
   }
 
   @FieldResolver(() => [PostAnswer], { nullable: "items" })
   async postAnswers(@Root() user: User): Promise<PostAnswer[]> {
-    const answers = PostService.findAllAnswerByUserId(user.id);
+    const answers = await this.postService.findAllAnswerByUserId(user.id);
 
     return answers;
   }
@@ -66,11 +68,11 @@ export default class UserResolver {
     @Arg("profileUrl", { description: "Github 프로필 URL" }) profileUrl: string,
     @Arg("socialUrl", { description: "github URL" }) socialUrl: string
   ) {
-    let data = await UserService.findOneUserById(id);
+    let data = await this.userService.findById(id);
     let isNewUser = false;
     if (!data) {
       isNewUser = true;
-      data = await UserService.registerUser(
+      data = await this.userService.register(
         id,
         username,
         profileUrl,

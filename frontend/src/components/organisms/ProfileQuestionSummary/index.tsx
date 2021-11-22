@@ -12,6 +12,7 @@ interface Props {
 const ProfileQuestionSummary: FunctionComponent<Props> = ({
   postQuestions,
 }) => {
+  console.log(postQuestions);
   return (
     <Styled.ProfileQuestionSummary>
       <TitleText

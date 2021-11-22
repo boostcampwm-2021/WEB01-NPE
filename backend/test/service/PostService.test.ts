@@ -2,9 +2,9 @@ import { ConnectionOptions, createConnection, getConnection } from "typeorm";
 import { PostQuestion } from "../../src/entities/PostQuestion";
 import { PostQuestionHasTag } from "../../src/entities/PostQuestionHasTag";
 import { User } from "../../src/entities/User";
-import NoSuchQuestionError from "../../src/graphql/errors/NoSuchQuestionError";
-import SearchQuestionInput from "../../src/graphql/inputTypes/SearchQuestionInput";
-import PostService from "../../src/graphql/services/PostService";
+import NoSuchQuestionError from "../../src/errors/NoSuchQuestionError";
+import SearchQuestionInput from "../../src/dto/SearchQuestionInput";
+import PostService from "../../src/services/PostService";
 const DB_CONN_OPTIONS: ConnectionOptions = require("../../ormconfig.json")[
   "development"
 ];

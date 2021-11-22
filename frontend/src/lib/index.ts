@@ -54,6 +54,44 @@ export const getOneQuestionByID = async (id: number) => {
   return { loading, error, data };
 };
 
+export const viewOneQuestionByID = async (id: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      viewOneQuestionById(id: ${id}){
+        id
+        title
+        desc
+        viewCount
+        realtimeShare
+        createdAt
+        thumbupCount
+        score
+        author {
+          id
+          username
+          profileUrl
+          score
+        }
+        tags {
+          id
+          name
+        }
+        answers{
+          desc
+          author{
+           username
+           profileUrl
+           score
+           id
+         }
+        }
+      }
+    }`,
+  });
+  return data;
+};
+
 export const getQuestions = async (
   take: number,
   skip: number,
@@ -82,6 +120,7 @@ export const getQuestions = async (
             score
             profileUrl
           }
+          answerCount
           realtimeShare
           title
           desc
@@ -141,6 +180,7 @@ export const getUserProfileData = async (userId: number) => {
             }
             viewCount
             thumbupCount
+            answerCount
           }
           postAnswers {
             id

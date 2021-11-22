@@ -2,13 +2,25 @@ import { EntityRepository, getRepository, Repository } from "typeorm";
 import { PostQuestion } from "../entities/PostQuestion";
 import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { UserHasTag } from "../entities/UserHasTag";
-import NoSuchQuestionError from "../graphql/errors/NoSuchQuestionError";
-import QuestionInput from "../graphql/inputTypes/QuestionInput";
+import NoSuchQuestionError from "../errors/NoSuchQuestionError";
+import QuestionInput from "../dto/QuestionInput";
+import { Service } from "typedi";
+import { InjectRepository } from "typeorm-typedi-extensions";
+import PostQuestionHasTagRepository from "./PostQuestionHasTagRepostiory";
+import UserHasTagRepository from "./UserHasTagRepository";
 
+@Service()
 @EntityRepository(PostQuestion)
 export default class QuestionRepository extends Repository<PostQuestion> {
-  private readonly questionHasTagRepository = getRepository(PostQuestionHasTag);
-  private readonly userHasTagRepository = getRepository(UserHasTag);
+  constructor(
+    @InjectRepository()
+    private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository,
+    @InjectRepository()
+    private readonly userHasTagRepository: UserHasTagRepository
+  ) {
+    super();
+  }
+
   public async addNewQuestion(
     args: QuestionInput,
     // 이후 ctx.user 로 수정
@@ -19,14 +31,14 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
     newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
-    await newQuestion.save();
+    await this.save(newQuestion);
 
     if (args.tagIds && args.tagIds.length > 0) {
       for (const tagId of args.tagIds) {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
-        this.questionHasTagRepository.save(postQuestionHasTag);
+        this.postQuestionHasTagRepository.save(postQuestionHasTag);
 
         // 유저 개인의 태그 저장
         let userHasTag = await this.userHasTagRepository.findOne({
@@ -77,7 +89,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     fieldsToUpdate: Partial<QuestionInput>
   ) {
     const partialQuestion: PostQuestion = new PostQuestion();
-    const originQuestion = await PostQuestion.findOne({ id: questionId });
+    const originQuestion = await this.findOneQuestionById(questionId);
     partialQuestion.id = questionId;
     partialQuestion.userId = originQuestion.userId;
     partialQuestion.title = fieldsToUpdate.title;
@@ -85,7 +97,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
 
     if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
-      await this.questionHasTagRepository.delete({
+      await this.postQuestionHasTagRepository.delete({
         postQuestionId: questionId,
       });
 
@@ -93,7 +105,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
         const tagEntity = new PostQuestionHasTag();
         tagEntity.postQuestion = partialQuestion;
         tagEntity.tagId = tagId;
-        this.questionHasTagRepository.save(tagEntity);
+        this.postQuestionHasTagRepository.save(tagEntity);
       }
     }
 

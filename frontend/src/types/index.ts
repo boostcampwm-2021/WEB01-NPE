@@ -22,6 +22,7 @@ export interface QuestionType {
   title: string;
   viewCount: number;
   thumbupCount: number;
+  answerCount: number;
 }
 
 export interface QuestionDetailType {

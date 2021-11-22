@@ -7,12 +7,17 @@ import { MDEditor, Button } from "@components/atoms";
 import { Modal } from "@components/molecules";
 import { POST_ANSWER } from "@src/lib";
 import * as Styled from "./styled";
+import { AnswerDetailType } from "@src/types";
 
 interface Props {
   questionId: number;
+  onNewAnswer: (newAnswer: AnswerDetailType) => void;
 }
 
-const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
+const AnswerRegister: FunctionComponent<Props> = ({
+  questionId,
+  onNewAnswer,
+}) => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const editorRef = useRef<any>(null);
   const [session] = useSession();
@@ -35,7 +40,23 @@ const AnswerRegister: FunctionComponent<Props> = ({ questionId }) => {
       },
     });
 
-    router.reload();
+  return (
+    <Styled.AnswerRegister
+      onSubmit={async (e) => {
+        if (!session || !session.user) return false;
+        e.preventDefault();
+        const newAnswer = (
+          await postAnswer({
+            variables: {
+              questionId,
+              desc: getMarkdown(),
+            },
+          })
+        ).data.addNewAnswer as AnswerDetailType;
+
+        onNewAnswer(newAnswer);
+      }}
+    >
   };
 
   return (

@@ -31,6 +31,7 @@ const SearchResult: FunctionComponent<Props> = ({
     tags,
     viewCount,
     thumbupCount,
+    answerCount,
   } = question;
   return (
     <Styled.Question>
@@ -61,7 +62,7 @@ const SearchResult: FunctionComponent<Props> = ({
         </Styled.TagContainer>
 
         <Styled.QusetionDetail>
-          <ViewsAndComment viewCount={viewCount} commentCount={thumbupCount} />
+          <ViewsAndComment viewCount={viewCount} commentCount={answerCount} />
         </Styled.QusetionDetail>
       </Styled.RightContainer>
     </Styled.Question>
