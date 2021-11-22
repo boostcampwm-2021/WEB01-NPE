@@ -7,6 +7,11 @@ import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
 import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/clike/clike";
+import "codemirror/mode/python/python";
+import "codemirror/mode/htmlmixed/htmlmixed";
+import "codemirror/mode/swift/swift";
+import "codemirror/mode/css/css";
 import { useSession } from "next-auth/client";
 
 const Editor: FunctionComponent<{
@@ -23,9 +28,7 @@ const Editor: FunctionComponent<{
   };
 
   const setDefaultVal = (ytext: Y.Text) => {
-    if (value && ytext.toString() === "") {
-      ytext.insert(0, value);
-    }
+    if (value && ytext.toString() === "") ytext.insert(0, value);
   };
 
   useEffect(() => {
