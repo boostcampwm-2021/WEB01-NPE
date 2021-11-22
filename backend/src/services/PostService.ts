@@ -122,6 +122,16 @@ export default class PostService {
     return question;
   }
 
+  public async viewOneQuestionById(id: number): Promise<PostQuestion> {
+    const question = await this.questionRepository.findOneQuestionById(id);
+
+    if (!question) throw new NoSuchQuestionError("Check ID");
+    question.viewCount++;
+    const viewedQuestion = await this.questionRepository.save(question);
+
+    return viewedQuestion;
+  }
+
   public async addNewQuestion(
     args: QuestionInput,
     // 이후 ctx.user 로 수정

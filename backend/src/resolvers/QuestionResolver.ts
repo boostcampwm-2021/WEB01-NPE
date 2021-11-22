@@ -35,12 +35,22 @@ export default class QuestionResolver {
 
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",
-    nullable: true,
   })
   async findOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
     const question = await this.postService.findOneQuestionById(id);
+
+    return question;
+  }
+
+  @Mutation(() => PostQuestion, {
+    description: "questionId를 통해 하나의 질문글 조회(조회수 증가)",
+  })
+  async viewOneQuestionById(
+    @Arg("id", () => Int, { description: "질문글 ID" }) id: number
+  ) {
+    const question = await this.postService.viewOneQuestionById(id);
 
     return question;
   }

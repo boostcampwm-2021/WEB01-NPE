@@ -9,7 +9,7 @@ import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
 import { AnswerRegister } from "@components/organisms";
 import { RealTimeModal } from "@components/templates";
 import { QuestionDetailType, AnswerDetailType } from "@src/types";
-import { getOneQuestionByID } from "@src/lib";
+import { viewOneQuestionByID } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -20,16 +20,13 @@ const MainContainer = styled.main`
 `;
 
 interface Props {
-  data: {
-    findOneQuestionById: QuestionDetailType;
-  };
+  question: QuestionDetailType;
 }
 
-const QuestionPage: NextPage<Props> = ({ data }) => {
+const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
   const [isModal, setIsModal] = useState<boolean>(false);
   const questionId = router.query.id;
-  const { findOneQuestionById: question } = data;
   const { answers }: { answers: AnswerDetailType[] } = question;
 
   const exitModal = () => {
@@ -73,13 +70,10 @@ interface Params extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id }: Params = context.params as Params;
-  const {
-    data,
-  }: {
-    data: { findOneQuestionById: QuestionDetailType };
-  } = await getOneQuestionByID(Number(id));
+  const viewedQuestion = await viewOneQuestionByID(Number(id));
+  const question = viewedQuestion.data.viewOneQuestionById;
 
-  if (!data) {
+  if (!question) {
     console.log("reload");
     return {
       redirect: {
@@ -91,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      data,
+      question,
     },
   };
 };
