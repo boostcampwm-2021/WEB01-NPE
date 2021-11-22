@@ -106,6 +106,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = Number(context.query.userId);
   const { data } = await getUserProfileData(userId);
 
+  console.log(data);
   return {
     props: {
       userProfileData: data.findUserById,

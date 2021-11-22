@@ -14,12 +14,12 @@ import { User } from "../entities/User";
 import PostService from "../services/PostService";
 //import instanceUserService from "../services/instanceUserService";
 import UserService from "../services/UserService";
-import { Service } from "typedi";
+import Container, { Service } from "typedi";
 
 @Service()
 @Resolver(User)
 export default class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  private userService: UserService = Container.get(UserService);
 
   @Query(() => User, {
     description: "User의 고유 ID를 통해 유저를 검색",
