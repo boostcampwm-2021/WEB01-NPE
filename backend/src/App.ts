@@ -16,6 +16,7 @@ import { graphqlHTTP } from "express-graphql";
 import { useContainer } from "typeorm";
 import { Container as typeDiContainer } from "typeorm-typedi-extensions";
 
+// typeorm Container로 typeDI Container사용
 useContainer(typeDiContainer);
 
 (async () => {

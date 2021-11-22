@@ -210,6 +210,19 @@ export default class PostService {
     else return false;
   }
 
+  public async getAnswerCount(questionId: number): Promise<number> {
+    const question = await this.questionRepository.findOneQuestionById(
+      questionId
+    );
+    if (!question) throw new NoSuchQuestionError();
+
+    const count = await this.answerRepository.count({
+      postQuestionId: questionId,
+    });
+
+    return count;
+  }
+
   public async addNewAnswer(
     args: AnswerInput,
     userId: number,

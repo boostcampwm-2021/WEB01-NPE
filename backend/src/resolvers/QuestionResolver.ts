@@ -74,6 +74,13 @@ export default class QuestionResolver {
     return answers;
   }
 
+  @FieldResolver(() => Int, { description: "해당 질문글에 달린 답변글의 개수" })
+  async answerCount(@Root() question: PostQuestion): Promise<number> {
+    const count = this.postService.getAnswerCount(question.id);
+
+    return count;
+  }
+
   @FieldResolver(() => [Tag], {
     description: "해당 글에 속한 태그들",
     nullable: "items",
