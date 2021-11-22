@@ -23,7 +23,7 @@ const getUserId = (headers: any): number => {
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
-  private postService: PostService = Container.get(PostService);
+  private readonly postService: PostService = Container.get(PostService);
   private readonly userService: UserService = Container.get(UserService);
 
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
