@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import express from "express";
-import GraphQLMiddleware from "./graphql";
 import cors from "cors";
 import { ConnectionOptions, createConnection, getConnection } from "typeorm";
 const DB_CONN_OPTIONS: Record<
@@ -10,6 +9,15 @@ const DB_CONN_OPTIONS: Record<
 import * as socketio from "socket.io";
 import socketModule from "./socket";
 import { Server } from "http";
+import { buildSchema } from "type-graphql";
+import * as Resolver from "./resolvers";
+import { authChecker } from "./middlewares/AuthChecker";
+import { graphqlHTTP } from "express-graphql";
+import { useContainer } from "typeorm";
+import { Container as typeDiContainer } from "typeorm-typedi-extensions";
+
+// typeorm Container로 typeDI Container사용
+useContainer(typeDiContainer);
 
 (async () => {
   let env = "";
@@ -20,10 +28,9 @@ import { Server } from "http";
   const app = express();
   await createConnection(DB_CONN_OPTIONS[env]);
 
-  const gqMiddleware = await GraphQLMiddleware.get();
-
   app.use(cors());
 
+  const gqMiddleware = await graphQLMiddleware();
   app.use("/graphql", gqMiddleware);
 
   let server: Server = null;
@@ -46,3 +53,20 @@ import { Server } from "http";
   });
   socketModule(io);
 })();
+
+const graphQLMiddleware = async () => {
+  const schema = await buildSchema({
+    resolvers: [
+      Resolver.UserResolver,
+      Resolver.QuestionResolver,
+      Resolver.TagResolver,
+      Resolver.AnswerResolver,
+    ],
+    authChecker: authChecker,
+  });
+
+  return graphqlHTTP({
+    schema: schema,
+    graphiql: process.env.NODE_ENV !== "production",
+  });
+};

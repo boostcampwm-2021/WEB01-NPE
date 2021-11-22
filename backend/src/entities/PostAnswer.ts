@@ -21,7 +21,7 @@ import { Field, ID, Int, ObjectType } from "type-graphql";
     "답변글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 질문을 의미합니다.",
 })
 @Entity("post_answer")
-export class PostAnswer extends BaseEntity {
+export class PostAnswer {
   @Field(() => ID, {
     description: "해당 글의 고유 id. 글 생성 순으로 지정",
   })

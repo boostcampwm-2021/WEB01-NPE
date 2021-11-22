@@ -8,11 +8,12 @@ import {
   Root,
 } from "type-graphql";
 import { verify } from "jsonwebtoken";
-import { PostAnswer } from "../../entities/PostAnswer";
-import { User } from "../../entities/User";
-import AnswerInput from "../inputTypes/AnswerInput";
+import { PostAnswer } from "../entities/PostAnswer";
+import { User } from "../entities/User";
+import AnswerInput from "../dto/AnswerInput";
 import PostService from "../services/PostService";
 import UserService from "../services/UserService";
+import { Container } from "typeorm-typedi-extensions";
 
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new Error("Auth Error");
@@ -22,6 +23,9 @@ const getUserId = (headers: any): number => {
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
+  private readonly postService: PostService = Container.get(PostService);
+  private readonly userService: UserService = Container.get(UserService);
+
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
   async addNewAnswer(
     @Arg("questionId", () => Int, { description: "질문글 ID" })
@@ -30,12 +34,9 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<PostAnswer> {
     const userId = getUserId(headers);
-    console.log(userId);
-    const newAnswer = await PostService.addNewAnswer(
+    const newAnswer = await this.postService.addNewAnswer(
       answerData,
-      {
-        id: userId,
-      },
+      userId,
       questionId
     );
     return newAnswer;
@@ -43,7 +44,7 @@ export default class AnswerResolver {
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() answer: PostAnswer): Promise<User> {
-    const author = await UserService.findOneUserById(answer.userId);
+    const author = await this.userService.findById(answer.userId);
 
     return author;
   }
@@ -57,12 +58,15 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<PostAnswer> {
     const userId = getUserId(headers);
-    const answer = await PostService.findOneAnswerById(answerId);
+    const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new Error("Not your Post!");
-    const updateResult = await PostService.updateAnswer(answerId, answerInput);
+    const updateResult = await this.postService.updateAnswer(
+      answerId,
+      answerInput
+    );
 
-    return await PostService.findOneAnswerById(answerId);
+    return await this.postService.findOneAnswerById(answerId);
   }
 
   @Mutation(() => Boolean, {
@@ -73,10 +77,10 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<boolean> {
     const userId = getUserId(headers);
-    const answer = await PostService.findOneAnswerById(answerId);
+    const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new Error("Not your Post!");
-    const isDeleted = await PostService.deleteAnswer(answerId);
+    const isDeleted = await this.postService.deleteAnswer(answerId);
 
     return isDeleted;
   }

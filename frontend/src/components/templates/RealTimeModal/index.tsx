@@ -52,8 +52,7 @@ const RealTimeModal: FunctionComponent<{
       <Styled.Modal>
         <Styled.temp>
           {SOCKET && <Mike socket={SOCKET} />}
-
-          <RealTimeEditor question={question} />
+          {SOCKET && <RealTimeEditor question={question} socket={SOCKET} />}
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.temp>
         <Button

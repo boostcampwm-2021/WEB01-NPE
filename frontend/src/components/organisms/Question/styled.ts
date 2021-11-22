@@ -3,8 +3,6 @@ import styled from "styled-components";
 export const Question = styled.section`
   display: flex;
   width: 600px;
-  // height: 200px;
-  // border: 1px solid black;
   margin-bottom: 40px;
   h2 {
     margin: 0;

@@ -1,12 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 import { Tag } from "./Tag";
 import { User } from "./User";
 
@@ -16,7 +9,7 @@ import { User } from "./User";
 @Index("fk_user_has_tag_user1_idx", ["userId"], {})
 @Index("fk_user_has_tag_tag1_idx", ["tagId"], {})
 @Entity("user_has_tag")
-export class UserHasTag extends BaseEntity {
+export class UserHasTag {
   @Field(() => Int, {
     description: "유저의 고유 ID",
   })

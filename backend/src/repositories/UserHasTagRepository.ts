@@ -1,13 +1,10 @@
-import { EntityRepository, getRepository, MoreThan, Repository } from "typeorm";
-import { Tag } from "../entities/Tag";
-import { User } from "../entities/User";
+import Container, { Service } from "typedi";
+import { EntityRepository, MoreThan, Repository } from "typeorm";
 import { UserHasTag } from "../entities/UserHasTag";
 
+@Service()
 @EntityRepository(UserHasTag)
 export default class UserHasTagRepository extends Repository<UserHasTag> {
-  private readonly userRepository = getRepository(User);
-  private readonly tagRepository = getRepository(Tag);
-
   public async getAllTagsUsedByUserByUserId(
     userId: number
   ): Promise<UserHasTag[]> {

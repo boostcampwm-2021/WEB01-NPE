@@ -1,20 +1,11 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PostQuestionHasTag } from "./PostQuestionHasTag";
-import { User } from "./User";
 import { UserHasTag } from "./UserHasTag";
 
 @ObjectType("Tag", { description: "태그 Ojbect 입니다." })
 @Entity("tag")
-export class Tag extends BaseEntity {
+export class Tag {
   @Field(() => ID, { description: "태그의 ID" })
   @PrimaryGeneratedColumn({ type: "int", name: "id" })
   id: number;

@@ -12,7 +12,7 @@ import {
   MDEditor,
   TitleInput,
 } from "@components/atoms";
-import { TagInput } from "@components/molecules";
+import { TagInput, Modal } from "@components/molecules";
 import * as Styled from "./styled";
 import { TagType } from "@src/types";
 
@@ -22,6 +22,7 @@ const ResisterQuestion: FunctionComponent = () => {
   const [isLive, setIsLive] = useState<boolean>(false);
   const [session] = useSession();
   const editorRef = useRef<any>(null);
+  const [isModal, setIsModal] = useState<boolean>(false);
   const [postQuestion] = useMutation(POST_QUESTION);
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
@@ -31,7 +32,8 @@ const ResisterQuestion: FunctionComponent = () => {
     event.preventDefault();
     if (!session || !session.user) return;
     if (title && title.length < 5) {
-      window.alert("제목은 5자 이상으로 입력해주세요");
+      // window.alert("제목은 5자 이상으로 입력해주세요");
+      setIsModal(true);
       return;
     }
     const { data } = await postQuestion({
@@ -64,11 +66,18 @@ const ResisterQuestion: FunctionComponent = () => {
       <Styled.SubmitContainer>
         <Button type="Submit" text="질문등록" onClick={() => {}} />
       </Styled.SubmitContainer>
+      {isModal && (
+        <Modal
+          show={isModal}
+          onClose={() => {
+            setIsModal(false);
+          }}
+        >
+          제목은 5자 이상으로 입력해주세요
+        </Modal>
+      )}
     </Styled.Container>
   );
 };
 
 export default ResisterQuestion;
-function variables(variables: any, arg1: {}) {
-  throw new Error("Function not implemented.");
-}

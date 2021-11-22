@@ -1,15 +1,7 @@
 import { Field, ID, Int, ObjectType } from "type-graphql";
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  OneToOne,
-  BaseEntity,
-} from "typeorm";
+import { Column, Entity, OneToMany, BaseEntity } from "typeorm";
 import { PostAnswer } from "./PostAnswer";
 import { PostQuestion } from "./PostQuestion";
-import { Tag } from "./Tag";
 import { UserHasTag } from "./UserHasTag";
 
 @ObjectType("User", {
@@ -17,7 +9,7 @@ import { UserHasTag } from "./UserHasTag";
     "유저 오브젝트 입니다. 하나의 오브젝트가 한 명(ID)의 유저입니다.",
 })
 @Entity("user")
-export class User extends BaseEntity {
+export class User {
   @Field(() => ID, {
     description: "유저의 고유 ID",
   })
