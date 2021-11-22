@@ -36,14 +36,17 @@ export const Editor = styled.div`
   }
 `;
 
-export const Tab = styled.div`
+export const TabWrapper = styled.div`
   display: flex;
+  width: 500px;
   background-color: rgba(0, 0, 0, 0.1);
   height: 40px;
   border-bottom: 1px solid;
+  overflow-x: scroll;
+  white-space: nowrap;
 `;
 
-export const Code = styled.div<{ focused: boolean }>`
+export const Tab = styled.div<{ focused: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,4 +57,12 @@ export const Code = styled.div<{ focused: boolean }>`
   :hover {
     cursor: pointer;
   }
+`;
+
+export const closeTab = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.3);
+  margin-left: 20px;
 `;

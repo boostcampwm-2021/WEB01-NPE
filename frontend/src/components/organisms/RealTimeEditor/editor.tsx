@@ -13,8 +13,9 @@ const Editor: FunctionComponent<{
   roomId: string;
   color: string;
   value?: string;
+  overwrite?: boolean;
   mode?: string;
-}> = ({ roomId, color, value, mode }) => {
+}> = ({ roomId, color, value, overwrite, mode }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
@@ -23,9 +24,8 @@ const Editor: FunctionComponent<{
   };
 
   const setDefaultVal = (ytext: Y.Text) => {
-    if (value && ytext.toString() === "") {
-      ytext.insert(0, value);
-    }
+    if (overwrite) ytext.delete(0, Number.MAX_VALUE);
+    if (value && ytext.toString() === "") ytext.insert(0, value);
   };
 
   useEffect(() => {
@@ -60,6 +60,7 @@ const Editor: FunctionComponent<{
     return () => {
       if (provider) {
         provider.disconnect();
+        ydoc.destroy();
       }
     };
   }, [editorRef]);
