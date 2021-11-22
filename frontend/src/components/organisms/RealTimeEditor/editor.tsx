@@ -63,7 +63,6 @@ const Editor: FunctionComponent<{
     return () => {
       if (provider) {
         provider.disconnect();
-        ydoc.destroy();
       }
     };
   }, [editorRef]);

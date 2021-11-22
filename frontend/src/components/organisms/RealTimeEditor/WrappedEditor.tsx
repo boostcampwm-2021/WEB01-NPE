@@ -152,6 +152,7 @@ const WrappedEditor: FunctionComponent<{
       <Styled.Tab
         focused={currentEditor === `${i}.${extension}`}
         onClick={onTabClick(`${i}.${extension}`)}
+        key={`${i}.${extension}`}
       >
         {i}.{extension}
       </Styled.Tab>
