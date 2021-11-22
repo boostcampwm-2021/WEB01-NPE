@@ -4,11 +4,23 @@ import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { UserHasTag } from "../entities/UserHasTag";
 import NoSuchQuestionError from "../errors/NoSuchQuestionError";
 import QuestionInput from "../dto/QuestionInput";
+import { Service } from "typedi";
+import { InjectRepository } from "typeorm-typedi-extensions";
+import PostQuestionHasTagRepository from "./PostQuestionHasTagRepostiory";
+import UserHasTagRepository from "./UserHasTagRepository";
 
+@Service()
 @EntityRepository(PostQuestion)
 export default class QuestionRepository extends Repository<PostQuestion> {
-  private readonly questionHasTagRepository = getRepository(PostQuestionHasTag);
-  private readonly userHasTagRepository = getRepository(UserHasTag);
+  constructor(
+    @InjectRepository()
+    private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository,
+    @InjectRepository()
+    private readonly userHasTagRepository: UserHasTagRepository
+  ) {
+    super();
+  }
+
   public async addNewQuestion(
     args: QuestionInput,
     // 이후 ctx.user 로 수정
@@ -26,7 +38,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
-        this.questionHasTagRepository.save(postQuestionHasTag);
+        this.postQuestionHasTagRepository.save(postQuestionHasTag);
 
         // 유저 개인의 태그 저장
         let userHasTag = await this.userHasTagRepository.findOne({
@@ -85,7 +97,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
 
     if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
-      await this.questionHasTagRepository.delete({
+      await this.postQuestionHasTagRepository.delete({
         postQuestionId: questionId,
       });
 
@@ -93,7 +105,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
         const tagEntity = new PostQuestionHasTag();
         tagEntity.postQuestion = partialQuestion;
         tagEntity.tagId = tagId;
-        this.questionHasTagRepository.save(tagEntity);
+        this.postQuestionHasTagRepository.save(tagEntity);
       }
     }
 

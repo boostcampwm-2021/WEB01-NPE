@@ -12,12 +12,15 @@ import SearchQuestionInput from "../dto/SearchQuestionInput";
 import { Service } from "typedi";
 import UserHasTagRepository from "../repositories/UserHasTagRepository";
 import { InjectRepository } from "typeorm-typedi-extensions";
+import PostQuestionHasTagRepository from "../repositories/PostQuestionHasTagRepostiory";
 
 @Service()
 export default class PostService {
   constructor(
     @InjectRepository()
-    private readonly userHasTagRepository: UserHasTagRepository
+    private readonly userHasTagRepository: UserHasTagRepository,
+    @InjectRepository()
+    private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository
   ) {}
 
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
@@ -127,7 +130,7 @@ export default class PostService {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
-        await postQuestionHasTag.save();
+        this.postQuestionHasTagRepository.create(postQuestionHasTag);
 
         // 유저 개인의 태그 저장
         let userHasTag = await this.userHasTagRepository.findOne({
@@ -169,7 +172,7 @@ export default class PostService {
         const tagEntity = new PostQuestionHasTag();
         tagEntity.postQuestion = partialQuestion;
         tagEntity.tagId = tagId;
-        tagEntity.save();
+        this.postQuestionHasTagRepository.save(tagEntity);
       }
     }
 
