@@ -19,6 +19,11 @@ interface CodeType {
   index: string;
 }
 
+const LanguageEnum = {
+  javascript: "js",
+  gfm: "md",
+};
+
 const color = RandomColor();
 const gfmCodeReg = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
 
@@ -29,11 +34,22 @@ const WrappedEditor: FunctionComponent<{
   const [currentEditor, setCurrentEditor] = useState("question");
   const [tabList, setTabList] = useState<string[]>([]);
   const [tabListIndex, setTabListIndex] = useState<number>(0);
+  const [isDropdown, setIsDropdown] = useState(false);
 
   const codeBlock = question.desc.match(gfmCodeReg);
 
   const onTabClick = (target: string) => () => {
     setCurrentEditor(target);
+  };
+  const onDropdown = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsDropdown(true);
+  };
+  const onDropDownClick = (event: MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+  };
+  const onReset = () => {
+    setIsDropdown(false);
   };
   const closeTab = (tab: string) => (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -44,13 +60,14 @@ const WrappedEditor: FunctionComponent<{
     });
     setCurrentEditor("question");
   };
-  const addNewTab = () => {
-    const newTabList = [...tabList, String(tabListIndex)];
+  const addNewTab = (mode: string) => () => {
+    const newTabList = [...tabList, `${tabListIndex}.${mode}`];
     socket.emit("code", {
       tabList: newTabList,
       index: tabListIndex + 1,
     });
-    setCurrentEditor(String(tabListIndex));
+    setCurrentEditor(String(`${tabListIndex}.${mode}`));
+    onReset();
   };
 
   useEffect(() => {
@@ -59,24 +76,33 @@ const WrappedEditor: FunctionComponent<{
       setTabListIndex(Number(code.index));
     });
     socket.emit("code", {});
+
+    document.body.addEventListener("click", onReset);
+
+    return () => {
+      document.body.removeEventListener("click", onReset);
+    };
   }, []);
 
-  const codeBlockTab = codeBlock?.map((_, i) => (
-    <Styled.Tab
-      focused={currentEditor === `Code ${i}`}
-      onClick={onTabClick(`Code ${i}`)}
-    >
-      Code {i}
-    </Styled.Tab>
-  ));
+  const codeBlockTab = codeBlock?.map((code, i) => {
+    const mode = code.split("\n")[0].slice(3).trim();
+    return (
+      <Styled.Tab
+        focused={currentEditor === `${i}.${mode}`}
+        onClick={onTabClick(`${i}.${mode}`)}
+      >
+        {i}.{LanguageEnum[mode]}
+      </Styled.Tab>
+    );
+  });
   const codeBlockEditor =
     codeBlock?.map((code, i) => {
       const codeOnly = code.split("\n").slice(1).join("\n").slice(0, -3);
       const mode = code.split("\n")[0].slice(3).trim();
       return (
-        currentEditor === `Code ${i}` && (
+        currentEditor === `${i}.${mode}` && (
           <Editor
-            roomId={`${question.id}-test-${i}`}
+            roomId={`${question.id}-q-${i}.${mode}`}
             color={color}
             value={codeOnly}
             mode={mode}
@@ -84,16 +110,19 @@ const WrappedEditor: FunctionComponent<{
         )
       );
     }) || "";
-  const newCodeBlockTab = tabList.map((tab) => (
-    <Styled.Tab
-      focused={currentEditor === tab}
-      onClick={onTabClick(tab)}
-      key={tab}
-    >
-      Code {tab}
-      <Styled.closeTab onClick={closeTab(tab)}>x</Styled.closeTab>
-    </Styled.Tab>
-  ));
+  const newCodeBlockTab = tabList.map((tab) => {
+    const [name, extension] = tab.split(".");
+    return (
+      <Styled.Tab
+        focused={currentEditor === tab}
+        onClick={onTabClick(tab)}
+        key={tab}
+      >
+        {name}.{LanguageEnum[extension]}
+        <Styled.closeTab onClick={closeTab(tab)}>x</Styled.closeTab>
+      </Styled.Tab>
+    );
+  });
   const newCodeBlockEditor = tabList.map(
     (tab) =>
       currentEditor === tab && (
@@ -102,6 +131,7 @@ const WrappedEditor: FunctionComponent<{
           color={color}
           value=""
           key={tab}
+          mode={tab.split(".")[1]}
         />
       )
   );
@@ -118,19 +148,18 @@ const WrappedEditor: FunctionComponent<{
             질문
           </Styled.Tab>
           {codeBlockTab}
-          <Styled.Tab
-            key="answer"
-            focused={currentEditor === "answer"}
-            onClick={onTabClick("answer")}
-          >
-            답변
-          </Styled.Tab>
           {newCodeBlockTab}
         </Styled.TabList>
         <Styled.AddTab>
-          <Styled.Tab focused={false} onClick={addNewTab} key="add">
+          <Styled.Tab focused={false} onClick={onDropdown} key="add">
             +
           </Styled.Tab>
+          {isDropdown && (
+            <Styled.Dropdown onClick={onDropDownClick}>
+              <div onClick={addNewTab("gfm")}>markdown</div>
+              <div onClick={addNewTab("javascript")}>javascript</div>
+            </Styled.Dropdown>
+          )}
         </Styled.AddTab>
       </Styled.TabWrapper>
       <>
@@ -143,9 +172,6 @@ const WrappedEditor: FunctionComponent<{
           />
         )}
         {codeBlockEditor}
-        {currentEditor === "answer" && (
-          <Editor roomId={`${question.id}-answer`} color={color} key="answer" />
-        )}
         {newCodeBlockEditor}
       </>
     </Styled.Editor>

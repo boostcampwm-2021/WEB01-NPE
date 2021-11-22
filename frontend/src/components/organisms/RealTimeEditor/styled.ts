@@ -83,3 +83,27 @@ export const closeTab = styled.div`
     color: rgba(255, 255, 255, 0.8);
   }
 `;
+
+export const Dropdown = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-item: center;
+  position: absolute;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  padding: 15px;
+
+  div {
+    display: flex;
+    align-items: center;
+    height: 30px;
+
+    :hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+`;
