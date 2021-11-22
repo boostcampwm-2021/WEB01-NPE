@@ -23,6 +23,7 @@ const getUserId = (headers: any): number => {
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
+  private postService: PostService = Container.get(PostService);
   private readonly userService: UserService = Container.get(UserService);
 
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
@@ -33,7 +34,7 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<PostAnswer> {
     const userId = getUserId(headers);
-    const newAnswer = await PostService.addNewAnswer(
+    const newAnswer = await this.postService.addNewAnswer(
       answerData,
       userId,
       questionId
@@ -57,12 +58,15 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<PostAnswer> {
     const userId = getUserId(headers);
-    const answer = await PostService.findOneAnswerById(answerId);
+    const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new Error("Not your Post!");
-    const updateResult = await PostService.updateAnswer(answerId, answerInput);
+    const updateResult = await this.postService.updateAnswer(
+      answerId,
+      answerInput
+    );
 
-    return await PostService.findOneAnswerById(answerId);
+    return await this.postService.findOneAnswerById(answerId);
   }
 
   @Mutation(() => Boolean, {
@@ -73,10 +77,10 @@ export default class AnswerResolver {
     @Ctx("headers") headers: any
   ): Promise<boolean> {
     const userId = getUserId(headers);
-    const answer = await PostService.findOneAnswerById(answerId);
+    const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new Error("Not your Post!");
-    const isDeleted = await PostService.deleteAnswer(answerId);
+    const isDeleted = await this.postService.deleteAnswer(answerId);
 
     return isDeleted;
   }

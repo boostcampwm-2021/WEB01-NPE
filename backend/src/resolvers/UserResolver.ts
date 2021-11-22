@@ -20,6 +20,7 @@ import Container, { Service } from "typedi";
 @Resolver(User)
 export default class UserResolver {
   private userService: UserService = Container.get(UserService);
+  private postService: PostService = Container.get(PostService);
 
   @Query(() => User, {
     description: "User의 고유 ID를 통해 유저를 검색",
@@ -47,14 +48,14 @@ export default class UserResolver {
 
   @FieldResolver(() => [PostQuestion], { nullable: "items" })
   async postQuestions(@Root() user: User): Promise<PostQuestion[]> {
-    const questions = PostService.findAllQuestionByUserId(user.id);
+    const questions = await this.postService.findAllQuestionByUserId(user.id);
 
     return questions;
   }
 
   @FieldResolver(() => [PostAnswer], { nullable: "items" })
   async postAnswers(@Root() user: User): Promise<PostAnswer[]> {
-    const answers = PostService.findAllAnswerByUserId(user.id);
+    const answers = await this.postService.findAllAnswerByUserId(user.id);
 
     return answers;
   }

@@ -9,10 +9,19 @@ import NoSuchQuestionError from "../errors/NoSuchQuestionError";
 import AnswerInput from "../dto/AnswerInput";
 import QuestionInput from "../dto/QuestionInput";
 import SearchQuestionInput from "../dto/SearchQuestionInput";
+import { Service } from "typedi";
+import UserHasTagRepository from "../repositories/UserHasTagRepository";
+import { InjectRepository } from "typeorm-typedi-extensions";
 
+@Service()
 export default class PostService {
+  constructor(
+    @InjectRepository()
+    private readonly userHasTagRepository: UserHasTagRepository
+  ) {}
+
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
-  public static async findAllQuestionByArgs(
+  public async findAllQuestionByArgs(
     args: SearchQuestionInput
   ): Promise<PostQuestion[]> {
     const { author, tagIDs, skip, take } = args;
@@ -66,14 +75,14 @@ export default class PostService {
     const builder = PostQuestion.createQueryBuilder()
       .where(whereObj)
       .skip(skip ?? 0)
-      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
+      .take(take ?? PostService.DEFALUT_TAKE_QUESTIONS_COUNT)
       .orderBy("id", "DESC");
 
     const rows = await builder.getMany();
     return rows;
   }
 
-  public static async findAllQuestionByUserId(
+  public async findAllQuestionByUserId(
     userId: number
   ): Promise<PostQuestion[]> {
     const questions = await PostQuestion.find({ userId });
@@ -81,22 +90,18 @@ export default class PostService {
     return questions;
   }
 
-  public static async findAllAnswerByUserId(
-    userId: number
-  ): Promise<PostAnswer[]> {
+  public async findAllAnswerByUserId(userId: number): Promise<PostAnswer[]> {
     const data = await PostAnswer.find({ userId });
     return data;
   }
 
-  public static async findAllAnswerByQuestionId(
-    id: number
-  ): Promise<PostAnswer[]> {
+  public async findAllAnswerByQuestionId(id: number): Promise<PostAnswer[]> {
     const data = await PostAnswer.find({ postQuestionId: id });
 
     return data;
   }
 
-  public static async findOneQuestionById(id: number): Promise<PostQuestion> {
+  public async findOneQuestionById(id: number): Promise<PostQuestion> {
     const question = await PostQuestion.findOne({ id: id });
 
     if (!question) throw new NoSuchQuestionError("Check ID");
@@ -104,7 +109,7 @@ export default class PostService {
     return question;
   }
 
-  public static async addNewQuestion(
+  public async addNewQuestion(
     args: QuestionInput,
     // 이후 ctx.user 로 수정
     user: { id: number }
@@ -125,7 +130,7 @@ export default class PostService {
         await postQuestionHasTag.save();
 
         // 유저 개인의 태그 저장
-        let userHasTag = await UserHasTag.findOne({
+        let userHasTag = await this.userHasTagRepository.findOne({
           userId: user.id,
           tagId: tagId,
         });
@@ -138,14 +143,14 @@ export default class PostService {
           userHasTag.count++;
         }
 
-        await userHasTag.save();
+        this.userHasTagRepository.save(userHasTag);
       }
     }
 
     return newQuestion;
   }
 
-  public static async updateQuestion(
+  public async updateQuestion(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ) {
@@ -171,14 +176,14 @@ export default class PostService {
     return await PostQuestion.save(partialQuestion);
   }
 
-  public static async deleteQuestion(questionId: number): Promise<boolean> {
+  public async deleteQuestion(questionId: number): Promise<boolean> {
     const result = await PostQuestion.delete({ id: questionId });
 
     if (result.affected > 0) return true;
     else return false;
   }
 
-  public static async addNewAnswer(
+  public async addNewAnswer(
     args: AnswerInput, // 이후 ctx.user 로 수정
     userId: number,
     questionId: number
@@ -198,13 +203,13 @@ export default class PostService {
     return await newAnswer.save();
   }
 
-  public static async findOneAnswerById(answerId: number): Promise<PostAnswer> {
+  public async findOneAnswerById(answerId: number): Promise<PostAnswer> {
     const answer = await PostAnswer.findOne({ id: answerId });
 
     return answer;
   }
 
-  public static async updateAnswer(
+  public async updateAnswer(
     answerId: number,
     answerInput: AnswerInput
   ): Promise<PostAnswer> {
@@ -214,7 +219,7 @@ export default class PostService {
     return await PostAnswer.save(answer);
   }
 
-  public static async deleteAnswer(answerId: number): Promise<boolean> {
+  public async deleteAnswer(answerId: number): Promise<boolean> {
     const deleteResult = await PostAnswer.delete({ id: answerId });
 
     return deleteResult.affected > 0;

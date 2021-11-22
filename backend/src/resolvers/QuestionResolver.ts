@@ -31,6 +31,7 @@ const getUserId = (headers: any): number => {
 export default class QuestionResolver {
   private userService: UserService = Container.get(UserService);
   private tagService: TagService = Container.get(TagService);
+  private postService: PostService = Container.get(PostService);
 
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",
@@ -39,7 +40,7 @@ export default class QuestionResolver {
   async findOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await PostService.findOneQuestionById(id);
+    const question = await this.postService.findOneQuestionById(id);
 
     return question;
   }
@@ -56,7 +57,9 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async answers(@Root() question: PostQuestion): Promise<PostAnswer[]> {
-    const answers = await PostService.findAllAnswerByQuestionId(question.id);
+    const answers = await this.postService.findAllAnswerByQuestionId(
+      question.id
+    );
 
     return answers;
   }
@@ -79,7 +82,7 @@ export default class QuestionResolver {
   async searchQuestions(
     @Arg("searchQuery") searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const questions = await PostService.findAllQuestionByArgs(searchQuery);
+    const questions = await this.postService.findAllQuestionByArgs(searchQuery);
 
     return questions;
   }
@@ -90,7 +93,7 @@ export default class QuestionResolver {
     @Ctx("headers") headers: any
   ): Promise<PostQuestion> {
     const userId = getUserId(headers);
-    const newQuestion = await PostService.addNewQuestion(questionData, {
+    const newQuestion = await this.postService.addNewQuestion(questionData, {
       id: userId,
     });
 
@@ -105,17 +108,17 @@ export default class QuestionResolver {
     fieldsToUpdate: QuestionInput,
     @Ctx("headers") headers: any
   ): Promise<PostQuestion> {
-    const question = await PostService.findOneQuestionById(questionId);
+    const question = await this.postService.findOneQuestionById(questionId);
     const questionAuthor = question.userId;
     const userId = getUserId(headers);
     if (questionAuthor !== userId) throw new Error("Not your Post!");
 
-    const updateResult = await PostService.updateQuestion(
+    const updateResult = await this.postService.updateQuestion(
       questionId,
       fieldsToUpdate
     );
 
-    return await PostService.findOneQuestionById(questionId);
+    return await this.postService.findOneQuestionById(questionId);
   }
 
   @Mutation(() => Boolean, {
@@ -126,11 +129,11 @@ export default class QuestionResolver {
     questionId: number,
     @Ctx("headers") headers: any
   ): Promise<boolean> {
-    const question = await PostService.findOneQuestionById(questionId);
+    const question = await this.postService.findOneQuestionById(questionId);
     const questionAuthor = question.userId;
     const userId = getUserId(headers);
     if (questionAuthor !== userId) throw new Error("Not your Post!");
-    const isDeleted = await PostService.deleteQuestion(questionId);
+    const isDeleted = await this.postService.deleteQuestion(questionId);
 
     return isDeleted;
   }
