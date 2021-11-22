@@ -39,7 +39,7 @@ export const Editor = styled.div`
 export const TabWrapper = styled.div`
   display: flex;
   width: 500px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #384051;
   height: 40px;
   border-bottom: 1px solid;
 `;
@@ -56,8 +56,8 @@ export const Tab = styled.div<{ focused: boolean }>`
   justify-content: center;
   align-items: center;
   padding: 0px 20px 0px 20px;
-  border-right: 1px solid;
-  ${(props) => props.focused && "background-color: rgba(0, 0, 0, 0.2);"}
+  ${(props) => props.focused && "background-color: rgba(0, 0, 0, 0.5);"}
+  color: #a8abb7;
 
   :hover {
     cursor: pointer;
@@ -66,13 +66,20 @@ export const Tab = styled.div<{ focused: boolean }>`
 
 export const AddTab = styled.div`
   display: flex;
-  border-left: 1px solid;
+
+  :hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 export const closeTab = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.3);
   margin-left: 20px;
+
+  :hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
 `;
