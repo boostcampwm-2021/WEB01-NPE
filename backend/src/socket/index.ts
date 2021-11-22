@@ -22,6 +22,7 @@ interface CodeType {
 
 const users: UsersType = {};
 const codes: CodeType = { tabList: [], index: "0" };
+let streamUserList: string[] = [];
 
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
@@ -57,20 +58,38 @@ export default (io: socketio.Server) => {
       console.log(roomName, chatItem);
       io.to(roomName).emit("chat", chatItem);
     });
+    socket.on("stream:join", () => {
+      if (!streamUserList.includes(socket.id)) {
+        streamUserList.push(socket.id);
+      }
+      io.sockets.to(socket.id).emit("stream:userList", streamUserList);
+    });
 
-    socket.emit("me", socket.id);
+    socket.on("stream:disconnect", () => {
+      streamUserList = streamUserList.filter(
+        (socketId) => socketId !== socket.id
+      );
+      io.sockets.to(socket.id).emit("stream:userList", streamUserList);
+    });
 
-    socket.on("callUser", (data) => {
-      console.log("to", data.userToCall);
-      io.to(data.userToCall).emit("callUser", {
-        signal: data.signalData,
-        from: data.from,
-        name: data.name,
+    socket.on("stream:candidate", (data) => {
+      socket.to(data.receiveSocketId).emit("stream:receiveCandidate", {
+        candidate: data.candidate,
+        sendSocketId: data.sendSocketId,
       });
     });
 
-    socket.on("answerCall", (data) => {
-      io.to(data.to).emit("callAccepted", data.signal);
+    socket.on("stream:offer", (data) => {
+      socket.to(data.receiveSocketId).emit("stream:receiveOffer", {
+        sdp: data.sdp,
+        sendSocketId: data.sendSocketId,
+      });
+    });
+    socket.on("stream:answer", (data) => {
+      socket.to(data.receiveSocketId).emit("stream:receiveAnswer", {
+        sdp: data.sdp,
+        sendSocketId: data.sendSocketId,
+      });
     });
 
     socket.on("code", (code) => {
