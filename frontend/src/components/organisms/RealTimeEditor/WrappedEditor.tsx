@@ -19,10 +19,70 @@ interface CodeType {
   index: string;
 }
 
-const LanguageEnum = {
-  javascript: "js",
-  gfm: "md",
+const languageSupport = [
+  "MarkDown",
+  "Javascript",
+  "C/C++",
+  "Java",
+  "Kotlin",
+  "Python",
+  "HTML",
+  "Swift",
+  "CSS",
+];
+
+const gfmLangToMode = {
+  javascript: "javascript",
+  c: "clike",
+  cpp: "clike",
+  java: "java",
+  kotlin: "kotlin",
+  python: "python",
+  html: "html",
+  swift: "swift",
+  css: "css",
 };
+
+const gfmLangToExtension = {
+  javascript: "js",
+  c: "c",
+  cpp: "c++",
+  java: "java",
+  kotlin: "kt",
+  python: "py",
+  html: "html",
+  swift: "swift",
+  css: "css",
+};
+
+const langToMode = {
+  MarkDown: "gfm",
+  Javascript: "javascript",
+  "C/C++": "clike",
+  Java: "clike",
+  Kotlin: "clike",
+  Python: "python",
+  HTML: "htmlmixed",
+  Swift: "swift",
+  CSS: "css",
+};
+
+const langToExtension = {
+  MarkDown: "md",
+  Javascript: "js",
+  "C/C++": "c",
+  Java: "java",
+  Kotlin: "kt",
+  Python: "py",
+  HTML: "html",
+  Swift: "swift",
+  CSS: "css",
+};
+
+const extensionToLang = Object.keys(langToExtension).reduce((obj, key) => {
+  obj[langToExtension[key]] = key;
+  return obj;
+}, {});
 
 const color = RandomColor();
 const gfmCodeReg = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
@@ -60,13 +120,14 @@ const WrappedEditor: FunctionComponent<{
     });
     setCurrentEditor("question");
   };
-  const addNewTab = (mode: string) => () => {
-    const newTabList = [...tabList, `${tabListIndex}.${mode}`];
+  const addNewTab = (language: string) => () => {
+    const extension = langToExtension[language];
+    const newTabList = [...tabList, `${tabListIndex}.${extension}`];
     socket.emit("code", {
       tabList: newTabList,
       index: tabListIndex + 1,
     });
-    setCurrentEditor(String(`${tabListIndex}.${mode}`));
+    setCurrentEditor(String(`${tabListIndex}.${extension}`));
     onReset();
   };
 
@@ -85,24 +146,27 @@ const WrappedEditor: FunctionComponent<{
   }, []);
 
   const codeBlockTab = codeBlock?.map((code, i) => {
-    const mode = code.split("\n")[0].slice(3).trim();
+    const language = code.split("\n")[0].slice(3).trim();
+    const extension = gfmLangToExtension[language];
     return (
       <Styled.Tab
-        focused={currentEditor === `${i}.${mode}`}
-        onClick={onTabClick(`${i}.${mode}`)}
+        focused={currentEditor === `${i}.${extension}`}
+        onClick={onTabClick(`${i}.${extension}`)}
       >
-        {i}.{LanguageEnum[mode]}
+        {i}.{extension}
       </Styled.Tab>
     );
   });
   const codeBlockEditor =
     codeBlock?.map((code, i) => {
       const codeOnly = code.split("\n").slice(1).join("\n").slice(0, -3);
-      const mode = code.split("\n")[0].slice(3).trim();
+      const language = code.split("\n")[0].slice(3).trim();
+      const extension = gfmLangToExtension[language];
+      const mode = gfmLangToMode[language];
       return (
-        currentEditor === `${i}.${mode}` && (
+        currentEditor === `${i}.${extension}` && (
           <Editor
-            roomId={`${question.id}-q-${i}.${mode}`}
+            roomId={`${question.id}-q-${i}.${extension}`}
             color={color}
             value={codeOnly}
             mode={mode}
@@ -118,23 +182,26 @@ const WrappedEditor: FunctionComponent<{
         onClick={onTabClick(tab)}
         key={tab}
       >
-        {name}.{LanguageEnum[extension]}
+        {name}.{extension}
         <Styled.closeTab onClick={closeTab(tab)}>x</Styled.closeTab>
       </Styled.Tab>
     );
   });
-  const newCodeBlockEditor = tabList.map(
-    (tab) =>
+  const newCodeBlockEditor = tabList.map((tab) => {
+    const [name, extension] = tab.split(".");
+    const mode = langToMode[extensionToLang[extension]];
+    return (
       currentEditor === tab && (
         <Editor
           roomId={`${question.id}-${tab}`}
           color={color}
           value=""
           key={tab}
-          mode={tab.split(".")[1]}
+          mode={mode}
         />
       )
-  );
+    );
+  });
 
   return (
     <Styled.Editor>
@@ -156,8 +223,11 @@ const WrappedEditor: FunctionComponent<{
           </Styled.Tab>
           {isDropdown && (
             <Styled.Dropdown onClick={onDropDownClick}>
-              <div onClick={addNewTab("gfm")}>markdown</div>
-              <div onClick={addNewTab("javascript")}>javascript</div>
+              {languageSupport.map((language) => (
+                <div key={language} onClick={addNewTab(language)}>
+                  {language}
+                </div>
+              ))}
             </Styled.Dropdown>
           )}
         </Styled.AddTab>
