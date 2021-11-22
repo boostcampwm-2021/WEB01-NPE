@@ -1,19 +1,26 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import "codemirror/theme/material.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/gfm/gfm";
 import RandomColor from "randomcolor";
+import * as Socket from "socket.io-client";
 
 import * as Styled from "./styled";
 import Editor from "./editor";
 import { QuestionDetailType } from "@src/types";
+
+interface CodeType {
+  tabList: string[];
+  index: string;
+}
 
 const color = RandomColor();
 const gfmCodeReg = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
 
 const WrappedEditor: FunctionComponent<{
   question: QuestionDetailType;
-}> = ({ question }) => {
+  socket: Socket.Socket;
+}> = ({ question, socket }) => {
   const [currentEditor, setCurrentEditor] = useState("question");
   const [tabList, setTabList] = useState<string[]>([]);
   const [tabListIndex, setTabListIndex] = useState<number>(0);
@@ -48,17 +55,27 @@ const WrappedEditor: FunctionComponent<{
       );
     }) || "";
 
+  useEffect(() => {
+    socket.on("code", (code: CodeType) => {
+      setTabList(code.tabList);
+      setTabListIndex(Number(code.index));
+    });
+    socket.emit("code", {});
+  }, []);
+
   return (
     <Styled.Editor>
       <Styled.TabWrapper>
         <Styled.Tab
           focused={currentEditor === "question"}
           onClick={onTabClick("question")}
+          key="question"
         >
           질문
         </Styled.Tab>
         {codeBlockTab}
         <Styled.Tab
+          key="answer"
           focused={currentEditor === "answer"}
           onClick={onTabClick("answer")}
         >
@@ -74,7 +91,11 @@ const WrappedEditor: FunctionComponent<{
             <Styled.closeTab
               onClick={(e) => {
                 e.stopPropagation();
-                setTabList(tabList.filter((_tab) => _tab !== tab));
+                const newTabList = tabList.filter((_tab) => _tab !== tab);
+                socket.emit("code", {
+                  tabList: newTabList,
+                  index: tabListIndex,
+                });
                 setCurrentEditor("question");
               }}
             >
@@ -85,10 +106,14 @@ const WrappedEditor: FunctionComponent<{
         <Styled.Tab
           focused={false}
           onClick={() => {
-            setTabList([...tabList, String(tabListIndex)]);
-            setTabListIndex(tabListIndex + 1);
+            const newTabList = [...tabList, String(tabListIndex)];
+            socket.emit("code", {
+              tabList: newTabList,
+              index: tabListIndex + 1,
+            });
             setCurrentEditor(String(tabListIndex));
           }}
+          key="add"
         >
           +
         </Styled.Tab>
@@ -99,11 +124,12 @@ const WrappedEditor: FunctionComponent<{
             roomId={`${question.id}-question`}
             color={color}
             value={question.desc}
+            key="question"
           />
         )}
         {codeBlockEditor}
         {currentEditor === "answer" && (
-          <Editor roomId={`${question.id}-answer`} color={color} />
+          <Editor roomId={`${question.id}-answer`} color={color} key="answer" />
         )}
         {tabList.map(
           (tab) =>
@@ -113,6 +139,7 @@ const WrappedEditor: FunctionComponent<{
                 color={color}
                 value=""
                 overwrite={true}
+                key={tab}
               />
             )
         )}
