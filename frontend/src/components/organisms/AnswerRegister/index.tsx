@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import React, { FormEvent, FunctionComponent, useRef, useState } from "react";
+import React, { FormEvent, FunctionComponent, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/client";
 
 import { MDEditor, Button } from "@components/atoms";
@@ -11,11 +11,13 @@ import { AnswerDetailType } from "@src/types";
 
 interface Props {
   questionId: number;
+  value?: string;
   onNewAnswer: (newAnswer: AnswerDetailType) => void;
 }
-
+  
 const AnswerRegister: FunctionComponent<Props> = ({
   questionId,
+  value,
   onNewAnswer,
 }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -40,6 +42,13 @@ const AnswerRegister: FunctionComponent<Props> = ({
       },
     });
 
+  useEffect(() => {
+    if (!editorRef || !editorRef.current) return;
+
+    const editorInstance = editorRef.current.getInstance();
+    editorInstance.setHTML(value);
+  }, [value]);
+
   return (
     <Styled.AnswerRegister
       onSubmit={async (e) => {
@@ -62,7 +71,7 @@ const AnswerRegister: FunctionComponent<Props> = ({
   return (
     <Styled.AnswerRegister onSubmit={onSubmit}>
       <h2>당신의 답변</h2>
-      <MDEditor type="Answer" ref={editorRef} />
+      {<MDEditor type="Answer" ref={editorRef} />}
       <Styled.AnswerBtnContainer>
         <Button type="Submit" text="답변하기" onClick={() => {}} />
       </Styled.AnswerBtnContainer>

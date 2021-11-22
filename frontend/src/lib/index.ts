@@ -39,6 +39,7 @@ export const getOneQuestionByID = async (id: number) => {
             name
           }
           answers{
+            id
             desc
             author{
              username

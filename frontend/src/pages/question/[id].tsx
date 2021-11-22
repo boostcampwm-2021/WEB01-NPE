@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useSession } from "next-auth/client";
 
 import { Modal } from "@components/molecules";
@@ -28,6 +28,7 @@ interface Props {
 
 const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
+  const [anwerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
   const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
@@ -49,6 +50,11 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
   });
+
+  const disconnectAndPostAnswer = () => {
+    exitModal();
+    setAnswerInput("abcd");
+  };
 
   const onNewAnswer = (newAnswer: AnswerDetailType) => {
     setAnswers((prev) => [...prev, newAnswer]);
@@ -96,7 +102,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
           realtimeModalHandler={modalHandler}
         />
 
-        <h2>{answers.length} 답변들</h2>
+        <h2>{answers.length}개의 답변</h2>
 
         {answers.map((answer) => {
           return (
@@ -109,7 +115,13 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
           questionId={Number(questionId)}
           onNewAnswer={onNewAnswer}
         />
-        {isModal && <RealTimeModal question={question} exitModal={exitModal} />}
+        {isModal && (
+          <RealTimeModal
+            question={question}
+            exitModal={exitModal}
+            disconnectAndPostAnswer={disconnectAndPostAnswer}
+          />
+        )}
       </MainContainer>
       {show && (
         <Modal

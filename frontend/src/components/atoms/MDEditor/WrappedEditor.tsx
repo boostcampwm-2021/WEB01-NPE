@@ -8,25 +8,20 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 interface Props {
   editorRef: any;
-  type?: string;
+  type: "Question" | "Answer";
+  initialValue?: string;
 }
 
-const WrappedEditor: FunctionComponent<Props> = (props) => {
-  return (
-    <Editor
-      ref={props.editorRef}
-      initialValue={
-        props.type === "Answer"
-          ? `## 답변을 입력해주세요`
-          : `## 질문을 입력해주세요.`
-      }
-      previewStyle="tab"
-      height={props.type === "Answer" ? "300px" : "600px"}
-      initialEditType="markdown"
-      useCommandShortcut={true}
-      plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
-    />
-  );
-};
-
+const WrappedEditor: FunctionComponent<Props> = (props) => (
+  <Editor
+    ref={props.editorRef}
+    previewStyle="tab"
+    initialValue={props.initialValue}
+    placeholder="질문을 입력해주세요"
+    height={props.type === "Answer" ? "300px" : "600px"}
+    initialEditType="markdown"
+    useCommandShortcut={true}
+    plugins={[colorSyntax, [codeSyntaxHighlight, { highlighter: Prism }]]}
+  />
+);
 export default WrappedEditor;

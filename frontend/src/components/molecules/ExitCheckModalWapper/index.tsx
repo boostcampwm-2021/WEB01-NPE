@@ -8,22 +8,21 @@ import { QuestionDetailType } from "@src/types";
 interface IExitCheckModalWarpperProps {
   question: QuestionDetailType;
   disconnectAndExit: VoidFunction;
+  disconnectAndPostAnswer: VoidFunction;
 }
 
 const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps> = ({
   question,
   disconnectAndExit,
+  disconnectAndPostAnswer,
 }) => {
   const [session] = useSession();
-  const [visibility, setVisibility] = React.useState("hidden");
   if (!session || !session.accessToken) throw new Error("Something wrong!");
 
-  React.useEffect(() => {
+  const turnoffModal = () => {
     const exitModalDiv = document.getElementById("exitModal");
-    exitModalDiv!.style.visibility = visibility;
-  }, [visibility]);
-
-  const turnoffModal = () => setVisibility("hidden");
+    exitModalDiv!.style.visibility = "hidden";
+  };
 
   return (
     <>
@@ -55,7 +54,7 @@ const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps
                 <Button
                   type="realtime_exit"
                   text="답변달기"
-                  onClick={disconnectAndExit}
+                  onClick={disconnectAndPostAnswer}
                 ></Button>
                 <Button
                   type="realtime_exit"
