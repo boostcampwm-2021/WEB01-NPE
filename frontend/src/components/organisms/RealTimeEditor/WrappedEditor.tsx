@@ -31,7 +31,7 @@ const languageSupport = [
   "CSS",
 ];
 
-const gfmLangToMode = {
+const gfmLangToMode: Record<string, string> = {
   javascript: "javascript",
   c: "clike",
   cpp: "clike",
@@ -43,7 +43,7 @@ const gfmLangToMode = {
   css: "css",
 };
 
-const gfmLangToExtension = {
+const gfmLangToExtension: Record<string, string> = {
   javascript: "js",
   c: "c",
   cpp: "c++",
@@ -55,7 +55,7 @@ const gfmLangToExtension = {
   css: "css",
 };
 
-const langToMode = {
+const langToMode: Record<string, string> = {
   MarkDown: "gfm",
   Javascript: "javascript",
   "C/C++": "clike",
@@ -67,7 +67,7 @@ const langToMode = {
   CSS: "css",
 };
 
-const langToExtension = {
+const langToExtension: Record<string, string> = {
   MarkDown: "md",
   Javascript: "js",
   "C/C++": "c",
@@ -79,7 +79,9 @@ const langToExtension = {
   CSS: "css",
 };
 
-const extensionToLang = Object.keys(langToExtension).reduce((obj, key) => {
+const extensionToLang: Record<string, string> = Object.keys(
+  langToExtension
+).reduce((obj: Record<string, string>, key) => {
   obj[langToExtension[key]] = key;
   return obj;
 }, {});
