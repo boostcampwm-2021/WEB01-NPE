@@ -34,12 +34,12 @@ const Editor: FunctionComponent<{
   useEffect(() => {
     if (!editorRef) return;
 
+    const yjsEndpoint =
+      process.env.NODE_ENV === "production"
+        ? `wss://nullpointerexception.ml/socket`
+        : `ws://localhost:1234`;
     const ydoc = new Y.Doc();
-    const provider = new WebsocketProvider(
-      "ws://101.101.217.233:1234",
-      roomId,
-      ydoc
-    );
+    const provider = new WebsocketProvider(yjsEndpoint, roomId, ydoc);
     const yText = ydoc.getText("codemirror");
     const yUndoManager = new Y.UndoManager(yText);
     provider.awareness.setLocalStateField("user", {
