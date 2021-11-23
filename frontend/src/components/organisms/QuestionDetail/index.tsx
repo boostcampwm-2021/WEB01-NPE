@@ -20,6 +20,7 @@ const QuestionDetail: FunctionComponent<Props> = ({
   realtimeModalHandler,
 }) => {
   const {
+    id,
     title,
     realtimeShare,
     author,
@@ -81,7 +82,9 @@ const QuestionDetail: FunctionComponent<Props> = ({
           )}
         </Styled.QuestionHeaderInfo>
       </Styled.QuestionHeader>
-      <DetailBody detail={{ desc, tags, thumbupCount, author }} />
+      <DetailBody
+        detail={{ id: Number(id), desc, tags, thumbupCount, author }}
+      />
 
       {deleteError && (
         <Styled.ModalWrapper>

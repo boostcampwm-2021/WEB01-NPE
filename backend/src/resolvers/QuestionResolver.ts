@@ -7,6 +7,7 @@ import {
   Query,
   Resolver,
   Root,
+  UseMiddleware,
 } from "type-graphql";
 import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
@@ -20,6 +21,8 @@ import TagService from "../services/TagService";
 import UserService from "../services/UserService";
 import "reflect-metadata";
 import { Container } from "typeorm-typedi-extensions";
+import ThumbService from "../services/ThumbService";
+import AuthMiddleware from "../middlewares/AuthMiddleware";
 
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new Error("Auth Error");
@@ -32,6 +35,7 @@ export default class QuestionResolver {
   private userService: UserService = Container.get(UserService);
   private tagService: TagService = Container.get(TagService);
   private postService: PostService = Container.get(PostService);
+  private thumbService: ThumbService = Container.get(ThumbService);
 
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",
@@ -40,7 +44,6 @@ export default class QuestionResolver {
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
     const question = await this.postService.findOneQuestionById(id);
-
     return question;
   }
 
@@ -51,7 +54,6 @@ export default class QuestionResolver {
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
     const question = await this.postService.viewOneQuestionById(id);
-
     return question;
   }
 
@@ -154,5 +156,36 @@ export default class QuestionResolver {
     const isDeleted = await this.postService.deleteQuestion(questionId);
 
     return isDeleted;
+  }
+
+  @Mutation(() => Boolean, {
+    description: "질문글 좋아요 Mutation. 성공 여부 boolean 반환",
+  })
+  async thumbUpQuestion(
+    @Arg("questionId", { description: "좋아요 표시할 질문글의 ID" })
+    questionId: number,
+    @Ctx("userId") userId: number
+  ): Promise<boolean> {
+    console.log("userId: " + userId);
+    const result = await this.thumbService.questionThumbUp(questionId, userId);
+
+    return result;
+  }
+
+  @Mutation(() => Boolean, {
+    description: "질문글 싫어요 Mutation. 성공 여부 boolean 반환",
+  })
+  async thumbDownQuestion(
+    @Arg("questionId", { description: "싫어요 표시할 질문글의 ID" })
+    questionId: number,
+    @Ctx("userId") userId: number
+  ): Promise<boolean> {
+    console.log("userId: " + userId);
+    const result = await this.thumbService.questionThumbDown(
+      questionId,
+      userId
+    );
+
+    return result;
   }
 }

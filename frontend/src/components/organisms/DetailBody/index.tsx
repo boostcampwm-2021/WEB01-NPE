@@ -10,11 +10,11 @@ interface Props {
 }
 
 const DetailBody: FunctionComponent<Props> = ({ detail }) => {
-  const { thumbupCount, desc, tags, author } = detail;
+  const { id, thumbupCount, desc, tags, author } = detail;
   return (
     <Styled.DetailBody>
       <Styled.VoteContainer>
-        <Vote thumbupCount={thumbupCount} />
+        <Vote id={id} thumbupCount={thumbupCount} />
       </Styled.VoteContainer>
       <Styled.DetailBodyInner>
         <Styled.DetailBodyDesc>

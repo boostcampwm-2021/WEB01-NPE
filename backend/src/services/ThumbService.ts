@@ -44,4 +44,34 @@ export default class ThumbService {
       });
     return true;
   }
+  public async questionThumbDown(
+    questionId: number,
+    userId: number
+  ): Promise<boolean> {
+    const alreadyExists = await this.questionThumb.findOne({
+      postQuestionId: questionId,
+      userId: userId,
+    });
+    if (alreadyExists) return false;
+
+    const newThumbDown = new QuestionThumb();
+    newThumbDown.postQuestionId = questionId;
+    newThumbDown.userId = userId;
+    newThumbDown.value = -1;
+
+    const question = await this.questionRepository.findOneQuestionById(
+      questionId
+    );
+    question.thumbupCount--;
+
+    await getConnection()
+      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(newThumbDown);
+        await transactionalEntityManager.save(question);
+      })
+      .catch((error) => {
+        throw error;
+      });
+    return true;
+  }
 }
