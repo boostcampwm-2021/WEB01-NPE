@@ -48,10 +48,14 @@ export default (io: socketio.Server) => {
 
       socket.emit("stream:initUsers", Object.values(users[roomName]));
       socket.to(roomName).emit("stream:userJoin", Object.values(user)[0]);
+      io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
     });
     socket.on("disconnect", (reason) => {
-      console.log(reason);
-      // delete users[roomName][socket!.id];
+      const userName = users[roomName][socket!.id].user.name;
+      io.to(roomName).emit("user exit", [socket!.id, userName]);
+      delete users[roomName][socket!.id];
+      io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
+      console.log(socket.id + " is disconnected. reason : " + reason);
     });
 
     socket.on("chat", (chatItem) => {

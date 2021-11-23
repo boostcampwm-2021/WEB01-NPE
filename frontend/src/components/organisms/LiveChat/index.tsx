@@ -20,20 +20,51 @@ interface ChatType {
   date: string;
 }
 
-let users: { [socketId: string]: UserType } = {};
+// let users: { [socketId: string]: UserType } = {};
 
 const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
   const [session, loading] = useSession();
   const [chats, setChats] = useState<ChatType[]>([]);
+  const [users, setUsers] = useState<{ [socketId: string]: UserType }>({});
+  const [userCount, setUserCount] = useState<number>(0);
   useEffect(() => {
     socket.on("chat", (chatItem: ChatType) => {
       setChats((chatList: ChatType[]) => [...chatList, chatItem]);
     });
     socket.on("user join", ([socketId, user]) => {
-      users[socketId] = user;
+      const newUser = {};
+      newUser[socketId] = user;
+      setUsers((prevUsers) => {
+        return {
+          ...prevUsers,
+          ...newUser,
+        };
+      });
+      const newChat: ChatType = {
+        id: "alert",
+        message: `${user.user.name} 님이 참여하셨습니다!`,
+        date: "",
+      };
+      setChats((chatList: ChatType[]) => [...chatList, newChat]);
+    });
+    socket.on("user exit", ([socketId, name]) => {
+      const newChat = {
+        id: "alert",
+        message: `${name} 님이 퇴장하셨습니다!`,
+        date: "",
+      };
+      setChats((chatList: ChatType[]) => [...chatList, newChat]);
     });
     socket.on("init users", (initUsers) => {
-      users = { ...initUsers };
+      setUsers((prevUsers) => {
+        return {
+          ...prevUsers,
+          ...initUsers,
+        };
+      });
+    });
+    socket.on("user count", (count) => {
+      setUserCount(count);
     });
   }, []);
   const onKeyPress = (event: KeyboardEvent) => {
@@ -62,6 +93,13 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
     }:${date.getMinutes()}`;
   };
   const showChat = (chat: ChatType, index: number) => {
+    if (chat.id === "alert") {
+      return (
+        <Styled.Message key={index}>
+          <Styled.Signal>{chat.message}</Styled.Signal>
+        </Styled.Message>
+      );
+    }
     if (chat.id == socket.id) {
       return (
         <Styled.Message key={index}>
@@ -82,8 +120,10 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
           <Styled.UserImg>
             <Image width={30} height={30} src={users[chat.id].user.image} />
           </Styled.UserImg>
-          <Styled.UserName>{users[chat.id].user.name}</Styled.UserName>
-          <Styled.ChatDate>{convertToString(chat.date)}</Styled.ChatDate>
+          <Styled.UserDetail>
+            <Styled.UserName>{users[chat.id].user.name}</Styled.UserName>
+            <Styled.ChatDate>{convertToString(chat.date)}</Styled.ChatDate>
+          </Styled.UserDetail>
         </Styled.UserInformation>
         <Styled.ChatContent>{chat.message}</Styled.ChatContent>
       </Styled.Message>
@@ -93,7 +133,7 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
     <Styled.ChatContainer>
       <Styled.ChatHeader>
         채팅
-        <Styled.UserCount>{Object.keys(users).length}</Styled.UserCount>
+        <Styled.UserCount>{userCount}</Styled.UserCount>
       </Styled.ChatHeader>
       <Styled.Messages>{chats.map(showChat)}</Styled.Messages>
       <Styled.InputContainer>

@@ -6,11 +6,12 @@ services:
       context: ./frontend
     command: sh -c "npm run start"
     ports:
-      - "80:3000"
+      - "3000:3000"
   server:
     build:
       dockerfile: Dockerfile
       context: ./backend
     ports:
+      - "1234:1234"
       - "4000:4000"
     command: sh -c "npm run start"
