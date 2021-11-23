@@ -80,7 +80,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
         <meta property="og:locale" content="ko_KR" />
         <meta
           property="og:url"
-          content={`http://118.67.142.132/question/${questionId}`}
+          content={`https://nullpointerexception.ml/question/${questionId}`}
         />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:domain" content="118.67.142.132.com" />
