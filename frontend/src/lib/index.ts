@@ -288,3 +288,14 @@ export const registerIfNotExists = async (
   });
   return data;
 };
+
+export const deleteQuestionById = async (questionId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation{
+      deleteQuestion(questionId: ${questionId})
+    }
+    `,
+  });
+  return data;
+};
