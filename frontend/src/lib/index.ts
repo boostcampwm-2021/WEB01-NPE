@@ -177,6 +177,7 @@ export const getUserProfileData = async (userId: number) => {
               }
             desc
             tags {
+              id
               name
             }
             viewCount
