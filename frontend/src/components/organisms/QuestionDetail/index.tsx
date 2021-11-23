@@ -5,17 +5,11 @@ import { Button, ContentText, TitleText } from "@components/atoms";
 import { DetailBody } from "@components/organisms";
 import { QuestionTitle } from "@components/molecules";
 import { QuestionDetailType } from "@src/types";
-import { gql, useMutation } from "@apollo/client";
 
 import * as Styled from "./styled";
 import { useSession } from "next-auth/client";
 import { deleteQuestionById } from "@src/lib";
 
-const DELETE_QUESTION = gql`
-  mutation DeleteQuestion($questionId: Float!) {
-    deleteQuestion(questionId: $questionId)
-  }
-`;
 interface Props {
   question: QuestionDetailType;
   realtimeModalHandler: VoidFunction;
