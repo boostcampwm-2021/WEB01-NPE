@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 interface Props {
   type: "Question" | "Answer";

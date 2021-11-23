@@ -24,6 +24,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Noto Sans KR", sans-serif;
+  height: 100%;
+  width: 100%;
 }
 
 a {

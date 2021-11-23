@@ -5,7 +5,6 @@ interface SessionUser {
   userId: number;
   user: {
     name: string;
-    email: string;
     image: string;
   };
   expires: string;
@@ -23,7 +22,6 @@ interface CodeType {
 const users: UsersType = {};
 const codes: CodeType = { tabList: [], index: "0" };
 let streamUserList: string[] = [];
-
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
@@ -47,6 +45,9 @@ export default (io: socketio.Server) => {
       users[roomName][socket.id] = user;
       socket.emit("init users", users[roomName]);
       socket.to(roomName).emit("user join", [socket.id, user]);
+
+      socket.emit("stream:initUsers", Object.values(users[roomName]));
+      socket.to(roomName).emit("stream:userJoin", Object.values(user)[0]);
       io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
     });
     socket.on("disconnect", (reason) => {
@@ -60,39 +61,6 @@ export default (io: socketio.Server) => {
     socket.on("chat", (chatItem) => {
       io.to(roomName).emit("chat", chatItem);
     });
-    socket.on("stream:join", () => {
-      if (!streamUserList.includes(socket.id)) {
-        streamUserList.push(socket.id);
-      }
-      io.sockets.to(socket.id).emit("stream:userList", streamUserList);
-    });
-
-    socket.on("stream:disconnect", () => {
-      streamUserList = streamUserList.filter(
-        (socketId) => socketId !== socket.id
-      );
-      io.sockets.to(socket.id).emit("stream:userList", streamUserList);
-    });
-
-    socket.on("stream:candidate", (data) => {
-      socket.to(data.receiveSocketId).emit("stream:receiveCandidate", {
-        candidate: data.candidate,
-        sendSocketId: data.sendSocketId,
-      });
-    });
-
-    socket.on("stream:offer", (data) => {
-      socket.to(data.receiveSocketId).emit("stream:receiveOffer", {
-        sdp: data.sdp,
-        sendSocketId: data.sendSocketId,
-      });
-    });
-    socket.on("stream:answer", (data) => {
-      socket.to(data.receiveSocketId).emit("stream:receiveAnswer", {
-        sdp: data.sdp,
-        sendSocketId: data.sendSocketId,
-      });
-    });
 
     socket.on("code", (code) => {
       if (code.tabList !== undefined) {
@@ -100,6 +68,35 @@ export default (io: socketio.Server) => {
         codes.index = code.index;
       }
       io.to(roomName).emit("code", codes);
+    });
+
+    socket.on("disconnect", () => {
+      streamUserList = streamUserList.filter((user: any) => user !== socket.id);
+      io.emit("stream:user_exit", { id: socket.id });
+    });
+
+    socket.on("stream:offer", (data) => {
+      socket.to(data.offerReceiveID).emit("stream:getOffer", {
+        sdp: data.sdp,
+        offerSendID: data.offerSendID,
+      });
+    });
+    socket.on("stream:answer", (data) => {
+      socket.to(data.answerReceiveID).emit("stream:getAnswer", {
+        sdp: data.sdp,
+        answerSendID: data.answerSendID,
+      });
+    });
+    socket.on("stream:candidate", (data) => {
+      socket.to(data.candidateReceiveID).emit("stream:getCandidate", {
+        candidate: data.candidate,
+        candidateSendID: data.candidateSendID,
+      });
+    });
+
+    socket.on("stream:join", () => {
+      streamUserList.push(socket.id);
+      io.sockets.to(socket.id).emit("stream:all_users", streamUserList);
     });
   });
 };

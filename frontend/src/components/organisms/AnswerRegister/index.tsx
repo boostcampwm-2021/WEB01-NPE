@@ -29,9 +29,8 @@ const AnswerRegister: FunctionComponent<Props> = ({
   const [isModal, setIsModal] = useState<boolean>(false);
   const editorRef = useRef<any>(null);
   const [session] = useSession();
-  const router = useRouter();
 
-  const [postAnswer, { data, loading, error }] = useMutation(POST_ANSWER);
+  const [postAnswer] = useMutation(POST_ANSWER);
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
     return editorInstance.getMarkdown();
@@ -55,7 +54,6 @@ const AnswerRegister: FunctionComponent<Props> = ({
 
   useEffect(() => {
     if (!editorRef || !editorRef.current) return;
-
     const editorInstance = editorRef.current.getInstance();
     editorInstance.setHTML(value);
   }, [value]);
