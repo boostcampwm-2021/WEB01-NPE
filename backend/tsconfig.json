@@ -9,13 +9,12 @@
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "typeRoots": ["./src"]
   },
   "include": ["src", "test"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
-    "include": [
-        "jest"
-    ]
-}
+    "include": ["jest"]
+  }
 }
