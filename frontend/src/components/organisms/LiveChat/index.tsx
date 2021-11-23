@@ -41,7 +41,6 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
           ...newUser,
         };
       });
-      setUserCount((prevCount) => prevCount + 1);
       const newChat: ChatType = {
         id: "alert",
         message: `${user.user.name} 님이 참여하셨습니다!`,
@@ -56,15 +55,16 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
         date: "",
       };
       setChats((chatList: ChatType[]) => [...chatList, newChat]);
-      setUserCount((prevCount) => prevCount - 1);
     });
-    socket.on("init users", ([initUsers, count]) => {
+    socket.on("init users", (initUsers) => {
       setUsers((prevUsers) => {
         return {
           ...prevUsers,
           ...initUsers,
         };
       });
+    });
+    socket.on("user count", (count) => {
       setUserCount(count);
     });
   }, []);
