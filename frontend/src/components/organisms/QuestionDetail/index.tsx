@@ -8,6 +8,8 @@ import { QuestionDetailType } from "@src/types";
 import { gql, useMutation } from "@apollo/client";
 
 import * as Styled from "./styled";
+import { useSession } from "next-auth/client";
+import { deleteQuestionById } from "@src/lib";
 
 const DELETE_QUESTION = gql`
   mutation DeleteQuestion($questionId: Float!) {
@@ -35,23 +37,19 @@ const QuestionDetail: FunctionComponent<Props> = ({
   } = question;
 
   const [deleteError, setDeleteError] = useState(false);
-  const [deleteQuestionById, { data: isDeleted }] = useMutation(
-    DELETE_QUESTION,
-    {
-      onError: () => {
-        setDeleteError(true);
-        setTimeout(() => {
-          setDeleteError(false);
-        }, 800);
-      },
-    }
-  );
+  const user = useSession();
 
-  const onDeleteQuestion = () => {
+  const onDeleteQuestion = async () => {
     if (window.confirm("삭제하시겠습니까?")) {
-      deleteQuestionById({ variables: { questionId: Number(question.id) } });
-      if (isDeleted) {
-        Router.push("/");
+      try {
+        const { data: isDeleted } = await deleteQuestionById(
+          Number(question.id)
+        );
+        if (isDeleted) {
+          Router.push("/");
+        }
+      } catch (err) {
+        setDeleteError(true);
       }
     }
   };
@@ -84,7 +82,9 @@ const QuestionDetail: FunctionComponent<Props> = ({
             type="Default"
             text={`Asked ${createdAt.slice(0, 10)} View ${viewCount}`}
           ></ContentText>
-          <span onClick={onDeleteQuestion}>삭제</span>
+          {user[0]?.userId === Number(author.id) && (
+            <span onClick={onDeleteQuestion}>삭제</span>
+          )}
         </Styled.QuestionHeaderInfo>
       </Styled.QuestionHeader>
       <DetailBody detail={{ desc, tags, thumbupCount, author }} />
