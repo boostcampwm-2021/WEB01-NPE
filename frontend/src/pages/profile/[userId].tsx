@@ -1,5 +1,6 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
+import Head from "next/head";
 import styled from "styled-components";
 
 import {
@@ -37,6 +38,45 @@ const ProfilePage: NextPage<Props> = ({
 }) => {
   return (
     <>
+      <Head>
+        <title>User {userProfileData.username} - NullPointerException</title>
+        <meta
+          name="description"
+          content="NullPointerException - 나와봐! 내가 알려줄께: 개발자들을 위한 실시간
+          QA 서비스"
+        />
+        <meta name="keywords" content="" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={userProfileData.username} />
+        <meta
+          property="og:description"
+          content="NullPointerException - 나와봐! 내가 알려줄께: 개발자들을 위한 실시간
+          QA 서비스"
+        />
+        <meta property="og:image" content={userProfileData.profileUrl} />
+        <meta property="og:site_name" content="NullPointerException" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta
+          property="og:url"
+          content={`https://nullpointerexception.ml/profile/${userProfileData.id}`}
+        />
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:domain"
+          content={`https://nullpointerexception.ml/profile/${userProfileData.id}`}
+        />
+        <meta
+          name="twitter:title"
+          property="og:title"
+          content={userProfileData.username}
+        />
+        <meta
+          name="twitter:description"
+          property="og:description"
+          content="NullPointerException - 나와봐! 내가 알려줄께: 개발자들을 위한 실시간
+          QA 서비스"
+        ></meta>
+      </Head>
       <Header type="Profile" setTexts={() => ""} />
       <MainContainer>
         <HeaderText type={"Default"} text={"프로필"} />

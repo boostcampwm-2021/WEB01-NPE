@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NextPage, GetServerSideProps } from "next";
+import Head from "next/head";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -71,6 +72,42 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
   return (
     <>
+      <Head>
+        <title>
+          NullPointerException - 나와봐! 내가 알려줄께: 개발자들을 위한 실시간
+          QA 서비스
+        </title>
+        <meta
+          name="description"
+          content="나와봐! 내가 알려줄께: 개발자들을 위한 실시간 QA 서비스"
+        />
+        <meta name="keywords" content="" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="NullPointerException" />
+        <meta
+          property="og:description"
+          content="나와봐! 내가 알려줄께: 개발자들을 위한 실시간 QA 서비스"
+        />
+        <meta
+          property="og:image"
+          content="https://user-images.githubusercontent.com/50866506/142799853-901b29c1-5836-467e-bf89-f8f37a08a17f.png"
+        />
+        <meta property="og:site_name" content="NullPointerException" />
+        <meta property="og:locale" content="ko_KR" />
+        <meta property="og:url" content={`https://nullpointerexception.ml`} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:domain" content="https://nullpointerexception.ml" />
+        <meta
+          name="twitter:title"
+          property="og:title"
+          content="NullPointerException"
+        />
+        <meta
+          name="twitter:description"
+          property="og:description"
+          content="나와봐! 내가 알려줄께: 개발자들을 위한 실시간 QA 서비스"
+        ></meta>
+      </Head>
       <Header type="Default" setTexts={setTexts} />
       <MainContainer>
         <SideBar
