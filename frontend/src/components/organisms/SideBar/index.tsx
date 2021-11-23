@@ -78,7 +78,12 @@ const SideBar: FunctionComponent<Props> = ({
       </Styled.Divider>
       <Styled.UlTags>
         {selectedTags.map((tag) => (
-          <SideTag type="Default" text={tag.name} onDelete={onDelete} />
+          <SideTag
+            key={tag.id}
+            type="Default"
+            text={tag.name}
+            onDelete={onDelete}
+          />
         ))}
       </Styled.UlTags>
     </Styled.Container>
