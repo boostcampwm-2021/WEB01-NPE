@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { useSession } from "next-auth/client";
 import Router from "next/router";
+import Link from "next/link";
 
 import * as Styled from "./styled";
 import { Logo, Input, Button } from "@components/atoms";
@@ -87,9 +88,11 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
 
   return (
     <Styled.HeaderDiv>
-      <Styled.LogoAnchor href="/">
-        <Logo type="Default" />
-      </Styled.LogoAnchor>
+      <Link href="/">
+        <a>
+          <Logo type="Default" />
+        </a>
+      </Link>
 
       <Styled.SearchForm {...headerProps} onSubmit={submitSearch}>
         <Input text={"Search..."} size={"medium"} ref={searchText} />
