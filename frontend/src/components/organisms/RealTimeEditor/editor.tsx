@@ -36,7 +36,7 @@ const Editor: FunctionComponent<{
 
     const yjsEndpoint =
       process.env.NODE_ENV === "production"
-        ? `wss://nullpointerexception.ml/socket`
+        ? `wss://nullpointerexception.ml/yjs`
         : `ws://localhost:1234`;
     const ydoc = new Y.Doc();
     const provider = new WebsocketProvider(yjsEndpoint, roomId, ydoc);
