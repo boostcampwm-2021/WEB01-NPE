@@ -26,6 +26,13 @@ const types: { [key: string]: StyleProps } = {
     fontWeight: "bold",
     ellipsis: true,
   },
+
+  LiveStream: {
+    color: "white",
+    fontSize: "12px",
+    fontWeight: "bold",
+    ellipsis: true,
+  },
 };
 
 const Text: FunctionComponent<Props> = ({ type, text }) => {

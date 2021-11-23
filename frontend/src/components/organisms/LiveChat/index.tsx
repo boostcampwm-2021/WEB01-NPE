@@ -9,7 +9,6 @@ interface UserType {
   userId: number;
   user: {
     name: string;
-    email: string;
     image: string;
   };
   expires: string;

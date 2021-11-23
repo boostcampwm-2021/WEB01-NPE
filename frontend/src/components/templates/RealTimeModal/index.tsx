@@ -8,7 +8,7 @@ import { RealTimeEditor } from "@components/organisms";
 import { QuestionDetailType } from "@src/types";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
-import Mike from "@src/components/organisms/Mike";
+import LiveStream from "@src/components/organisms/LiveAudioStream/";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
@@ -51,7 +51,7 @@ const RealTimeModal: FunctionComponent<{
     <Styled.ModalWrapper>
       <Styled.Modal>
         <Styled.temp>
-          {SOCKET && <Mike socket={SOCKET} />}
+          {SOCKET && <LiveStream socket={SOCKET} />}
           {SOCKET && <RealTimeEditor question={question} socket={SOCKET} />}
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.temp>
