@@ -38,7 +38,14 @@ const ProfilePage: NextPage<Props> = ({
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image width={192} height={192} src={userProfileData.profileUrl} />
+            <Image
+              width={192}
+              height={192}
+              src={userProfileData.profileUrl}
+              placeholder="blur"
+              blurDataURL={`${userProfileData.profileUrl}&s40`}
+              priority={true}
+            />
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />

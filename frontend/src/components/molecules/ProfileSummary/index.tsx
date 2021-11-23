@@ -18,7 +18,14 @@ const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
   return (
     <Styled.Anchor onClick={onProfileButton}>
       <Styled.ImageDiv>
-        <Image width={48} height={48} src={author.profileUrl} />
+        <Image
+          width={48}
+          height={48}
+          src={author.profileUrl}
+          placeholder="blur"
+          blurDataURL={`${author.profileUrl}&s40`}
+          priority={true}
+        />
       </Styled.ImageDiv>
       <Styled.TextDiv>
         <Text type="Header" text={author.username} />
