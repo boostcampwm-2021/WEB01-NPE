@@ -1,5 +1,5 @@
 import React, { FunctionComponent, Dispatch, SetStateAction } from "react";
-import Image from "next/dist/client/image";
+import Image from "next/image";
 
 import * as Styled from "./styled";
 import image from "./mic.png";

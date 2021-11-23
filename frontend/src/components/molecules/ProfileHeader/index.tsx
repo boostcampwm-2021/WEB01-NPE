@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from "react";
+import Image from "next/image";
 
 import * as Styled from "./styled";
-import { Image, Text } from "@components/atoms";
+import { Text } from "@components/atoms";
 interface Props {
   src: string;
   text: string;
@@ -12,7 +13,7 @@ const ProfileHeader: FunctionComponent<Props> = ({ src, text, onClick }) => {
   return (
     <Styled.ProfileDiv onClick={onClick}>
       <Styled.ImageDiv>
-        <Image type="Default" src={src} />
+        <Image src={src} width={24} height={24} />
       </Styled.ImageDiv>
       <Styled.TextDiv>
         <Text type="Header" text={text} />
