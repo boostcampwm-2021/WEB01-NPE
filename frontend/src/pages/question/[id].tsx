@@ -83,7 +83,10 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
           content={`https://nullpointerexception.ml/question/${questionId}`}
         />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:domain" content="118.67.142.132.com" />
+        <meta
+          name="twitter:domain"
+          content="https://nullpointerexception.ml/question/${questionId}"
+        />
         <meta
           name="twitter:title"
           property="og:title"
