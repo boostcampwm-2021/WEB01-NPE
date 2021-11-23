@@ -79,6 +79,7 @@ export const viewOneQuestionByID = async (id: number) => {
           name
         }
         answers{
+          id
           desc
           author{
            username
