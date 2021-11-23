@@ -50,6 +50,7 @@ useContainer(typeDiContainer);
       origin: "*",
       credentials: true,
     },
+    path: "/socket",
   });
   socketModule(io);
 })();
