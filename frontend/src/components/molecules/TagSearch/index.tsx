@@ -1,8 +1,9 @@
 import React, { createRef, FunctionComponent, useState } from "react";
+import Image from "next/image";
 
 import * as Styled from "./styled";
 import { TagType } from "@src/types";
-
+import plusImg from "./plus2.svg";
 interface Props {
   onSubmit: (value: TagType) => void;
   tagList: TagType[];
@@ -50,7 +51,7 @@ const TagSearch: FunctionComponent<Props> = ({ onSubmit, tagList }) => {
           inputTag!.current!.value = "";
         }}
       >
-        추가
+        <Image src={plusImg} width={20} height={20} />
       </Styled.Button>
       {candidateTags.length !== 0 && (
         <Styled.TagList>{candidateTags.map(getItem)}</Styled.TagList>
