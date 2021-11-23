@@ -14,9 +14,11 @@ import AnswerInput from "../dto/AnswerInput";
 import PostService from "../services/PostService";
 import UserService from "../services/UserService";
 import { Container } from "typeorm-typedi-extensions";
+import AuthenticationError from "../errors/AuthenticationError";
+import AuthorizationError from "../errors/AuthorizationError";
 
 const getUserId = (headers: any): number => {
-  if (!headers.authorization) throw new Error("Auth Error");
+  if (!headers.authorization) throw new AuthenticationError();
   const token = headers.authorization.split(" ")[1];
   return (verify(token, "keyboard cat") as any).userId;
 };
@@ -60,7 +62,7 @@ export default class AnswerResolver {
     const userId = getUserId(headers);
     const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
-    if (userId !== anwerAuthorId) throw new Error("Not your Post!");
+    if (userId !== anwerAuthorId) throw new AuthorizationError();
     const updateResult = await this.postService.updateAnswer(
       answerId,
       answerInput
@@ -79,7 +81,7 @@ export default class AnswerResolver {
     const userId = getUserId(headers);
     const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
-    if (userId !== anwerAuthorId) throw new Error("Not your Post!");
+    if (userId !== anwerAuthorId) throw new AuthorizationError();
     const isDeleted = await this.postService.deleteAnswer(answerId);
 
     return isDeleted;

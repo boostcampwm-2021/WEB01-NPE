@@ -15,6 +15,7 @@ import { authChecker } from "./middlewares/AuthChecker";
 import { graphqlHTTP } from "express-graphql";
 import { useContainer } from "typeorm";
 import { Container as typeDiContainer } from "typeorm-typedi-extensions";
+import AuthMiddleware from "./middlewares/AuthMiddleware";
 
 // typeorm Container로 typeDI Container사용
 useContainer(typeDiContainer);
@@ -64,6 +65,7 @@ const graphQLMiddleware = async () => {
       Resolver.AnswerResolver,
     ],
     authChecker: authChecker,
+    globalMiddlewares: [AuthMiddleware],
   });
 
   return graphqlHTTP({

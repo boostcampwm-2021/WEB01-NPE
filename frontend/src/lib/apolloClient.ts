@@ -19,9 +19,9 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(async (_, { headers }) => {
   const session = await getSession();
-  if (!session) return {};
+  if (!session || !session.userId) return {};
 
-  const token = sign(session, "keyboard cat");
+  const token = sign({ userId: session.userId }, "keyboard cat");
 
   return {
     headers: {
