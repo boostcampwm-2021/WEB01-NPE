@@ -83,6 +83,8 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
     };
   }, []);
 
+  if (loading) return <Styled.HeaderDiv />;
+
   return (
     <Styled.HeaderDiv>
       <Styled.LogoAnchor href="/">
