@@ -321,3 +321,14 @@ export const deleteQuestionById = async (questionId: number) => {
   });
   return data;
 };
+
+export const deleteAnswerById = async (answerId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation{
+      deleteAnswer(answerId: ${answerId})
+    }
+    `,
+  });
+  return data;
+};

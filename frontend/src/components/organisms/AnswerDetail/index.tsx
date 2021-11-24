@@ -11,7 +11,7 @@ interface Props {
 const AnswerDetail: FunctionComponent<Props> = ({ answer }) => {
   return (
     <Styled.Container>
-      <DetailBody detail={answer} />
+      <DetailBody detail={answer} type="Answer" />
     </Styled.Container>
   );
 };
