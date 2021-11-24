@@ -1,17 +1,10 @@
-import React, {
-  FunctionComponent,
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-} from "react";
+import React, { FunctionComponent, useEffect, useState, useRef } from "react";
 
 import Peer from "simple-peer";
 import * as Socket from "socket.io-client";
 import * as Styled from "./styled";
 import StreamProfile from "./StreamProfile";
 import Audio from "./Audio";
-import MuteButton from "./MuteButton";
 
 interface UserType {
   userId: number;
@@ -29,7 +22,7 @@ interface Props {
 
 const LiverStream: FunctionComponent<Props> = ({ socket, questionId }) => {
   const [profileUsers, setProfileUsers] = useState([]);
-  const localAudioRef = useRef<HTMLVideoElement>(null);
+  const localAudioRef = useRef<HTMLAudioElement>(null);
   const peersRef = useRef<{ peerID: any; peer: any }[]>([]);
   const [peers, setPeers] = useState<any[]>([]);
 
@@ -62,10 +55,9 @@ const LiverStream: FunctionComponent<Props> = ({ socket, questionId }) => {
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
-        video: { width: 150, height: 100 },
+        video: false,
       })
       .then((localStream) => {
-        localStream.getAudioTracks()[0].enabled = false;
         if (localAudioRef.current) {
           localAudioRef.current.srcObject = localStream;
         }
@@ -114,39 +106,20 @@ const LiverStream: FunctionComponent<Props> = ({ socket, questionId }) => {
       });
   }, []);
 
-  useEffect(() => {
-    socket.on("init users", (users) => {
-      setProfileUsers(users);
-    });
-    socket.on("user join", ([socketId, user]) => {
-      setProfileUsers([...profileUsers, user]);
-    });
-    return () => {};
-  }, []);
+  // useEffect(() => {
+  //   socket.on("init users", (users) => {
+  //     setProfileUsers(users);
+  //   });
+  //   socket.on("user join", ([socketId, user]) => {
+  //     setProfileUsers([...profileUsers, user]);
+  //   });
+  //   return () => {};
+  // }, []);
 
   return (
     <Styled.Container>
-      {/* <Styled.ProfileContainer>
-        {profileUsers.length >= 1 &&
-          profileUsers.map((data, idx) => {
-            return (
-              <StreamProfile
-                name={"test"}
-                profileUrl={"https://avatars.githubusercontent.com/u/67536413"}
-                key={idx}
-              />
-            );
-          })} */}
-      {/* </Styled.ProfileContainer> */}
-
       <Styled.PeerVideoContainer>
-        <video
-          ref={localAudioRef}
-          muted={true}
-          autoPlay
-          width={150}
-          height={100}
-        />
+        <audio ref={localAudioRef} muted={true} autoPlay />
         {peers.map((peer, index) => {
           return <Audio key={index} peer={peer} />;
         })}
