@@ -201,8 +201,13 @@ const LiverStream: FunctionComponent<Props> = ({ socket }) => {
     <Styled.Container>
       <Styled.ProfileContainer>
         {profileUsers.map((data, idx) => {
-          const { image, name } = data.user;
-          return <StreamProfile name={name} profileUrl={image} key={idx} />;
+          return (
+            <StreamProfile
+              name={"test"}
+              profileUrl={"https://avatars.githubusercontent.com/u/67536413"}
+              key={idx}
+            />
+          );
         })}
       </Styled.ProfileContainer>
 
