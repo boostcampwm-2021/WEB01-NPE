@@ -7,6 +7,7 @@ import { DetailType } from "@src/types";
 
 interface Props {
   detail: DetailType;
+  type: "Answer" | "Question";
 }
 
 const DetailBody: FunctionComponent<Props> = ({ detail }) => {

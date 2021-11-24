@@ -9,7 +9,7 @@ const Audio: FunctionComponent = ({ peer }) => {
       }
     });
   }, []);
-  return <video ref={audioRef} playsInline autoPlay width={150} height={100} />;
+  return <video ref={audioRef} playsInline autoPlay />;
 };
 
 export default Audio;
