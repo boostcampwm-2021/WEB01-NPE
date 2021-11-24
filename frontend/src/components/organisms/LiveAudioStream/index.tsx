@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 
+import Peer from "simple-peer";
 import * as Socket from "socket.io-client";
 import * as Styled from "./styled";
 import StreamProfile from "./StreamProfile";
@@ -21,206 +22,135 @@ interface UserType {
   expires: string;
 }
 
-const pc_config = {
-  iceServers: [
-    {
-      urls: "stun:localhost.com:4000",
-    },
-  ],
-};
-
-const constraints = {
-  audio: true,
-  video: false,
-};
-
 interface Props {
   socket: Socket.Socket;
+  questionId: string;
 }
 
-interface StreamData {}
-const LiverStream: FunctionComponent<Props> = ({ socket }) => {
-  const [profileUsers, setProfileUsers] = useState<UserType[]>([]);
-  const localAudioRef = useRef<HTMLAudioElement>(null);
-  const localStreamRef = useRef<MediaStream>();
-  const [streamUsers, setStreamUsers] = useState<any[]>([]);
-  let pcsRef = {};
+const LiverStream: FunctionComponent<Props> = ({ socket, questionId }) => {
+  const [profileUsers, setProfileUsers] = useState([]);
+  const localAudioRef = useRef<HTMLVideoElement>(null);
+  const peersRef = useRef<{ peerID: any; peer: any }[]>([]);
+  const [peers, setPeers] = useState<any[]>([]);
 
-  const getLocalStream = useCallback(async () => {
-    let localStream = null;
-    try {
-      localStream = await navigator.mediaDevices.getUserMedia(constraints);
-    } catch (err) {
-      return;
-    }
+  const addPeer = (
+    incomingSignal: any,
+    callerId: string,
+    stream: MediaStream
+  ) => {
+    const peer = new Peer({ initiator: false, trickle: false, stream });
 
-    localStreamRef.current = localStream;
-    socket.emit("stream:join");
-    if (localAudioRef.current) {
-      localAudioRef.current.srcObject = localStream;
-    }
-  }, []);
-
-  const createPeerConnection = useCallback((socketID) => {
-    try {
-      const pc = new RTCPeerConnection(pc_config);
-
-      pc.onicecandidate = (e) => {
-        if (!(socket && e.candidate)) return;
-        socket.emit("stream:candidate", {
-          candidate: e.candidate,
-          candidateSendID: socket.id,
-          candidateReceiveID: socketID,
-        });
-      };
-
-      pc.ontrack = (e) => {
-        setStreamUsers((oldUsers) =>
-          oldUsers
-            .filter((user) => user.id !== socketID)
-            .concat({
-              id: socketID,
-              stream: e.streams[0],
-            })
-        );
-      };
-
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => {
-          if (!localStreamRef.current) return;
-          pc.addTrack(track, localStreamRef.current);
-        });
-      } else {
-        console.log("no local stream");
-      }
-      return pc;
-    } catch (e) {
-      console.error(e);
-      return undefined;
-    }
-  }, []);
+    peer.on("signal", (signal) => {
+      socket.emit("stream:returningSignal", { signal, callerId });
+    });
+    peer.signal(incomingSignal);
+    return peer;
+  };
+  const createPeer = (
+    userToSiganl: any,
+    callerId: string,
+    stream: MediaStream
+  ) => {
+    const peer = new Peer({ initiator: true, trickle: false, stream });
+    peer.on("signal", (signal) => {
+      socket.emit("stream:sendingSignal", { userToSiganl, callerId, signal });
+    });
+    return peer;
+  };
 
   useEffect(() => {
-    socket.on("stream:initUsers", (userList) => {
-      setProfileUsers(userList);
-    });
-    socket.on("stream:userJoin", (user) => {
-      setProfileUsers([...profileUsers, user]);
-    });
-  }, []);
-
-  useEffect(() => {
-    socket.on("stream:initUsers", (userList) => {
-      setProfileUsers(userList);
-    });
-    socket.on("stream:userJoin", (user) => {
-      setProfileUsers([...profileUsers, user]);
-    });
-
-    getLocalStream();
-    socket.on("stream:all_users", (allUsers) => {
-      allUsers.forEach(async (userID: string) => {
-        const pc = createPeerConnection(userID);
-        if (!pc) return;
-        pcsRef = { ...pcsRef, [userID]: pc };
-        try {
-          const localSdp = await pc.createOffer({
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: false,
-          });
-          await pc.setLocalDescription(new RTCSessionDescription(localSdp));
-          socket.emit("stream:offer", {
-            sdp: localSdp,
-            offerSendID: socket.id,
-            offerSendEmail: "offerSendSample@sample.com",
-            offerReceiveID: userID,
-          });
-        } catch (e) {
-          console.error(e);
+    navigator.mediaDevices
+      .getUserMedia({
+        audio: true,
+        video: { width: 150, height: 100 },
+      })
+      .then((localStream) => {
+        localStream.getAudioTracks()[0].enabled = false;
+        if (localAudioRef.current) {
+          localAudioRef.current.srcObject = localStream;
         }
-      });
-    });
 
-    const getOffer = async () => {};
-
-    socket.on("stream:getOffer", async ({ sdp, offerSendID }) => {
-      const pc = createPeerConnection(offerSendID);
-      if (!pc) return;
-      try {
-        await pc.setRemoteDescription(new RTCSessionDescription(sdp));
-        const localSdp = await pc.createAnswer({
-          offerToReceiveVideo: false,
-          offerToReceiveAudio: true,
+        socket.emit("stream:join", { questionId });
+        socket.on("stream:allUsers", (users) => {
+          if (users.length === 0) return;
+          const _peers: any = [];
+          users.forEach((userId: string) => {
+            const peer = createPeer(userId, socket.id, localStream);
+            peersRef.current.push({
+              peerID: userId,
+              peer,
+            });
+            _peers.push(peer);
+          });
+          setPeers(_peers);
         });
-        await pc.setLocalDescription(new RTCSessionDescription(localSdp));
-        pcsRef = { ...pcsRef, [offerSendID]: pc };
-        socket.emit("stream:answer", {
-          sdp: localSdp,
-          answerSendID: socket.id,
-          answerReceiveID: offerSendID,
+
+        socket.on("stream:userJoin", (payload) => {
+          const peer = addPeer(payload.signal, payload.callerId, localStream);
+          peersRef.current.push({
+            peerID: payload.callerID,
+            peer,
+          });
+          setPeers([...peers, peer]);
         });
-      } catch (e) {
-        console.error(e);
-      }
-    });
 
-    socket.on("stream:getAnswer", ({ sdp, answerSendID }) => {
-      const peer = pcsRef[answerSendID];
-      if (!peer) return;
-      peer.setRemoteDescription(new RTCSessionDescription(sdp));
-    });
+        socket.on("stream:exit", (socketId) => {
+          const newPeers = peers.filter((id) => id !== socketId);
+          setPeers(newPeers);
 
-    socket.on("stream:getCandidate", async ({ candidateSendID, candidate }) => {
-      if (pcsRef[candidateSendID]) {
-        const pc = pcsRef[candidateSendID];
-        pc.addIceCandidate(new RTCIceCandidate(candidate));
-      }
-    });
+          const newProfileUsers = profileUsers.filter(
+            (user) => user.userId !== socketId
+          );
 
-    socket.on("stream:user_exit", ({ id }) => {
-      // if (!pcsRef.id) return;
-      // pcsRef[id].close();
-      // delete pcsRef.id;
+          setProfileUsers(newProfileUsers);
+        });
 
-      setStreamUsers((oldUsers) => oldUsers.filter((user) => user.id !== id));
-      setProfileUsers((oldUsers) => {
-        console.log("hello", oldUsers);
-        return oldUsers.filter((user) => user.userId !== id);
+        socket.on("stream:recevingReturnSignal", (payload) => {
+          const item = peersRef.current.find((p) => (p.peerID = payload.id));
+          if (item) {
+            item.peer.signal(payload.signal);
+          }
+        });
       });
-    });
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [createPeerConnection, getLocalStream]);
+  }, []);
 
-  const [myMute, setMyMute] = useState(false);
+  useEffect(() => {
+    socket.on("init users", (users) => {
+      setProfileUsers(users);
+    });
+    socket.on("user join", ([socketId, user]) => {
+      setProfileUsers([...profileUsers, user]);
+    });
+    return () => {};
+  }, []);
 
   return (
     <Styled.Container>
-      <Styled.ProfileContainer>
-        {profileUsers.map((data, idx) => {
-          return (
-            <StreamProfile
-              name={"test"}
-              profileUrl={"https://avatars.githubusercontent.com/u/67536413"}
-              key={idx}
-            />
-          );
+      {/* <Styled.ProfileContainer>
+        {profileUsers.length >= 1 &&
+          profileUsers.map((data, idx) => {
+            return (
+              <StreamProfile
+                name={"test"}
+                profileUrl={"https://avatars.githubusercontent.com/u/67536413"}
+                key={idx}
+              />
+            );
+          })} */}
+      {/* </Styled.ProfileContainer> */}
+
+      <Styled.PeerVideoContainer>
+        <video
+          ref={localAudioRef}
+          muted={true}
+          autoPlay
+          width={150}
+          height={100}
+        />
+        {peers.map((peer, index) => {
+          return <Audio key={index} peer={peer} />;
         })}
-      </Styled.ProfileContainer>
-
-      {localStreamRef.current && (
-        <Audio stream={localStreamRef.current} myMute={myMute} />
-      )}
-
-      {streamUsers.map((user, idx) => {
-        {
-          return <Audio stream={user.stream} myMute={false} key={idx} />;
-        }
-      })}
-      <MuteButton setMyMute={setMyMute} myMute={myMute} />
+      </Styled.PeerVideoContainer>
     </Styled.Container>
   );
 };

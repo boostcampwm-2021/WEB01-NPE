@@ -1,17 +1,15 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 
-interface Props {
-  stream: MediaStream;
-  myMute: boolean;
-}
-const Audio: FunctionComponent<Props> = ({ stream, myMute }) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+const Audio: FunctionComponent = ({ peer }) => {
+  const audioRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.srcObject = stream;
-    }
-  });
-  return <audio ref={audioRef} autoPlay muted={myMute} />;
+    peer.on("stream", (stream: MediaStream) => {
+      if (audioRef.current) {
+        audioRef.current.srcObject = stream;
+      }
+    });
+  }, []);
+  return <video ref={audioRef} playsInline autoPlay width={150} height={100} />;
 };
 
 export default Audio;

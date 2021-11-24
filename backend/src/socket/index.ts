@@ -19,9 +19,21 @@ interface CodeType {
   index: string;
 }
 
+interface sendPayload {
+  signal: any;
+  callerId: any;
+  userToSiganl: any;
+}
+interface returnPayload {
+  callerId: any;
+  signal: any;
+}
+
 const users: UsersType = {};
 const codes: CodeType = { tabList: [], index: "0" };
-let streamUserList: string[] = [];
+let streamUserList: any = {};
+const socketToRoom: any = {};
+
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
@@ -31,31 +43,49 @@ export default (io: socketio.Server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log(socket.id + " is connected");
     let roomName = "";
     socket.on("joinRoom", ({ questionId }: { questionId: string }) => {
       roomName = questionId;
       socket.join(roomName);
+
       const token = socket.handshake.auth.token;
       const user = verify(token, "keyboard cat") as SessionUser;
-
       if (users[roomName] === undefined) {
         users[roomName] = {};
       }
       users[roomName][socket.id] = user;
+
       socket.emit("init users", users[roomName]);
       socket.to(roomName).emit("user join", [socket.id, user]);
-
-      socket.emit("stream:initUsers", Object.values(users[roomName]));
-      socket.to(roomName).emit("stream:userJoin", Object.values(user)[0]);
-      io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
     });
+
+    socket.on("stream:join", ({ questionId }: { questionId: string }) => {
+      if (streamUserList[questionId]) {
+        streamUserList[questionId].push(socket.id);
+      } else {
+        streamUserList[questionId] = [socket.id];
+      }
+      const otherUser = streamUserList[questionId].filter(
+        (id: string) => id !== socket.id
+      );
+      socketToRoom[socket.id] = questionId;
+      socket.emit("stream:allUsers", otherUser);
+    });
+
     socket.on("disconnect", (reason) => {
-      const userName = users[roomName][socket!.id].user.name;
-      io.to(roomName).emit("user exit", [socket!.id, userName]);
-      delete users[roomName][socket!.id];
-      io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
-      console.log(socket.id + " is disconnected. reason : " + reason);
+      // const userName = users[roomName][socket!.id].user.name;
+      // io.to(roomName).emit("user exit", [socket!.id, userName]);
+      // delete users[roomName][socket!.id];
+      // io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
+      // console.log(socket.id + " is disconnected. reason : " + reason);
+
+      const roomID = socketToRoom[socket.id];
+      io.emit("stream:exit", socket.id);
+      let room = streamUserList[roomID];
+      if (room) {
+        room = room.filter((id: string) => id !== socket.id);
+        streamUserList[roomID] = room;
+      }
     });
 
     socket.on("chat", (chatItem) => {
@@ -70,33 +100,18 @@ export default (io: socketio.Server) => {
       io.to(roomName).emit("code", codes);
     });
 
-    socket.on("disconnect", () => {
-      streamUserList = streamUserList.filter((user: any) => user !== socket.id);
-      io.emit("stream:user_exit", { id: socket.id });
-    });
-
-    socket.on("stream:offer", (data) => {
-      socket.to(data.offerReceiveID).emit("stream:getOffer", {
-        sdp: data.sdp,
-        offerSendID: data.offerSendID,
-      });
-    });
-    socket.on("stream:answer", (data) => {
-      socket.to(data.answerReceiveID).emit("stream:getAnswer", {
-        sdp: data.sdp,
-        answerSendID: data.answerSendID,
-      });
-    });
-    socket.on("stream:candidate", (data) => {
-      socket.to(data.candidateReceiveID).emit("stream:getCandidate", {
-        candidate: data.candidate,
-        candidateSendID: data.candidateSendID,
+    socket.on("stream:sendingSignal", (payload: sendPayload) => {
+      io.to(payload.userToSiganl).emit("stream:userJoin", {
+        signal: payload.signal,
+        callerId: payload.callerId,
       });
     });
 
-    socket.on("stream:join", () => {
-      streamUserList.push(socket.id);
-      io.sockets.to(socket.id).emit("stream:all_users", streamUserList);
+    socket.on("stream:returningSignal", (payload: returnPayload) => {
+      io.to(payload.callerId).emit("stream:recevingReturnSignal", {
+        signal: payload.signal,
+        id: socket.id,
+      });
     });
   });
 };
