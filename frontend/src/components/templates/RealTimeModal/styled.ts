@@ -19,6 +19,8 @@ export const Modal = styled.div`
   min-height: 720px;
   background: white;
   overflow: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 `;
 
 export const ModalContenWrapper = styled.div`
