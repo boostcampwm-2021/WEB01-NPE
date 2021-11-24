@@ -2,6 +2,9 @@ import { Service } from "typedi";
 import { getConnection } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import { QuestionThumb } from "../entities/QuestionThumb";
+import { AnswerThumb } from "../entities/AnswerThumb";
+import AnswerRepository from "../repositories/AnswerRepository";
+import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
 import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 
@@ -11,7 +14,11 @@ export default class ThumbService {
     @InjectRepository()
     private readonly questionThumb: QuestionThumbRepository,
     @InjectRepository()
-    private readonly questionRepository: QuestionRepository
+    private readonly questionRepository: QuestionRepository,
+    @InjectRepository()
+    private readonly answerRepository: AnswerRepository,
+    @InjectRepository()
+    private readonly answerThumb: AnswerThumbRepository
   ) {}
 
   public async questionThumbUp(
@@ -68,6 +75,64 @@ export default class ThumbService {
       .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
         await transactionalEntityManager.save(newThumbDown);
         await transactionalEntityManager.save(question);
+      })
+      .catch((error) => {
+        throw error;
+      });
+    return true;
+  }
+
+  public async answerThumbUp(
+    answerId: number,
+    userId: number
+  ): Promise<boolean> {
+    const alreadyExists = await this.answerThumb.findOne({
+      postAnswerId: answerId,
+      userId: userId,
+    });
+    if (alreadyExists) return false;
+
+    const newThumbUp = new AnswerThumb();
+    newThumbUp.postAnswerId = answerId;
+    newThumbUp.userId = userId;
+    newThumbUp.value = 1;
+
+    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    answer.thumbupCount++;
+
+    await getConnection()
+      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(newThumbUp);
+        await transactionalEntityManager.save(answer);
+      })
+      .catch((error) => {
+        throw error;
+      });
+    return true;
+  }
+
+  public async answerThumbDown(
+    answerId: number,
+    userId: number
+  ): Promise<boolean> {
+    const alreadyExists = await this.answerThumb.findOne({
+      postAnswerId: answerId,
+      userId: userId,
+    });
+    if (alreadyExists) return false;
+
+    const newThumbDown = new AnswerThumb();
+    newThumbDown.postAnswerId = answerId;
+    newThumbDown.userId = userId;
+    newThumbDown.value = -1;
+
+    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    answer.thumbupCount--;
+
+    await getConnection()
+      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+        await transactionalEntityManager.save(newThumbDown);
+        await transactionalEntityManager.save(answer);
       })
       .catch((error) => {
         throw error;

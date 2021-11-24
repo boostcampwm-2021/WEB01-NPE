@@ -14,7 +14,11 @@ const DetailBody: FunctionComponent<Props> = ({ detail }) => {
   return (
     <Styled.DetailBody>
       <Styled.VoteContainer>
-        <Vote id={id} thumbupCount={thumbupCount} />
+        <Vote
+          id={Number(id)}
+          thumbupCount={thumbupCount}
+          isQuestion={tags !== undefined}
+        />
       </Styled.VoteContainer>
       <Styled.DetailBodyInner>
         <Styled.DetailBodyDesc>

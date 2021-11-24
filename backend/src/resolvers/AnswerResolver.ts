@@ -16,6 +16,7 @@ import UserService from "../services/UserService";
 import { Container } from "typeorm-typedi-extensions";
 import AuthenticationError from "../errors/AuthenticationError";
 import AuthorizationError from "../errors/AuthorizationError";
+import ThumbService from "../services/ThumbService";
 
 const getUserId = (headers: any): number => {
   if (!headers.authorization) throw new AuthenticationError();
@@ -27,6 +28,7 @@ const getUserId = (headers: any): number => {
 export default class AnswerResolver {
   private readonly postService: PostService = Container.get(PostService);
   private readonly userService: UserService = Container.get(UserService);
+  private readonly thumbService: ThumbService = Container.get(ThumbService);
 
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
   async addNewAnswer(
@@ -85,5 +87,33 @@ export default class AnswerResolver {
     const isDeleted = await this.postService.deleteAnswer(answerId);
 
     return isDeleted;
+  }
+
+  @Mutation(() => Boolean, {
+    description: "답변글 좋아요 Mutation. 성공 여부 boolean 반환",
+  })
+  async thumbUpAnswer(
+    @Arg("answerId", { description: "좋아요 표시할 답변글의 ID" })
+    answerId: number,
+    @Ctx("userId") userId: number
+  ): Promise<boolean> {
+    console.log("userId: " + userId);
+    const result = await this.thumbService.answerThumbUp(answerId, userId);
+
+    return result;
+  }
+
+  @Mutation(() => Boolean, {
+    description: "답변글 싫어요 Mutation. 성공 여부 boolean 반환",
+  })
+  async thumbDownAnswer(
+    @Arg("answerId", { description: "싫어요 표시할 답변글의 ID" })
+    answerId: number,
+    @Ctx("userId") userId: number
+  ): Promise<boolean> {
+    console.log("userId: " + userId);
+    const result = await this.thumbService.answerThumbDown(answerId, userId);
+
+    return result;
   }
 }

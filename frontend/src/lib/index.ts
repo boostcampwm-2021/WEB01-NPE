@@ -79,7 +79,9 @@ export const viewOneQuestionByID = async (id: number) => {
           name
         }
         answers{
+          id
           desc
+          thumbupCount
           author{
            username
            profileUrl
@@ -108,6 +110,26 @@ export const thumbDownQuestion = async (questionId: number) => {
     mutation: gql`
     mutation {
       thumbDownQuestion(questionId: ${questionId})
+    }`,
+  });
+  return data;
+};
+
+export const thumbUpAnswer = async (answerId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      thumbUpAnswer(answerId: ${answerId})
+    }`,
+  });
+  return data;
+};
+
+export const thumbDownAnswer = async (answerId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      thumbDownAnswer(answerId: ${answerId})
     }`,
   });
   return data;
