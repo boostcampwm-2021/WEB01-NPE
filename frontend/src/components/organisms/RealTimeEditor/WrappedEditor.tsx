@@ -4,9 +4,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import "codemirror/theme/material.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/gfm/gfm";
 import RandomColor from "randomcolor";
 import * as Socket from "socket.io-client";
 
