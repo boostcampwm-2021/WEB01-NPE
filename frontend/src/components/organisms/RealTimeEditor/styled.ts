@@ -49,6 +49,13 @@ export const TabList = styled.div`
   width: 450px;
   overflow-x: scroll;
   white-space: nowrap;
+
+  -ms-overflow-style: none; // IE and Edge
+  scrollbar-width: none; // Firefox
+
+  ::-webkit-scrollbar {
+    display: none; // Chrome, Safari, Opera
+  }
 `;
 
 export const Tab = styled.div<{ focused: boolean }>`
