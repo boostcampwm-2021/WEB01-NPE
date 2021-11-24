@@ -15,8 +15,10 @@ interface UsersType {
   };
 }
 interface CodeType {
-  tabList: string[];
-  index: string;
+  [roomName: string]: {
+    tabList: string[];
+    index: string;
+  };
 }
 
 interface sendPayload {
@@ -30,7 +32,7 @@ interface returnPayload {
 }
 
 const users: UsersType = {};
-const codes: CodeType = { tabList: [], index: "0" };
+const codes: CodeType = {};
 let streamUserList: any = {};
 const socketToRoom: any = {};
 
@@ -57,14 +59,6 @@ export default (io: socketio.Server) => {
 
       socket.emit("init users", users[roomName]);
       socket.to(roomName).emit("user join", [socket.id, user]);
-
-      socket.on("code", (code) => {
-        if (code.tabList !== undefined) {
-          codes.tabList = [...code.tabList];
-          codes.index = code.index;
-        }
-        io.to(roomName).emit("code", codes);
-      });
     });
 
     socket.on("stream:join", ({ questionId }: { questionId: string }) => {
@@ -98,6 +92,17 @@ export default (io: socketio.Server) => {
 
     socket.on("chat", (chatItem) => {
       io.to(roomName).emit("chat", chatItem);
+    });
+
+    socket.on("code", (code) => {
+      if (codes[roomName] === undefined) {
+        codes[roomName] = { tabList: [], index: "0" };
+      }
+      if (code.tabList !== undefined) {
+        codes[roomName].tabList = [...code.tabList];
+        codes[roomName].index = code.index;
+      }
+      io.to(roomName).emit("code", codes[roomName]);
     });
 
     socket.on("stream:sendingSignal", (payload: sendPayload) => {
