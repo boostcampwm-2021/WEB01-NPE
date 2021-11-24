@@ -77,7 +77,7 @@ export default class QuestionRepository extends Repository<PostQuestion> {
     return question;
   }
 
-  public async deleteQuestion(questionId: number): Promise<boolean> {
+  public async deleteById(questionId: number): Promise<boolean> {
     const result = await this.delete({ id: questionId });
 
     if (result.affected > 0) return true;

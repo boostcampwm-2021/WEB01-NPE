@@ -34,7 +34,7 @@ export default class AnswerRepository extends Repository<PostAnswer> {
     return await this.save(answer);
   }
 
-  public async deleteAnswer(answerId: number): Promise<boolean> {
+  public async deleteById(answerId: number): Promise<boolean> {
     const deleteResult = await this.delete({ id: answerId });
 
     return deleteResult.affected > 0;

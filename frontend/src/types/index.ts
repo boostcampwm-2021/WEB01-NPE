@@ -42,20 +42,16 @@ export interface QuestionDetailType {
   answers: AnswerDetailType[];
 }
 
-export interface AnswerDetailType {
-  id: string;
-  author: AuthorType;
-  desc: string;
-  thumbupCount: number;
-  createdAt: string;
-}
-
 export interface DetailType {
   id: number;
   desc: string;
   tags?: TagType[];
   thumbupCount: number;
   author: AuthorType;
+}
+
+export interface AnswerDetailType extends DetailType {
+  createdAt: string;
 }
 
 export interface AnswerType {

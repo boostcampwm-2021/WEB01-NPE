@@ -1,4 +1,9 @@
-import { thumbDownQuestion, thumbUpQuestion } from "@src/lib";
+import {
+  thumbDownAnswer,
+  thumbDownQuestion,
+  thumbUpAnswer,
+  thumbUpQuestion,
+} from "@src/lib";
 import React, { FunctionComponent, useState } from "react";
 
 import * as Styled from "./styled";
@@ -6,6 +11,7 @@ import * as Styled from "./styled";
 interface Props {
   id: number;
   thumbupCount: number;
+  isQuestion: boolean;
 }
 
 const Vote: FunctionComponent<Props> = (props: Props) => {
@@ -14,7 +20,12 @@ const Vote: FunctionComponent<Props> = (props: Props) => {
   const [thumbUpCount, setThumbUpCount] = useState(thumbUpCount_prop);
 
   const onThumbUpClick = async () => {
-    const result = (await thumbUpQuestion(id)).data.thumbUpQuestion;
+    let result = false;
+    if (props.isQuestion) {
+      result = (await thumbUpQuestion(id)).data.thumbUpQuestion;
+    } else {
+      result = (await thumbUpAnswer(id)).data.thumbUpAnswer;
+    }
 
     if (result) {
       setThumbUpCount((prev) => prev + 1);
@@ -24,7 +35,12 @@ const Vote: FunctionComponent<Props> = (props: Props) => {
   };
 
   const onThumbDownClick = async () => {
-    const result = (await thumbDownQuestion(id)).data.thumbDownQuestion;
+    let result = false;
+    if (props.isQuestion) {
+      result = (await thumbDownQuestion(id)).data.thumbDownQuestion;
+    } else {
+      result = (await thumbDownAnswer(id)).data.thumbDownAnswer;
+    }
 
     if (result) {
       setThumbUpCount((prev) => prev - 1);

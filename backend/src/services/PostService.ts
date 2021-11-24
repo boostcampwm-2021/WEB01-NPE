@@ -3,7 +3,6 @@ import { PostAnswer } from "../entities/PostAnswer";
 import { PostQuestion } from "../entities/PostQuestion";
 import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
 import { Tag } from "../entities/Tag";
-import { User } from "../entities/User";
 import { UserHasTag } from "../entities/UserHasTag";
 import NoSuchQuestionError from "../errors/NoSuchQuestionError";
 import AnswerInput from "../dto/AnswerInput";
@@ -16,6 +15,8 @@ import PostQuestionHasTagRepository from "../repositories/PostQuestionHasTagRepo
 import AnswerRepository from "../repositories/AnswerRepository";
 import UserRepository from "../repositories/UserRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
+import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
+import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 
 @Service()
 export default class PostService {
@@ -29,7 +30,11 @@ export default class PostService {
     @InjectRepository()
     private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository,
     @InjectRepository()
-    private readonly answerRepository: AnswerRepository
+    private readonly answerRepository: AnswerRepository,
+    @InjectRepository()
+    private readonly questionThumbRepository: QuestionThumbRepository,
+    @InjectRepository()
+    private readonly answerThumbRepository: AnswerThumbRepository
   ) {}
 
   private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
@@ -204,10 +209,10 @@ export default class PostService {
   }
 
   public async deleteQuestion(questionId: number): Promise<boolean> {
-    const result = await this.questionRepository.delete({ id: questionId });
+    const result = await this.questionRepository.deleteById(questionId);
+    await this.questionThumbRepository.deleteByQuestionId(questionId);
 
-    if (result.affected > 0) return true;
-    else return false;
+    return result;
   }
 
   public async getAnswerCount(questionId: number): Promise<number> {
@@ -257,8 +262,9 @@ export default class PostService {
   }
 
   public async deleteAnswer(answerId: number): Promise<boolean> {
-    const deleteResult = await this.answerRepository.delete({ id: answerId });
+    await this.answerRepository.deleteById(answerId);
+    await this.answerThumbRepository.deleteByAnswerId(answerId);
 
-    return deleteResult.affected > 0;
+    return true;
   }
 }
