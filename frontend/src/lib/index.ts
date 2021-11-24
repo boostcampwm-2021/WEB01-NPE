@@ -93,6 +93,26 @@ export const viewOneQuestionByID = async (id: number) => {
   return data;
 };
 
+export const thumbUpQuestion = async (questionId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      thumbUpQuestion(questionId: ${questionId})
+    }`,
+  });
+  return data;
+};
+
+export const thumbDownQuestion = async (questionId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      thumbDownQuestion(questionId: ${questionId})
+    }`,
+  });
+  return data;
+};
+
 export const getQuestions = async (
   take: number,
   skip: number,

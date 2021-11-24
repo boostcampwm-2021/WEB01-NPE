@@ -51,6 +51,7 @@ export interface AnswerDetailType {
 }
 
 export interface DetailType {
+  id: number;
   desc: string;
   tags?: TagType[];
   thumbupCount: number;

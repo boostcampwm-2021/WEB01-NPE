@@ -6,9 +6,9 @@ export const authChecker: AuthChecker<Request> = (
   { root, args, context, info },
   roles
 ): boolean => {
-  if (context.headers.authorization) {
-    const token = context.headers.authorization.split(" ")[1];
-    const data: any = verify(token, "keyboard cat");
-  }
+  // if (context.headers.authorization) {
+  //   const token = context.headers.authorization.split(" ")[1];
+  //   const data: any = verify(token, "keyboard cat");
+  // }
   return true;
 };

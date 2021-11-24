@@ -42,7 +42,7 @@ export class PostAnswer {
   @Column("text", { name: "desc" })
   desc: string;
 
-  @Field({ description: "해당 답변글의 좋아요 개수" })
+  @Field(() => Int, { description: "해당 답변글의 좋아요 개수" })
   @Column("int", { name: "thumbup_count", default: () => "'0'" })
   thumbupCount: number;
 
