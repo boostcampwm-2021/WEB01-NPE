@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps } from "next";
 import type { NextPage } from "next";
 import styled from "styled-components";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
 
 import { Modal } from "@components/molecules";
@@ -31,7 +31,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
-  const [session, loading] = useSession();
+  const [session] = useSession();
   const questionId = router.query.id;
 
   const exitModal = () => {
@@ -45,10 +45,6 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
       setShow(true);
     }
   };
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden"; // 브라우저 스크롤 block
-  });
 
   const disconnectAndPostAnswer = () => {
     exitModal();
@@ -119,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const question = viewedQuestion.data.viewOneQuestionById;
 
   if (!question) {
-    console.log("reload");
     return {
       redirect: {
         destination: "/",
