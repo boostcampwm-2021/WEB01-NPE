@@ -12,20 +12,20 @@ import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 export default class ThumbService {
   constructor(
     @InjectRepository()
-    private readonly questionThumb: QuestionThumbRepository,
+    private readonly questionThumbRepository: QuestionThumbRepository,
     @InjectRepository()
     private readonly questionRepository: QuestionRepository,
     @InjectRepository()
     private readonly answerRepository: AnswerRepository,
     @InjectRepository()
-    private readonly answerThumb: AnswerThumbRepository
+    private readonly answerThumbRepository: AnswerThumbRepository
   ) {}
 
   public async questionThumbUp(
     questionId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.questionThumb.findOne({
+    const alreadyExists = await this.questionThumbRepository.findOne({
       postQuestionId: questionId,
       userId: userId,
     });
@@ -55,7 +55,7 @@ export default class ThumbService {
     questionId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.questionThumb.findOne({
+    const alreadyExists = await this.questionThumbRepository.findOne({
       postQuestionId: questionId,
       userId: userId,
     });
@@ -86,7 +86,7 @@ export default class ThumbService {
     answerId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.answerThumb.findOne({
+    const alreadyExists = await this.answerThumbRepository.findOne({
       postAnswerId: answerId,
       userId: userId,
     });
@@ -115,7 +115,7 @@ export default class ThumbService {
     answerId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.answerThumb.findOne({
+    const alreadyExists = await this.answerThumbRepository.findOne({
       postAnswerId: answerId,
       userId: userId,
     });
