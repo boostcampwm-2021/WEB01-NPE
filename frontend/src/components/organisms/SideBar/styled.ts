@@ -3,12 +3,12 @@ import styled from "styled-components";
 export const Container = styled.aside`
   align-self: start;
   position: sticky;
-  top: 120px;
   z-index: 10;
+  top: 120px;
   width: 220px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1), 0px 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 5px 5px 0px 0px;
-  margin-top: 4px;
+  margin-top: 80px;
   min-height: 700px;
   height: 70%;
 `;
