@@ -21,7 +21,21 @@ export const Modal = styled.div`
   overflow: auto;
 `;
 
-export const temp = styled.div`
+export const ModalContenWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  background-color: #2a303d;
+`;
+
+export const LeftTab = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+export const ExitButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 `;
