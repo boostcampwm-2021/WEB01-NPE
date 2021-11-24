@@ -24,6 +24,7 @@ interface Props {
   };
   userTagCountChartData: ChartData<"doughnut"> & ChartData<"bar">;
   answerStateChartData: ChartData<"doughnut"> & ChartData<"bar">;
+  error?: number;
 }
 
 const ProfilePage: NextPage<Props> = ({
@@ -114,17 +115,24 @@ const ProfilePage: NextPage<Props> = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = Number(context.query.userId);
-  const { data } = await getUserProfileData(userId);
 
-  return {
-    props: {
-      userProfileData: data.findUserById,
-      userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
-      answerStateChartData: makeAnswerStateChartData(
-        data.findUserById.postAnswers
-      ),
-    },
-  };
+  try {
+    const { data } = await getUserProfileData(userId);
+
+    return {
+      props: {
+        userProfileData: data.findUserById,
+        userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
+        answerStateChartData: makeAnswerStateChartData(
+          data.findUserById.postAnswers
+        ),
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const makeTagCountChartData = (
