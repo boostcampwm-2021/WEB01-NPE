@@ -40,6 +40,7 @@ export const DetailBodyInner = styled.div`
   width: 100%;
   border-left: 1px solid #e1e4e8;
   margin-left: 20px;
+  position: relative;
 `;
 
 export const DetailBodyInfo = styled.div`
@@ -50,4 +51,10 @@ export const DetailBodyInfo = styled.div`
 
 export const TagListContainer = styled.div`
   width: 100%;
+`;
+
+export const DeleteBtn = styled.span`
+  font-size: 14px;
+  position: absolute;
+  right: 10px;
 `;

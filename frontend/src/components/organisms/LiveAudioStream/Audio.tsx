@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect, useRef } from "react";
 
 const Audio: FunctionComponent = ({ peer }) => {
-  const audioRef = useRef<HTMLVideoElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     peer.on("stream", (stream: MediaStream) => {
       if (audioRef.current) {
@@ -9,7 +9,7 @@ const Audio: FunctionComponent = ({ peer }) => {
       }
     });
   }, []);
-  return <video ref={audioRef} playsInline autoPlay />;
+  return <audio ref={audioRef} playsInline autoPlay />;
 };
 
 export default Audio;

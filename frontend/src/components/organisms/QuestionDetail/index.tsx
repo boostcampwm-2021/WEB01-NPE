@@ -84,6 +84,7 @@ const QuestionDetail: FunctionComponent<Props> = ({
       </Styled.QuestionHeader>
       <DetailBody
         detail={{ id: Number(id), desc, tags, thumbupCount, author }}
+        type="Question"
       />
 
       {deleteError && (

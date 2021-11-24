@@ -53,7 +53,7 @@ const RealTimeModal: FunctionComponent<{
       <Styled.Modal>
         <Styled.ModalContenWrapper>
           <Styled.LeftTab>
-            {SOCKET && <LiveStream socket={SOCKET} />}
+            {SOCKET && <LiveStream socket={SOCKET} questionId={question.id} />}
             <Styled.ExitButtonWrapper>
               <Button
                 type="realtime_exit"
