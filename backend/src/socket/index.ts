@@ -57,6 +57,14 @@ export default (io: socketio.Server) => {
 
       socket.emit("init users", users[roomName]);
       socket.to(roomName).emit("user join", [socket.id, user]);
+
+      socket.on("code", (code) => {
+        if (code.tabList !== undefined) {
+          codes.tabList = [...code.tabList];
+          codes.index = code.index;
+        }
+        io.to(roomName).emit("code", codes);
+      });
     });
 
     socket.on("stream:join", ({ questionId }: { questionId: string }) => {
@@ -90,14 +98,6 @@ export default (io: socketio.Server) => {
 
     socket.on("chat", (chatItem) => {
       io.to(roomName).emit("chat", chatItem);
-    });
-
-    socket.on("code", (code) => {
-      if (code.tabList !== undefined) {
-        codes.tabList = [...code.tabList];
-        codes.index = code.index;
-      }
-      io.to(roomName).emit("code", codes);
     });
 
     socket.on("stream:sendingSignal", (payload: sendPayload) => {
