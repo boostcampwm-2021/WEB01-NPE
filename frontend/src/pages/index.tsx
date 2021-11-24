@@ -31,7 +31,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);
 
   const reset = () => {
     setTagList([]);
@@ -50,7 +50,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
       if (data) {
         setQuestionList(data.searchQuestions);
-        setIndex(data.searchQuestions.length);
+        setQuestionIndex(data.searchQuestions.length);
         window.scrollTo(0, 0);
       }
     };
@@ -60,14 +60,14 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
   const getMorePost = async () => {
     const { data } = await getQuestions(
       5,
-      index,
+      questionIndex,
       texts,
       tagList.map((tag) => Number(tag.id)),
       isLive
     );
     if (data) {
       const { searchQuestions: fetchData } = data;
-      setIndex(index + fetchData.length);
+      setQuestionIndex(questionIndex + fetchData.length);
       setQuestionList([...questionList, ...fetchData]);
     } else {
       setHasMore(false);

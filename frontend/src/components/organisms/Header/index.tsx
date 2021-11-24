@@ -74,7 +74,7 @@ const Header: FunctionComponent<Props> = ({ type, setTexts, onResetState }) => {
 
   const onResetAll = () => {
     onReset();
-    if (onResetState !== undefined) onResetState();
+    if (onResetState) onResetState();
     searchText!.current!.value = "";
   };
 
