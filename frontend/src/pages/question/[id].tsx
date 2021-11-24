@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ParsedUrlQuery } from "querystring";
 import { GetServerSideProps, NextPage } from "next";
-import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
 import styled from "styled-components";
@@ -26,9 +25,7 @@ interface Props {
   error?: number;
 }
 
-const QuestionPage: NextPage<Props> = ({ question, error }) => {
-  if (error) return <ErrorPage statusCode={error} />;
-
+const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
   const [anwerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -125,9 +122,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } catch {
     return {
-      props: {
-        error: 404,
-      },
+      notFound: true,
     };
   }
 };

@@ -1,7 +1,6 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import Image from "next/image";
-import ErrorPage from "next/error";
 import styled from "styled-components";
 
 import { HeaderText, TitleText, ContentText, Chart } from "@components/atoms";
@@ -32,9 +31,7 @@ const ProfilePage: NextPage<Props> = ({
   userProfileData,
   userTagCountChartData,
   answerStateChartData,
-  error,
 }) => {
-  if (error) return <ErrorPage statusCode={error} />;
   return (
     <>
       <SEOHeader
@@ -133,9 +130,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   } catch {
     return {
-      props: {
-        error: 404,
-      },
+      notFound: true,
     };
   }
 };

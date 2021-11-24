@@ -27,6 +27,12 @@ const types: { [key: string]: StyleProps } = {
     height: 48,
     alt: "Home화면으로 이동",
   },
+  Short128: {
+    src: ShortLogoImg,
+    width: 128,
+    height: 128,
+    alt: "Home화면으로 이동",
+  },
 };
 
 const Logo: FunctionComponent<Props> = ({ type }) => {
