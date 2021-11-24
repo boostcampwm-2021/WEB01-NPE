@@ -33,6 +33,11 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
   const [hasMore, setHasMore] = useState(true);
   const [index, setIndex] = useState(0);
 
+  const reset = () => {
+    setTagList([]);
+    setTexts("");
+  };
+
   useEffect(() => {
     const fetchQuestions = async () => {
       const { data } = await getQuestions(
@@ -78,7 +83,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         imageUrl="https://user-images.githubusercontent.com/50866506/142799853-901b29c1-5836-467e-bf89-f8f37a08a17f.png"
         siteUrl="https://nullpointerexception.ml"
       />
-      <Header type="Default" setTexts={setTexts} />
+      <Header type="Default" setTexts={setTexts} onResetState={reset} />
       <MainContainer>
         <SideBar
           selectedTags={tagList}

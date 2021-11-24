@@ -19,6 +19,7 @@ import {
 interface Props {
   type: string;
   setTexts: (value: string) => void;
+  onResetState?: () => void;
 }
 
 interface StyleProps {
@@ -34,7 +35,7 @@ const types: { [key: string]: StyleProps } = {
   },
 };
 
-const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
+const Header: FunctionComponent<Props> = ({ type, setTexts, onResetState }) => {
   const headerProps: StyleProps = types[type];
 
   const [session, loading] = useSession();
@@ -71,6 +72,12 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
     document.body.style.overflow = "auto";
   };
 
+  const onResetAll = () => {
+    onReset();
+    if (onResetState !== undefined) onResetState();
+    searchText!.current!.value = "";
+  };
+
   const submitSearch = (event: React.FormEvent<HTMLElement>) => {
     event.preventDefault();
     setTexts(searchText!.current!.value);
@@ -89,7 +96,7 @@ const Header: FunctionComponent<Props> = ({ type, setTexts }) => {
   return (
     <Styled.HeaderDiv>
       <Link href="/">
-        <a>
+        <a onClick={onResetAll}>
           <Logo type="Default" />
         </a>
       </Link>
