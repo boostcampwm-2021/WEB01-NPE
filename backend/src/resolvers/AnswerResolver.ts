@@ -97,7 +97,6 @@ export default class AnswerResolver {
     answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    console.log("userId: " + userId);
     const result = await this.thumbService.answerThumbUp(answerId, userId);
 
     return result;
@@ -111,7 +110,6 @@ export default class AnswerResolver {
     answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    console.log("userId: " + userId);
     const result = await this.thumbService.answerThumbDown(answerId, userId);
 
     return result;
