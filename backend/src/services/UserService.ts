@@ -32,7 +32,7 @@ export default class UserService {
     newUser.username = username;
     newUser.profileUrl = profileUrl;
     newUser.socialUrl = socialUrl;
-    this.userRepository.create(newUser);
+    await this.userRepository.save(newUser);
 
     return newUser;
   }
