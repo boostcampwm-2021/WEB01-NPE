@@ -27,7 +27,7 @@ interface Props {
 
 const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
-  const [anwerInput, setAnswerInput] = useState<string | undefined>();
+  const [answerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
   const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
@@ -82,6 +82,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
         <AnswerRegister
           questionId={Number(questionId)}
           onNewAnswer={onNewAnswer}
+          value={answerInput}
         />
         {isModal && (
           <RealTimeModal
