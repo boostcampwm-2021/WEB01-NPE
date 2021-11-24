@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from "react";
+import Image from "next/image";
 
 import * as Styled from "./styled";
-
+import deleteImg from "./delete.svg";
 interface Props {
   type: string;
   text: string;
@@ -28,7 +29,7 @@ const SideTag: FunctionComponent<Props> = ({ type, text, onDelete }) => {
     <Styled.TagContainer {...styleProps}>
       <Styled.TagText>{text}</Styled.TagText>
       <Styled.DeleteButton {...styleProps} onClick={() => onDelete(text)}>
-        🗑
+        <Image src={deleteImg} width={12} height={12} />
       </Styled.DeleteButton>
     </Styled.TagContainer>
   );

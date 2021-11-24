@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from "react";
 import Router from "next/router";
+import Image from "next/image";
 
 import * as Styled from "./styled";
-import { Image, Text } from "@components/atoms";
+import { Text } from "@components/atoms";
 import { AuthorType } from "@src/types";
 
 interface Props {
@@ -17,7 +18,14 @@ const ProfileSummary: FunctionComponent<Props> = ({ author }) => {
   return (
     <Styled.Anchor onClick={onProfileButton}>
       <Styled.ImageDiv>
-        <Image type="Large" src={author.profileUrl} />
+        <Image
+          width={48}
+          height={48}
+          src={author.profileUrl}
+          placeholder="blur"
+          blurDataURL={`${author.profileUrl}&s40`}
+          priority={true}
+        />
       </Styled.ImageDiv>
       <Styled.TextDiv>
         <Text type="Header" text={author.username} />

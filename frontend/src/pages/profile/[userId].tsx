@@ -1,15 +1,11 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
+import Image from "next/image";
 import styled from "styled-components";
 
-import {
-  HeaderText,
-  TitleText,
-  ContentText,
-  Image,
-  Chart,
-} from "@components/atoms";
+import { HeaderText, TitleText, ContentText, Chart } from "@components/atoms";
 import { Header } from "@components/organisms/";
+import { SEOHeader } from "@components/templates";
 import { getUserProfileData } from "@src/lib";
 import { AnswerType, AuthorType, QuestionType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
@@ -38,13 +34,27 @@ const ProfilePage: NextPage<Props> = ({
 }) => {
   return (
     <>
+      <SEOHeader
+        title={`User ${userProfileData.username} - NullPointerException`}
+        description="NullPointerException - 나와봐! 내가 알려줄께: 개발자들을 위한 실시간
+        QA 서비스"
+        imageUrl={userProfileData.profileUrl}
+        siteUrl={`https://nullpointerexception.ml/profile/${userProfileData.id}`}
+      />
       <Header type="Profile" setTexts={() => ""} />
       <MainContainer>
         <HeaderText type={"Default"} text={"프로필"} />
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image type={"Profile"} src={`${userProfileData.profileUrl}`} />
+            <Image
+              width={192}
+              height={192}
+              src={userProfileData.profileUrl}
+              placeholder="blur"
+              blurDataURL={`${userProfileData.profileUrl}&s40`}
+              priority={true}
+            />
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />
@@ -54,7 +64,8 @@ const ProfilePage: NextPage<Props> = ({
             />
             <ProfileSoical>
               <Image
-                type="Large"
+                width="48"
+                height="48"
                 src={
                   "https://i.ibb.co/mRdht2f/PCp-Xdqv-UWf-CW1m-Xh-H1-Y-98y-Bpgs-Wxu-TSTofy3-NGMo9y-BTATDyz-Vkq-U580bf-Sln50b-FU.png"
                 }

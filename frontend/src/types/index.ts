@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 export interface AuthorType {
   __typename: string;
   id: string;

@@ -45,7 +45,7 @@ const SearchResult: FunctionComponent<Props> = ({
 
       <Styled.RightContainer>
         <Styled.HeaderContainer>
-          <Link href={`question/${id}`}>
+          <Link href={`/question/${id}`}>
             <a>
               <QuestionTitle
                 text={title}

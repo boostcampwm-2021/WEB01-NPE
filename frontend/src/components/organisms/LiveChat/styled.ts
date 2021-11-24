@@ -41,6 +41,10 @@ export const Message = styled.li`
 export const UserInformation = styled.div`
   display: flex;
 `;
+export const UserDetail = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
 export const UserImg = styled.div`
   width: 30px;
   height: 30px;
@@ -111,4 +115,11 @@ export const Input = styled.textarea`
     outline: none;
   }
   border-radius: 0px 0px 10px 10px;
+`;
+
+export const Signal = styled.div`
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
 `;
