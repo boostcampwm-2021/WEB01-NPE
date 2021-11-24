@@ -6,10 +6,13 @@ import React, {
 } from "react";
 import RandomColor from "randomcolor";
 import * as Socket from "socket.io-client";
+import * as Y from "yjs";
+import { WebsocketProvider } from "y-websocket";
 
 import * as Styled from "./styled";
 import Editor from "./editor";
 import { QuestionDetailType } from "@src/types";
+import { CodemirrorBinding } from "y-codemirror";
 
 interface CodeType {
   tabList: string[];
@@ -89,7 +92,13 @@ const gfmCodeReg = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
 const WrappedEditor: FunctionComponent<{
   question: QuestionDetailType;
   socket: Socket.Socket;
-}> = ({ question, socket }) => {
+  setCodeList: any;
+}> = ({ question, socket, setCodeList }) => {
+  const serverUrl =
+    process.env.NODE_ENV === "production"
+      ? `wss://nullpointerexception.ml/yjs`
+      : `ws://localhost:1234`;
+
   const [currentEditor, setCurrentEditor] = useState("question");
   const [tabList, setTabList] = useState<string[]>([]);
   const [tabListIndex, setTabListIndex] = useState<number>(0);
@@ -130,6 +139,25 @@ const WrappedEditor: FunctionComponent<{
     onReset();
   };
 
+  const setAllCodes = () =>
+    tabList
+      .map((tab) => `${question.id}-answer-${tab}`)
+      .map((id) => {
+        const ydoc = new Y.Doc();
+        const provider = new WebsocketProvider(serverUrl, id, ydoc);
+        provider.once("synced", () => {
+          const text = ydoc.getText("codemirror");
+          console.log(text.toString());
+          setCodeList((prev: string[]) => [...prev, text.toString()]);
+          provider.disconnect();
+        });
+      });
+
+  useEffect(() => {
+    setCodeList([]);
+    setAllCodes();
+  }, [tabList]);
+
   useEffect(() => {
     socket.on("code", (code: CodeType) => {
       setTabList(code.tabList);
@@ -166,7 +194,9 @@ const WrappedEditor: FunctionComponent<{
       return (
         currentEditor === `${i}.${extension}` && (
           <Editor
-            roomId={`${question.id}-q-${i}.${extension}`}
+            key={`${i}.${extension}`}
+            serverUrl={serverUrl}
+            roomId={`${question.id}-question-${i}.${extension}`}
             color={color}
             value={codeOnly}
             mode={mode}
@@ -175,14 +205,13 @@ const WrappedEditor: FunctionComponent<{
       );
     }) || "";
   const newCodeBlockTab = tabList.map((tab) => {
-    const [name, extension] = tab.split(".");
     return (
       <Styled.Tab
         focused={currentEditor === tab}
         onClick={onTabClick(tab)}
         key={tab}
       >
-        {name}.{extension}
+        {tab}
         <Styled.closeTab onClick={closeTab(tab)}>x</Styled.closeTab>
       </Styled.Tab>
     );
@@ -193,7 +222,8 @@ const WrappedEditor: FunctionComponent<{
     return (
       currentEditor === tab && (
         <Editor
-          roomId={`${question.id}-${tab}`}
+          serverUrl={serverUrl}
+          roomId={`${question.id}-answer-${tab}`}
           color={color}
           value=""
           key={tab}
@@ -235,6 +265,7 @@ const WrappedEditor: FunctionComponent<{
       <>
         {currentEditor === "question" && (
           <Editor
+            serverUrl={serverUrl}
             roomId={`${question.id}-question`}
             color={color}
             value={question.desc}

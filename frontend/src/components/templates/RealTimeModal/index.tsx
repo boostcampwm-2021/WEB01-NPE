@@ -14,9 +14,11 @@ const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
   exitModal: VoidFunction;
   disconnectAndPostAnswer: VoidFunction;
-}> = ({ question, exitModal, disconnectAndPostAnswer }) => {
+  setCodeList: any;
+}> = ({ question, exitModal, disconnectAndPostAnswer, setCodeList }) => {
   const [SOCKET, setSOCKET] = useState<Socket.Socket | null>(null);
   const [session] = useSession();
+
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
@@ -62,7 +64,13 @@ const RealTimeModal: FunctionComponent<{
               ></Button>
             </Styled.ExitButtonWrapper>
           </Styled.LeftTab>
-          {SOCKET && <RealTimeEditor question={question} socket={SOCKET} />}
+          {SOCKET && (
+            <RealTimeEditor
+              question={question}
+              socket={SOCKET}
+              setCodeList={setCodeList}
+            />
+          )}
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.ModalContenWrapper>
         <ExitCheckModalWarpper

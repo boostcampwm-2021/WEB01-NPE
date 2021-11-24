@@ -32,6 +32,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
   const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
   const [session] = useSession();
+  const [codeList, setCodeList] = useState<string[]>([]);
   const questionId = router.query.id;
 
   const exitModal = () => {
@@ -48,7 +49,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
 
   const disconnectAndPostAnswer = () => {
     exitModal();
-    setAnswerInput("abcd");
+    setAnswerInput(codeList.join("\n"));
   };
 
   const onNewAnswer = (newAnswer: AnswerDetailType) => {
@@ -89,6 +90,7 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
             question={question}
             exitModal={exitModal}
             disconnectAndPostAnswer={disconnectAndPostAnswer}
+            setCodeList={setCodeList}
           />
         )}
       </MainContainer>
