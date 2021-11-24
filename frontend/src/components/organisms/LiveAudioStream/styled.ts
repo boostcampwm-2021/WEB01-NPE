@@ -43,7 +43,12 @@ export const TextDiv = styled.div`
 `;
 
 export const Container = styled.div`
-  background-color: #2a303d;
   padding: 30px;
-  width: 200px;
+  width: 400px;
+  height: 400px;
+`;
+
+export const PeerVideoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
