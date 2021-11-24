@@ -3,8 +3,7 @@ import styled from "styled-components";
 export const Editor = styled.div`
   display: flex;
   flex-direction: column;
-  width 500px;
-  border: 1px solid;
+  width 780px;
 
   .CodeMirror {
     width: 100%;
@@ -38,15 +37,14 @@ export const Editor = styled.div`
 
 export const TabWrapper = styled.div`
   display: flex;
-  width: 500px;
+  width: 780px;
   background-color: #384051;
-  height: 40px;
-  border-bottom: 1px solid;
+  height: 37px;
 `;
 
 export const TabList = styled.div`
   display: flex;
-  width: 450px;
+  width: 730px;
   overflow-x: scroll;
   white-space: nowrap;
 `;

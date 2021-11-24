@@ -19,9 +19,25 @@ export const Modal = styled.div`
   min-height: 720px;
   background: white;
   overflow: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 `;
 
-export const temp = styled.div`
+export const ModalContenWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  background-color: #2a303d;
+`;
+
+export const LeftTab = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+
+export const ExitButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 `;

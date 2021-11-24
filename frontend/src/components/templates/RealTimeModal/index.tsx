@@ -51,16 +51,20 @@ const RealTimeModal: FunctionComponent<{
   return (
     <Styled.ModalWrapper>
       <Styled.Modal>
-        <Styled.temp>
-          {SOCKET && <LiveStream socket={SOCKET} />}
+        <Styled.ModalContenWrapper>
+          <Styled.LeftTab>
+            {SOCKET && <LiveStream socket={SOCKET} />}
+            <Styled.ExitButtonWrapper>
+              <Button
+                type="realtime_exit"
+                text="나가기"
+                onClick={onExitClick}
+              ></Button>
+            </Styled.ExitButtonWrapper>
+          </Styled.LeftTab>
           {SOCKET && <RealTimeEditor question={question} socket={SOCKET} />}
           {SOCKET && <LiveChat socket={SOCKET} />}
-        </Styled.temp>
-        <Button
-          type="realtime_exit"
-          text="나가기"
-          onClick={onExitClick}
-        ></Button>
+        </Styled.ModalContenWrapper>
         <ExitCheckModalWarpper
           question={question}
           disconnectAndExit={disconnectAndExit}
