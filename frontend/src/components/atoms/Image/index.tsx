@@ -5,6 +5,7 @@ interface Props {
   type: string;
   src: string;
   alt?: string;
+  onClick?: VoidFunction;
 }
 
 interface StyleProps {
@@ -27,7 +28,7 @@ const types: { [key: string]: StyleProps } = {
   },
 };
 
-const image: FunctionComponent<Props> = ({ type, src, alt }) => {
+const image: FunctionComponent<Props> = ({ type, src, alt, onClick }) => {
   const StyleProps = types[type];
   return (
     <Image
@@ -35,6 +36,7 @@ const image: FunctionComponent<Props> = ({ type, src, alt }) => {
       {...StyleProps}
       alt={alt || "Profile image"}
       objectFit={"contain"}
+      onClick={onClick}
     />
   );
 };

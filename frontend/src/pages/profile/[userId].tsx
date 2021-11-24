@@ -22,6 +22,7 @@ interface Props {
     username: string;
     score: number;
     profileUrl: string;
+    socialUrl: string;
     author: AuthorType;
     postQuestions: QuestionType[];
     postAnswers: AnswerType[];
@@ -47,11 +48,19 @@ const ProfilePage: NextPage<Props> = ({
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />
-            <TitleText
+            <ContentText
               type={"Default"}
               text={`누적 스코어 : ${String(userProfileData.score)}`}
             />
-            <ContentText type={"Default"} text={"abcabc@gmail.com"} />
+            <ProfileSoical>
+              <Image
+                type="Large"
+                src={
+                  "https://i.ibb.co/mRdht2f/PCp-Xdqv-UWf-CW1m-Xh-H1-Y-98y-Bpgs-Wxu-TSTofy3-NGMo9y-BTATDyz-Vkq-U580bf-Sln50b-FU.png"
+                }
+                onClick={() => (location.href = userProfileData.socialUrl)}
+              />
+            </ProfileSoical>
           </TextDiv>
         </ProfileDiv>
         <ChartWrapper>
@@ -199,9 +208,6 @@ const ImageDiv = styled.div`
 `;
 
 const TextDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   margin-left: 50px;
 `;
 
@@ -219,6 +225,12 @@ const ChartDiv = styled.div`
 const SummaryWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const ProfileSoical = styled.div`
+  display: flex;
+  flex-gap: 10px;
+  margin-top: 20px;
 `;
 
 export default ProfilePage;

@@ -207,6 +207,7 @@ export const getUserProfileData = async (userId: number) => {
           username
           score
           profileUrl
+          socialUrl
           postQuestions {
             id
             title
