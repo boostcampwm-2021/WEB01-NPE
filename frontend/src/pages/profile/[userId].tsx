@@ -1,14 +1,9 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
+import Image from "next/image";
 import styled from "styled-components";
 
-import {
-  HeaderText,
-  TitleText,
-  ContentText,
-  Image,
-  Chart,
-} from "@components/atoms";
+import { HeaderText, TitleText, ContentText, Chart } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { SEOHeader } from "@components/templates";
 import { getUserProfileData } from "@src/lib";
@@ -51,7 +46,14 @@ const ProfilePage: NextPage<Props> = ({
         <TitleText type={"Default"} text={"기본 정보"} />
         <ProfileDiv>
           <ImageDiv>
-            <Image type={"Profile"} src={`${userProfileData.profileUrl}`} />
+            <Image
+              width={192}
+              height={192}
+              src={userProfileData.profileUrl}
+              placeholder="blur"
+              blurDataURL={`${userProfileData.profileUrl}&s40`}
+              priority={true}
+            />
           </ImageDiv>
           <TextDiv>
             <TitleText type={"Default"} text={userProfileData.username} />
