@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ParsedUrlQuery } from "querystring";
-import { GetServerSideProps } from "next";
-import type { NextPage } from "next";
-import styled from "styled-components";
+import { GetServerSideProps, NextPage } from "next";
+import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/client";
+import styled from "styled-components";
 
 import { Modal } from "@components/molecules";
 import { QuestionDetail, AnswerDetail, Header } from "@components/organisms";
@@ -23,9 +23,12 @@ const MainContainer = styled.main`
 
 interface Props {
   question: QuestionDetailType;
+  error?: number;
 }
 
-const QuestionPage: NextPage<Props> = ({ question }) => {
+const QuestionPage: NextPage<Props> = ({ question, error }) => {
+  if (error) return <ErrorPage statusCode={error} />;
+
   const router = useRouter();
   const [anwerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -111,23 +114,22 @@ interface Params extends ParsedUrlQuery {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id }: Params = context.params as Params;
-  const viewedQuestion = await viewOneQuestionByID(Number(id));
-  const question = viewedQuestion.data.viewOneQuestionById;
+  try {
+    const viewedQuestion = await viewOneQuestionByID(Number(id));
+    const question = viewedQuestion.data.viewOneQuestionById;
 
-  if (!question) {
     return {
-      redirect: {
-        destination: "/",
-        permanent: false,
+      props: {
+        question,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        error: 404,
       },
     };
   }
-
-  return {
-    props: {
-      question,
-    },
-  };
 };
 
 export default QuestionPage;

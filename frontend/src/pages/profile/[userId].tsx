@@ -1,6 +1,7 @@
 import React from "react";
 import type { NextPage, GetServerSideProps } from "next";
 import Image from "next/image";
+import ErrorPage from "next/error";
 import styled from "styled-components";
 
 import { HeaderText, TitleText, ContentText, Chart } from "@components/atoms";
@@ -24,13 +25,16 @@ interface Props {
   };
   userTagCountChartData: ChartData<"doughnut"> & ChartData<"bar">;
   answerStateChartData: ChartData<"doughnut"> & ChartData<"bar">;
+  error?: number;
 }
 
 const ProfilePage: NextPage<Props> = ({
   userProfileData,
   userTagCountChartData,
   answerStateChartData,
+  error,
 }) => {
+  if (error) return <ErrorPage statusCode={error} />;
   return (
     <>
       <SEOHeader
@@ -114,17 +118,26 @@ const ProfilePage: NextPage<Props> = ({
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = Number(context.query.userId);
-  const { data } = await getUserProfileData(userId);
 
-  return {
-    props: {
-      userProfileData: data.findUserById,
-      userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
-      answerStateChartData: makeAnswerStateChartData(
-        data.findUserById.postAnswers
-      ),
-    },
-  };
+  try {
+    const { data } = await getUserProfileData(userId);
+
+    return {
+      props: {
+        userProfileData: data.findUserById,
+        userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
+        answerStateChartData: makeAnswerStateChartData(
+          data.findUserById.postAnswers
+        ),
+      },
+    };
+  } catch {
+    return {
+      props: {
+        error: 404,
+      },
+    };
+  }
 };
 
 const makeTagCountChartData = (
