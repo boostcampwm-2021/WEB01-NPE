@@ -98,7 +98,7 @@ const LiverStream: FunctionComponent<Props> = ({ socket, questionId }) => {
         });
 
         socket.on("stream:recevingReturnSignal", (payload) => {
-          const item = peersRef.current.find((p) => (p.peerID = payload.id));
+          const item = peersRef.current.find((p) => p.peerID === payload.id);
           if (item) {
             item.peer.signal(payload.signal);
           }
