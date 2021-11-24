@@ -31,7 +31,12 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
   const [hasMore, setHasMore] = useState(true);
-  const [index, setIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);
+
+  const reset = () => {
+    setTagList([]);
+    setTexts("");
+  };
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -45,7 +50,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
       if (data) {
         setQuestionList(data.searchQuestions);
-        setIndex(data.searchQuestions.length);
+        setQuestionIndex(data.searchQuestions.length);
         window.scrollTo(0, 0);
       }
     };
@@ -55,14 +60,14 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
   const getMorePost = async () => {
     const { data } = await getQuestions(
       5,
-      index,
+      questionIndex,
       texts,
       tagList.map((tag) => Number(tag.id)),
       isLive
     );
     if (data) {
       const { searchQuestions: fetchData } = data;
-      setIndex(index + fetchData.length);
+      setQuestionIndex(questionIndex + fetchData.length);
       setQuestionList([...questionList, ...fetchData]);
     } else {
       setHasMore(false);
@@ -78,7 +83,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         imageUrl="https://user-images.githubusercontent.com/50866506/142799853-901b29c1-5836-467e-bf89-f8f37a08a17f.png"
         siteUrl="https://nullpointerexception.ml"
       />
-      <Header type="Default" setTexts={setTexts} />
+      <Header type="Default" setTexts={setTexts} onResetState={reset} />
       <MainContainer>
         <SideBar
           selectedTags={tagList}
