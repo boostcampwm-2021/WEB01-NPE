@@ -12,11 +12,15 @@ import { WebsocketProvider } from "y-websocket";
 import * as Styled from "./styled";
 import Editor from "./editor";
 import { QuestionDetailType } from "@src/types";
-import { CodemirrorBinding } from "y-codemirror";
 
 interface CodeType {
   tabList: string[];
   index: string;
+}
+
+interface CodeListType {
+  language: string;
+  code: string;
 }
 
 const languageSupport = [
@@ -32,6 +36,7 @@ const languageSupport = [
 ];
 
 const gfmLangToMode: Record<string, string> = {
+  markdown: "markdown",
   javascript: "javascript",
   c: "clike",
   cpp: "clike",
@@ -44,6 +49,7 @@ const gfmLangToMode: Record<string, string> = {
 };
 
 const gfmLangToExtension: Record<string, string> = {
+  markdown: "md",
   javascript: "js",
   c: "c",
   cpp: "c++",
@@ -79,6 +85,13 @@ const langToExtension: Record<string, string> = {
   CSS: "css",
 };
 
+const extensionToGfmLang: Record<string, string> = Object.keys(
+  gfmLangToExtension
+).reduce((obj: Record<string, string>, key) => {
+  obj[gfmLangToExtension[key]] = key;
+  return obj;
+}, {});
+
 const extensionToLang: Record<string, string> = Object.keys(
   langToExtension
 ).reduce((obj: Record<string, string>, key) => {
@@ -92,7 +105,7 @@ const gfmCodeReg = /^(([ \t]*`{3,4})([^\n]*)([\s\S]+?)(^[ \t]*\2))/gm;
 const WrappedEditor: FunctionComponent<{
   question: QuestionDetailType;
   socket: Socket.Socket;
-  setCodeList: any;
+  setCodeList: (value: CodeListType[]) => void;
 }> = ({ question, socket, setCodeList }) => {
   const serverUrl =
     process.env.NODE_ENV === "production"
@@ -147,8 +160,11 @@ const WrappedEditor: FunctionComponent<{
         const provider = new WebsocketProvider(serverUrl, id, ydoc);
         provider.once("synced", () => {
           const text = ydoc.getText("codemirror");
-          console.log(text.toString());
-          setCodeList((prev: string[]) => [...prev, text.toString()]);
+          const newCode: CodeListType = {
+            language: extensionToGfmLang[id.split(".")[1]],
+            code: text.toString(),
+          };
+          setCodeList((prev) => [...prev, newCode]);
           provider.disconnect();
         });
       });
