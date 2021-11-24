@@ -48,7 +48,7 @@ const AnswerRegister: FunctionComponent<Props> = ({
   useEffect(() => {
     if (!editorRef || !editorRef.current) return;
     const editorInstance = editorRef.current.getInstance();
-    editorInstance.setHTML(value);
+    editorInstance.setMarkdown(value);
   }, [value]);
 
   useEffect(() => {
