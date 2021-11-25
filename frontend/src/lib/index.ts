@@ -68,6 +68,7 @@ export const viewOneQuestionByID = async (id: number) => {
         createdAt
         thumbupCount
         score
+        adopted
         author {
           id
           username
@@ -82,6 +83,7 @@ export const viewOneQuestionByID = async (id: number) => {
           id
           desc
           thumbupCount
+          state
           author{
            username
            profileUrl
@@ -91,6 +93,17 @@ export const viewOneQuestionByID = async (id: number) => {
         }
       }
     }`,
+  });
+  return data;
+};
+
+export const turnOffRealtimeShare = async (questionId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation{
+      turnOffRealtimeShare(questionId: ${questionId})
+    }
+    `,
   });
   return data;
 };
@@ -130,6 +143,16 @@ export const thumbDownAnswer = async (answerId: number) => {
     mutation: gql`
     mutation {
       thumbDownAnswer(answerId: ${answerId})
+    }`,
+  });
+  return data;
+};
+
+export const adoptAnswer = async (answerId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation {
+      adoptAnswer(answerId: ${answerId}) 
     }`,
   });
   return data;
@@ -262,6 +285,7 @@ export const POST_ANSWER = gql`
       }
       thumbupCount
       createdAt
+      state
     }
   }
 `;

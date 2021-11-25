@@ -40,6 +40,7 @@ export interface QuestionDetailType {
   createdAt: string;
   score: number;
   answers: AnswerDetailType[];
+  adopted: boolean;
 }
 
 export interface DetailType {
@@ -52,6 +53,7 @@ export interface DetailType {
 
 export interface AnswerDetailType extends DetailType {
   createdAt: string;
+  state: 0 | 1;
 }
 
 export interface AnswerType {
