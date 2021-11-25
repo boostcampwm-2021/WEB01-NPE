@@ -7,7 +7,6 @@ import {
   Query,
   Resolver,
   Root,
-  UseMiddleware,
 } from "type-graphql";
 import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
@@ -182,6 +181,30 @@ export default class QuestionResolver {
     const result = await this.thumbService.questionThumbDown(
       questionId,
       userId
+    );
+
+    return result;
+  }
+
+  @Query(() => [PostQuestion], {
+    description: "질문글 좋아요 개수 역순으로 5개 가져오기",
+  })
+  async getQuestionsRank(): Promise<PostQuestion[]> {
+    return await this.postService.getQuestionsRank();
+  }
+  
+  
+  @Mutation(() => Boolean, {
+    description: "실시간 공유 끄기 Mutation",
+  })
+  async turnOffRealtimeShare(
+    @Ctx("userId") userId: number,
+    @Arg("questionId", { description: "싫어요 표시할 질문글의 ID" })
+    questionId: number
+  ) {
+    const result = await this.postService.turnOffRealtimeShare(
+      userId,
+      questionId
     );
 
     return result;

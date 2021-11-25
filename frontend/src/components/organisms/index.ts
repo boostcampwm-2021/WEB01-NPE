@@ -8,3 +8,4 @@ export { default as AnswerRegister } from "./AnswerRegister";
 export { default as RealTimeEditor } from "./RealTimeEditor";
 export { default as LivaAudioStream } from "./LiveAudioStream";
 export { default as LiveChat } from "./LiveChat";
+export { default as LeaderBoard } from "./LeaderBoard";

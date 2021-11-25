@@ -9,14 +9,18 @@ import { QuestionDetailType } from "@src/types";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
 import LiveStream from "@src/components/organisms/LiveAudioStream/";
+import { turnOffRealtimeShare } from "@src/lib";
+import router from "next/router";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
   exitModal: VoidFunction;
   disconnectAndPostAnswer: VoidFunction;
-}> = ({ question, exitModal, disconnectAndPostAnswer }) => {
+  setCodeList: any;
+}> = ({ question, exitModal, disconnectAndPostAnswer, setCodeList }) => {
   const [SOCKET, setSOCKET] = useState<Socket.Socket | null>(null);
   const [session] = useSession();
+
   if (!session || !session.accessToken) throw new Error("Auth Required");
 
   React.useEffect(() => {
@@ -47,6 +51,12 @@ const RealTimeModal: FunctionComponent<{
     exitModal();
   };
 
+  const disconnectAndDestory = async () => {
+    disconnectAndExit();
+    await turnOffRealtimeShare(Number(question.id));
+    router.reload();
+  };
+
   return (
     <Styled.ModalWrapper>
       <Styled.Modal>
@@ -61,13 +71,20 @@ const RealTimeModal: FunctionComponent<{
               ></Button>
             </Styled.ExitButtonWrapper>
           </Styled.LeftTab>
-          {SOCKET && <RealTimeEditor question={question} socket={SOCKET} />}
+          {SOCKET && (
+            <RealTimeEditor
+              question={question}
+              socket={SOCKET}
+              setCodeList={setCodeList}
+            />
+          )}
           {SOCKET && <LiveChat socket={SOCKET} />}
         </Styled.ModalContenWrapper>
         <ExitCheckModalWarpper
           question={question}
           disconnectAndExit={disconnectAndExit}
           disconnectAndPostAnswer={disconnectAndPostAnswer}
+          disconnectAndDestory={disconnectAndDestory}
         />
       </Styled.Modal>
     </Styled.ModalWrapper>

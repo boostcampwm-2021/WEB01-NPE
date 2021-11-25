@@ -5,7 +5,7 @@
 ![](https://img.shields.io/github/issues-pr-raw/boostcampwm-2021/WEB01-NPE?color=green)
 ![](https://img.shields.io/github/issues-pr-closed-raw/boostcampwm-2021/web01-npe?color=red)
 ![](https://img.shields.io/github/milestones/all/boostcampwm-2021/web01-npe)
-![](https://img.shields.io/website?url=http%3A%2F%2F118.67.142.132%2F)
+![](https://img.shields.io/website?url=https%3A%2F%2Fnullpointerexception.ml)
 ![](https://img.shields.io/github/workflow/status/boostcampwm-2021/WEB01-NPE/Main%20%EB%B8%8C%EB%9E%9C%EC%B9%98%20%EB%B0%B0%ED%8F%AC%20%EC%9E%90%EB%8F%99%ED%99%94)
 
 # NPE - NullPointerException

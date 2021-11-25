@@ -58,3 +58,11 @@ export const DeleteBtn = styled.span`
   position: absolute;
   right: 10px;
 `;
+
+export const SvgDiv = styled.div<{ fill: string }>`
+  fill: ${(props) => props.fill};
+
+  :hover {
+    cursor: pointer;
+  }
+`;

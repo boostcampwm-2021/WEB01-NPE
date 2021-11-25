@@ -8,12 +8,14 @@ import { QuestionDetailType } from "@src/types";
 interface IExitCheckModalWarpperProps {
   question: QuestionDetailType;
   disconnectAndExit: VoidFunction;
+  disconnectAndDestory: VoidFunction;
   disconnectAndPostAnswer: VoidFunction;
 }
 
 const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps> = ({
   question,
   disconnectAndExit,
+  disconnectAndDestory,
   disconnectAndPostAnswer,
 }) => {
   const [session] = useSession();
@@ -31,11 +33,15 @@ const ExitCheckModalWarpper: React.FunctionComponent<IExitCheckModalWarpperProps
           <TitleText type="Default" text="정말 나가시겠습니까?"></TitleText>
           {session.userId == question.author.id ? (
             <>
+              <ContentText
+                type="Default"
+                text="질문자 퇴장시 더이상 입장 불가능합니다"
+              />
               <Styled.ButtonWapper>
                 <Button
                   type="realtime_exit"
                   text="나가기"
-                  onClick={disconnectAndExit}
+                  onClick={disconnectAndDestory}
                 ></Button>
                 <Button
                   type="realtime_exit"

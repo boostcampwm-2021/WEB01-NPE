@@ -8,11 +8,23 @@ const WrappedEditor = dynamic(() => import("./WrappedEditor"), {
   ssr: false,
 });
 
+interface CodeListType {
+  language: string;
+  code: string;
+}
+
 const RealTimeEditor: FunctionComponent<{
   question: QuestionDetailType;
   socket: Socket.Socket;
-}> = ({ question, socket }) => {
-  return <WrappedEditor question={question} socket={socket} />;
+  setCodeList: (value: CodeListType[]) => void;
+}> = ({ question, socket, setCodeList }) => {
+  return (
+    <WrappedEditor
+      question={question}
+      socket={socket}
+      setCodeList={setCodeList}
+    />
+  );
 };
 
 export default RealTimeEditor;
