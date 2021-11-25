@@ -15,11 +15,12 @@ import "codemirror/mode/css/css";
 import { useSession } from "next-auth/client";
 
 const Editor: FunctionComponent<{
+  serverUrl: string;
   roomId: string;
   color: string;
   value?: string;
   mode?: string;
-}> = ({ roomId, color, value, mode }) => {
+}> = ({ serverUrl, roomId, color, value, mode }) => {
   const [editorRef, setEditorRef] = useState(null);
   const [session] = useSession();
 
@@ -34,12 +35,8 @@ const Editor: FunctionComponent<{
   useEffect(() => {
     if (!editorRef) return;
 
-    const yjsEndpoint =
-      process.env.NODE_ENV === "production"
-        ? `wss://nullpointerexception.ml/yjs`
-        : `ws://localhost:1234`;
     const ydoc = new Y.Doc();
-    const provider = new WebsocketProvider(yjsEndpoint, roomId, ydoc);
+    const provider = new WebsocketProvider(serverUrl, roomId, ydoc);
     const yText = ydoc.getText("codemirror");
     const yUndoManager = new Y.UndoManager(yText);
     provider.awareness.setLocalStateField("user", {
@@ -49,7 +46,9 @@ const Editor: FunctionComponent<{
     if (provider.synced) {
       setDefaultVal(yText);
     } else {
-      provider.once("synced", () => setDefaultVal(yText));
+      provider.once("synced", () => {
+        setDefaultVal(yText);
+      });
     }
     const binding = new CodemirrorBinding(
       yText,

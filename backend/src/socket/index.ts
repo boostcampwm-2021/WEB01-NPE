@@ -15,8 +15,10 @@ interface UsersType {
   };
 }
 interface CodeType {
-  tabList: string[];
-  index: string;
+  [roomName: string]: {
+    tabList: string[];
+    index: string;
+  };
 }
 
 interface sendPayload {
@@ -30,7 +32,7 @@ interface returnPayload {
 }
 
 const users: UsersType = {};
-const codes: CodeType = { tabList: [], index: "0" };
+const codes: CodeType = {};
 let streamUserList: any = {};
 const socketToRoom: any = {};
 
@@ -93,11 +95,14 @@ export default (io: socketio.Server) => {
     });
 
     socket.on("code", (code) => {
-      if (code.tabList !== undefined) {
-        codes.tabList = [...code.tabList];
-        codes.index = code.index;
+      if (codes[roomName] === undefined) {
+        codes[roomName] = { tabList: [], index: "0" };
       }
-      io.to(roomName).emit("code", codes);
+      if (code.tabList !== undefined) {
+        codes[roomName].tabList = [...code.tabList];
+        codes[roomName].index = code.index;
+      }
+      io.to(roomName).emit("code", codes[roomName]);
     });
 
     socket.on("stream:sendingSignal", (payload: sendPayload) => {

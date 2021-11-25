@@ -25,13 +25,19 @@ interface Props {
   error?: number;
 }
 
+interface CodeListType {
+  language: string;
+  code: string;
+}
+
 const QuestionPage: NextPage<Props> = ({ question }) => {
   const router = useRouter();
-  const [anwerInput, setAnswerInput] = useState<string | undefined>();
+  const [answerInput, setAnswerInput] = useState<string | undefined>();
   const [isModal, setIsModal] = useState<boolean>(false);
   const [answers, setAnswers] = useState<AnswerDetailType[]>(question.answers);
   const [show, setShow] = useState<boolean>(false);
   const [session] = useSession();
+  const [codeList, setCodeList] = useState<CodeListType[]>([]);
   const questionId = router.query.id;
 
   const exitModal = () => {
@@ -48,7 +54,14 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
 
   const disconnectAndPostAnswer = () => {
     exitModal();
-    setAnswerInput("abcd");
+    const code = codeList
+      .map(({ language, code }) =>
+        language !== "markdown"
+          ? `\`\`\` ${language}\n${code.trim()}\n\`\`\``
+          : code.trim()
+      )
+      .join("\n\n");
+    setAnswerInput(code);
   };
 
   const onNewAnswer = (newAnswer: AnswerDetailType) => {
@@ -82,12 +95,14 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
         <AnswerRegister
           questionId={Number(questionId)}
           onNewAnswer={onNewAnswer}
+          value={answerInput}
         />
         {isModal && (
           <RealTimeModal
             question={question}
             exitModal={exitModal}
             disconnectAndPostAnswer={disconnectAndPostAnswer}
+            setCodeList={setCodeList}
           />
         )}
       </MainContainer>
