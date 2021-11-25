@@ -20,10 +20,6 @@ import { ObjectType, Field, ID, Int, Float, Authorized } from "type-graphql";
     "질문글에 대한 오브젝트 입니다. 하나의 오브젝트가 하나의 질문을 의미합니다.",
 })
 export class PostQuestion {
-  // 인증 전용
-  // 관련 type-graphql 문서
-  // https://typegraphql.com/docs/authorization.html
-  @Authorized()
   @Field(() => ID, {
     description: "해당 글의 고유 id. 글 생성 순으로 지정",
   })
@@ -45,6 +41,10 @@ export class PostQuestion {
   @Field(() => Int, { description: "글 조회수" })
   @Column("int", { name: "view_count", default: () => "'0'" })
   viewCount: number;
+
+  @Field(() => Boolean, { description: "채택 여부", defaultValue: 0 })
+  @Column("tinyint", { name: "adopted", default: () => "'0'" })
+  adopted: number;
 
   @Field(() => Boolean, { description: "실시간 공유 여부" })
   @Column("tinyint", { name: "realtime_share" })

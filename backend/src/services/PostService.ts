@@ -18,6 +18,7 @@ import QuestionRepository from "../repositories/QuestionRepository";
 import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
 import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 import AuthorizationError from "../errors/AuthorizationError";
+import CommonError from "../errors/CommonError";
 
 @Service()
 export default class PostService {
@@ -243,6 +244,10 @@ export default class PostService {
     newAnswer.userId = userId;
     newAnswer.desc = args.desc;
 
+    const author = await this.userRepository.findById(userId);
+    author.score += 10;
+    await this.userRepository.save(author);
+
     return await this.answerRepository.save(newAnswer);
   }
 
@@ -269,18 +274,44 @@ export default class PostService {
     return true;
   }
 
-  public async turnOffRealtimeShare(userId: number, questionId: number) {
+  public async adoptAnswer(userId: number, answerId: number): Promise<boolean> {
+    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answerAuthor = await this.userRepository.findById(answer.userId);
+    const question = await this.questionRepository.findOneQuestionById(
+      answer.postQuestionId
+    );
+
+    if (answer.postQuestionUserId !== userId)
+      throw new AuthorizationError(
+        "you don't have permission! It is not your question."
+      );
+
+    if (answer.userId === userId)
+      throw new CommonError("you can't adopt your answer");
+
+    if (question.adopted === 1)
+      throw new CommonError("question already adopted another answer");
+
+    if (answer.state === 0) {
+      question.adopted = 1;
+      answer.state = 1;
+      answerAuthor.score += 50;
+      await this.answerRepository.save(answer);
+      await this.userRepository.save(answerAuthor);
+      await this.questionRepository.save(question);
+      return true;
+    } else {
+      return false;
+    }
+  }
+ public async turnOffRealtimeShare(userId: number, questionId: number) {
     const question = await this.questionRepository.findOneQuestionById(
       questionId
     );
 
     if (question.userId !== userId)
-      throw new AuthorizationError(
-        "you don't have permission! It is not your question."
-      );
-
-    // if (question.realtimeShare === 0)
-    //   throw new CommonError("realtime share is already disabled");
+    if (question.realtimeShare === 0)
+      throw new CommonError("realtime share is already disabled");
 
     question.realtimeShare = 0;
     await this.questionRepository.save(question);

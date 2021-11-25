@@ -114,4 +114,18 @@ export default class AnswerResolver {
 
     return result;
   }
+
+  @Mutation(() => Boolean, {
+    description:
+      "답변글 채택 Mutation. 성공 여부 boolean 반환. 실패시 자신의 질문글에 대한 채택",
+  })
+  async adoptAnswer(
+    @Arg("answerId", { description: "채택할 답변글의 ID" })
+    answerId: number,
+    @Ctx("userId") userId: number
+  ): Promise<boolean> {
+    const result = await this.postService.adoptAnswer(userId, answerId);
+
+    return result;
+  }
 }

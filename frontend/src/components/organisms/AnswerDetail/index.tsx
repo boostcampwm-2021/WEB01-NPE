@@ -6,12 +6,13 @@ import * as Styled from "./styled";
 
 interface Props {
   answer: AnswerDetailType;
+  isAdoptable?: boolean;
 }
 
-const AnswerDetail: FunctionComponent<Props> = ({ answer }) => {
+const AnswerDetail: FunctionComponent<Props> = ({ answer, isAdoptable }) => {
   return (
     <Styled.Container>
-      <DetailBody detail={answer} type="Answer" />
+      <DetailBody detail={answer} type="Answer" isAdoptable={isAdoptable} />
     </Styled.Container>
   );
 };
