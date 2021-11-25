@@ -277,6 +277,9 @@ export default class PostService {
   public async adoptAnswer(userId: number, answerId: number): Promise<boolean> {
     const answer = await this.answerRepository.findOneAnswerById(answerId);
     const answerAuthor = await this.userRepository.findById(answer.userId);
+    const question = await this.questionRepository.findOneQuestionById(
+      answer.postQuestionId
+    );
 
     if (answer.postQuestionUserId !== userId)
       throw new AuthorizationError(
@@ -285,6 +288,9 @@ export default class PostService {
 
     if (answer.userId === userId)
       throw new CommonError("you can't adopt your answer");
+
+    if (question.adopted === 1)
+      throw new CommonError("question already adopted another answer");
 
     if (answer.state === 0) {
       answer.state = 1;
