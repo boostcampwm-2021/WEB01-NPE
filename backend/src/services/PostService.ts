@@ -304,4 +304,18 @@ export default class PostService {
       return false;
     }
   }
+ public async turnOffRealtimeShare(userId: number, questionId: number) {
+    const question = await this.questionRepository.findOneQuestionById(
+      questionId
+    );
+
+    if (question.userId !== userId)
+    if (question.realtimeShare === 0)
+      throw new CommonError("realtime share is already disabled");
+
+    question.realtimeShare = 0;
+    await this.questionRepository.save(question);
+
+    return true;
+  }
 }
