@@ -2,51 +2,30 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import Image from "next/image";
 
 import * as Styled from "./styled";
+import { AuthorType } from "@src/types";
 import trophyImg from "./trophy.svg";
 import questionImg from "./question.svg";
 import thumbsupImg from "./thumbsup.svg";
+import router from "next/router";
 
-const rankers = [
-  {
-    profileUrl: "https://avatars.githubusercontent.com/u/49035066?s=40&v=4",
-    username: "안승재",
-    score: 99,
-  },
+interface QuestionType {
+  title: string;
+  thumbupCount: number;
+  id: number;
+}
 
-  {
-    profileUrl: "https://avatars.githubusercontent.com/u/49035066?s=40&v=4",
-    username: "hwangwoojin",
-    score: 99,
-  },
-  {
-    profileUrl: "https://avatars.githubusercontent.com/u/49035066?s=40&v=4",
-    username: "hwangwoojin",
-    score: 99,
-  },
-  {
-    profileUrl: "https://avatars.githubusercontent.com/u/49035066?s=40&v=4",
-    username: "hwangwoojin",
-    score: 99,
-  },
-  {
-    profileUrl: "https://avatars.githubusercontent.com/u/49035066?s=40&v=4",
-    username: "hwangwoojin",
-    score: 99,
-  },
-];
+interface Props {
+  userRank: AuthorType[];
+  questionRank: QuestionType[];
+}
 
-const questions = [
-  { title: "자바스크립트 문자열 재업 2", thumbupCount: 1 },
-  { title: "자바스크립트 문자열 재업 2", thumbupCount: 1 },
-  { title: "자바스크립트 문자열 재업 2", thumbupCount: 1 },
-  { title: "자바스크립트 문자열 재업 2", thumbupCount: 1 },
-  { title: "자바스크립트 문자열 재업 2", thumbupCount: 1 },
-];
-
-const LeaderBoard: FunctionComponent = () => {
-  const showRanker = (user, index) => {
+const LeaderBoard: FunctionComponent<Props> = ({ userRank, questionRank }) => {
+  const showRanker = (user: AuthorType, index: number) => {
     return (
-      <Styled.Ranker key={index}>
+      <Styled.Ranker
+        key={index}
+        onClick={() => router.push(`profile/${user.id}`)}
+      >
         <Styled.RankerProfile>
           <Styled.RankerNumber>{index + 1}</Styled.RankerNumber>
           <Styled.RankerImage>
@@ -58,9 +37,12 @@ const LeaderBoard: FunctionComponent = () => {
       </Styled.Ranker>
     );
   };
-  const showQuestion = (question, index) => {
+  const showQuestion = (question: QuestionType, index: number) => {
     return (
-      <Styled.Question key={index}>
+      <Styled.Question
+        key={index}
+        onClick={() => router.push(`question/${question.id}`)}
+      >
         <Styled.QuestionTitle>{question.title}</Styled.QuestionTitle>
         <Styled.QuestionThumbsUp>
           <Styled.Icon>
@@ -82,7 +64,7 @@ const LeaderBoard: FunctionComponent = () => {
             </Styled.Icon>
             RANKING
           </Styled.RankingHeader>
-          <Styled.RankerList>{rankers.map(showRanker)}</Styled.RankerList>
+          <Styled.RankerList>{userRank.map(showRanker)}</Styled.RankerList>
         </Styled.RankingContainer>
 
         <Styled.QuestionsContainer>
@@ -93,7 +75,7 @@ const LeaderBoard: FunctionComponent = () => {
               </Styled.Icon>
               <Styled.QuestionHead>인기 질문</Styled.QuestionHead>
             </Styled.QuestionHeader>
-            {questions.map(showQuestion)}
+            {questionRank.map(showQuestion)}
           </Styled.Questions>
         </Styled.QuestionsContainer>
       </Styled.Container>

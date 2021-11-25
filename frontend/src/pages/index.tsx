@@ -6,7 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Header, LeaderBoard, SideBar } from "@components/organisms";
 import { QuestionList, SEOHeader } from "@components/templates";
 import { QuestionType, TagType } from "@src/types";
-import { test, getQuestions } from "@src/lib";
+import { test, getQuestions, getUsersRank, getQuestionsRank } from "@src/lib";
 
 const MainContainer = styled.main`
   display: flex;
@@ -22,9 +22,11 @@ interface Data {
 interface Props {
   data: Data;
   error: any;
+  userRank: any;
+  questionRank: any;
 }
 
-const MainPage: NextPage<Props> = ({ data, error }) => {
+const MainPage: NextPage<Props> = ({ data, error, userRank, questionRank }) => {
   const [tagList, setTagList] = useState<TagType[]>([]);
   const [isLive, setIsLive] = useState<boolean>(false);
   const [texts, setTexts] = useState<string>("");
@@ -101,7 +103,10 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         >
           <QuestionList questions={questionList} />
         </InfiniteScroll>
-        <LeaderBoard />
+        <LeaderBoard
+          userRank={userRank.getUsersRank}
+          questionRank={questionRank.getQuestionsRank}
+        />
       </MainContainer>
     </>
   );
@@ -109,6 +114,8 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data } = await getQuestions(5, 0);
+  const { data: userRank } = await getUsersRank();
+  const { data: questionRank } = await getQuestionsRank();
   if (!data) {
     return {
       redirect: {
@@ -121,6 +128,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       data,
+      userRank,
+      questionRank,
     },
   };
 };

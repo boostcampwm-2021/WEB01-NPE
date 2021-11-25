@@ -90,6 +90,10 @@ export const RankerScore = styled.div`
   align-items: center;
   font-weight: 550;
   color: #83c1ff;
+  transition: all 0.3s ease-in-out;
+  ${Ranker}:hover & {
+    color: white;
+  }
 `;
 
 export const QuestionsContainer = styled.div`
