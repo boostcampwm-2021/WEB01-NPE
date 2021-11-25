@@ -1,15 +1,17 @@
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const Audio: FunctionComponent = ({ peer }) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+export default function Audio({ stream }) {
+  const ref = useRef(null);
+
   useEffect(() => {
-    peer.on("stream", (stream: MediaStream) => {
-      if (audioRef.current) {
-        audioRef.current.srcObject = stream;
-      }
-    });
-  }, []);
-  return <audio ref={audioRef} playsInline autoPlay />;
-};
+    if (ref.current) {
+      ref.current.srcObject = stream;
+    }
+  });
 
-export default Audio;
+  return (
+    <>
+      <audio ref={ref} autoPlay></audio>
+    </>
+  );
+}

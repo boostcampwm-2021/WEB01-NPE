@@ -44,7 +44,6 @@ const RealTimeModal: FunctionComponent<{
   };
 
   const disconnectAndExit = () => {
-    SOCKET?.disconnect();
     exitModal();
   };
 
@@ -53,7 +52,7 @@ const RealTimeModal: FunctionComponent<{
       <Styled.Modal>
         <Styled.ModalContenWrapper>
           <Styled.LeftTab>
-            {SOCKET && <LiveStream socket={SOCKET} questionId={question.id} />}
+            {SOCKET && <LiveStream socket={SOCKET} />}
             <Styled.ExitButtonWrapper>
               <Button
                 type="realtime_exit"
