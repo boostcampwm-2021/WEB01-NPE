@@ -7,7 +7,6 @@ import {
   Query,
   Resolver,
   Root,
-  UseMiddleware,
 } from "type-graphql";
 import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
@@ -185,5 +184,12 @@ export default class QuestionResolver {
     );
 
     return result;
+  }
+
+  @Query(() => [PostQuestion], {
+    description: "질문글 좋아요 개수 역순으로 5개 가져오기",
+  })
+  async getQuestionsRank(): Promise<PostQuestion[]> {
+    return await this.postService.getQuestionsRank();
   }
 }

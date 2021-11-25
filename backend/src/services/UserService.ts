@@ -36,4 +36,13 @@ export default class UserService {
 
     return newUser;
   }
+
+  public async getUsersRank(): Promise<User[]> {
+    const users = this.userRepository.find({
+      take: 5,
+      order: { score: "DESC" },
+    });
+
+    return users;
+  }
 }

@@ -82,4 +82,9 @@ export default class UserResolver {
 
     return isNewUser;
   }
+
+  @Query(() => [User], { description: "유저 점수 역순으로 5개 가져오기" })
+  async getUsersRank(): Promise<User[]> {
+    return await this.userService.getUsersRank();
+  }
 }
