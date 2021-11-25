@@ -190,7 +190,11 @@ export default class QuestionResolver {
   @Mutation(() => Boolean, {
     description: "실시간 공유 끄기 Mutation",
   })
-  async turnOffRealtimeShare(userId: number, questionId: number) {
+  async turnOffRealtimeShare(
+    @Ctx("userId") userId: number,
+    @Arg("questionId", { description: "싫어요 표시할 질문글의 ID" })
+    questionId: number
+  ) {
     const result = await this.postService.turnOffRealtimeShare(
       userId,
       questionId
