@@ -378,3 +378,34 @@ export const deleteAnswerById = async (answerId: number) => {
   });
   return data;
 };
+
+export const getUsersRank = async () => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        getUsersRank {
+          profileUrl
+          username
+          score
+          id
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};
+
+export const getQuestionsRank = async () => {
+  const { loading, error, data } = await client.query({
+    query: gql`
+      query {
+        getQuestionsRank {
+          title
+          thumbupCount
+          id
+        }
+      }
+    `,
+  });
+  return { loading, error, data };
+};

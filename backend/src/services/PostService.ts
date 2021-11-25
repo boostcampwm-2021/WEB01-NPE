@@ -139,6 +139,15 @@ export default class PostService {
     return viewedQuestion;
   }
 
+  public async getQuestionsRank(): Promise<PostQuestion[]> {
+    const questions = this.questionRepository.find({
+      take: 5,
+      order: { thumbupCount: "DESC" },
+    });
+
+    return questions;
+  }
+
   public async addNewQuestion(
     args: QuestionInput,
     // 이후 ctx.user 로 수정
