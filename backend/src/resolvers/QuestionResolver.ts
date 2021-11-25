@@ -186,4 +186,16 @@ export default class QuestionResolver {
 
     return result;
   }
+
+  @Mutation(() => Boolean, {
+    description: "실시간 공유 끄기 Mutation",
+  })
+  async turnOffRealtimeShare(userId: number, questionId: number) {
+    const result = await this.postService.turnOffRealtimeShare(
+      userId,
+      questionId
+    );
+
+    return result;
+  }
 }
