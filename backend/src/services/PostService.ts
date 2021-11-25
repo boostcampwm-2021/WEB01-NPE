@@ -17,6 +17,8 @@ import UserRepository from "../repositories/UserRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
 import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
 import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
+import AuthorizationError from "../errors/AuthorizationError";
+import CommonError from "../errors/CommonError";
 
 @Service()
 export default class PostService {
@@ -270,5 +272,28 @@ export default class PostService {
     await this.answerThumbRepository.deleteByAnswerId(answerId);
 
     return true;
+  }
+
+  public async adoptAnswer(userId: number, answerId: number): Promise<boolean> {
+    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answerAuthor = await this.userRepository.findById(answer.userId);
+
+    if (answer.postQuestionUserId !== userId)
+      throw new AuthorizationError(
+        "you don't have permission! It is not your question."
+      );
+
+    if (answer.userId === userId)
+      throw new CommonError("you can't adopt your answer");
+
+    if (answer.state === 0) {
+      answer.state = 1;
+      answerAuthor.score += 50;
+      await this.answerRepository.save(answer);
+      await this.userRepository.save(answerAuthor);
+      return true;
+    } else {
+      return false;
+    }
   }
 }
