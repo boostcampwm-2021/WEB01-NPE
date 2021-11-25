@@ -9,6 +9,8 @@ import { QuestionDetailType } from "@src/types";
 import ExitCheckModalWarpper from "@src/components/molecules/ExitCheckModalWapper";
 import LiveChat from "@src/components/organisms/LiveChat";
 import LiveStream from "@src/components/organisms/LiveAudioStream/";
+import { turnOffRealtimeShare } from "@src/lib";
+import router from "next/router";
 
 const RealTimeModal: FunctionComponent<{
   question: QuestionDetailType;
@@ -50,6 +52,12 @@ const RealTimeModal: FunctionComponent<{
     exitModal();
   };
 
+  const disconnectAndDestory = async () => {
+    disconnectAndExit();
+    await turnOffRealtimeShare(Number(question.id));
+    router.reload();
+  };
+
   return (
     <Styled.ModalWrapper>
       <Styled.Modal>
@@ -77,6 +85,7 @@ const RealTimeModal: FunctionComponent<{
           question={question}
           disconnectAndExit={disconnectAndExit}
           disconnectAndPostAnswer={disconnectAndPostAnswer}
+          disconnectAndDestory={disconnectAndDestory}
         />
       </Styled.Modal>
     </Styled.ModalWrapper>

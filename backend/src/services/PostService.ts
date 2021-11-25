@@ -17,6 +17,7 @@ import UserRepository from "../repositories/UserRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
 import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
 import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
+import AuthorizationError from "../errors/AuthorizationError";
 
 @Service()
 export default class PostService {
@@ -264,6 +265,25 @@ export default class PostService {
   public async deleteAnswer(answerId: number): Promise<boolean> {
     await this.answerRepository.deleteById(answerId);
     await this.answerThumbRepository.deleteByAnswerId(answerId);
+
+    return true;
+  }
+
+  public async turnOffRealtimeShare(userId: number, questionId: number) {
+    const question = await this.questionRepository.findOneQuestionById(
+      questionId
+    );
+
+    if (question.userId !== userId)
+      throw new AuthorizationError(
+        "you don't have permission! It is not your question."
+      );
+
+    // if (question.realtimeShare === 0)
+    //   throw new CommonError("realtime share is already disabled");
+
+    question.realtimeShare = 0;
+    await this.questionRepository.save(question);
 
     return true;
   }

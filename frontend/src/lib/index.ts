@@ -95,6 +95,17 @@ export const viewOneQuestionByID = async (id: number) => {
   return data;
 };
 
+export const turnOffRealtimeShare = async (questionId: number) => {
+  const data = await client.mutate({
+    mutation: gql`
+    mutation{
+      turnOffRealtimeShare(questionId: ${questionId})
+    }
+    `,
+  });
+  return data;
+};
+
 export const thumbUpQuestion = async (questionId: number) => {
   const data = await client.mutate({
     mutation: gql`
