@@ -242,6 +242,10 @@ export default class PostService {
     newAnswer.userId = userId;
     newAnswer.desc = args.desc;
 
+    const author = await this.userRepository.findById(userId);
+    author.score += 10;
+    await this.userRepository.save(author);
+
     return await this.answerRepository.save(newAnswer);
   }
 
