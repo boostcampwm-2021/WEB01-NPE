@@ -3,7 +3,7 @@ import { NextPage, GetServerSideProps } from "next";
 import styled from "styled-components";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import { Header, SideBar } from "@components/organisms";
+import { Header, LeaderBoard, SideBar } from "@components/organisms";
 import { QuestionList, SEOHeader } from "@components/templates";
 import { QuestionType, TagType } from "@src/types";
 import { test, getQuestions } from "@src/lib";
@@ -101,6 +101,7 @@ const MainPage: NextPage<Props> = ({ data, error }) => {
         >
           <QuestionList questions={questionList} />
         </InfiniteScroll>
+        <LeaderBoard />
       </MainContainer>
     </>
   );
