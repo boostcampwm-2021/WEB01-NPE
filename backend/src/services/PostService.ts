@@ -293,10 +293,12 @@ export default class PostService {
       throw new CommonError("question already adopted another answer");
 
     if (answer.state === 0) {
+      question.adopted = 1;
       answer.state = 1;
       answerAuthor.score += 50;
       await this.answerRepository.save(answer);
       await this.userRepository.save(answerAuthor);
+      await this.questionRepository.save(question);
       return true;
     } else {
       return false;
