@@ -88,7 +88,10 @@ const QuestionPage: NextPage<Props> = ({ question }) => {
         {answers.map((answer) => {
           return (
             <li key={answer.id}>
-              <AnswerDetail answer={answer} />
+              <AnswerDetail
+                answer={answer}
+                isAdoptable={session?.userId === Number(question.author.id)}
+              />
             </li>
           );
         })}

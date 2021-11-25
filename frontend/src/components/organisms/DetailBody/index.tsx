@@ -10,9 +10,14 @@ import { deleteAnswerById, adoptAnswer } from "@src/lib";
 interface Props {
   detail: AnswerDetailType;
   type: "Question" | "Answer";
+  isAdoptable?: boolean;
 }
 
-const DetailBody: FunctionComponent<Props> = ({ detail, type }) => {
+const DetailBody: FunctionComponent<Props> = ({
+  detail,
+  type,
+  isAdoptable,
+}) => {
   const { id, thumbupCount, desc, tags, author, state } = detail;
   const user = useSession();
   const [color, setColor] = useState<string>("");
@@ -37,7 +42,6 @@ const DetailBody: FunctionComponent<Props> = ({ detail, type }) => {
   };
 
   useEffect(() => {
-    console.log(state);
     setColor(state === 1 ? "green" : "rgba(0, 0, 0, 0.1)");
   }, [state]);
 
@@ -49,7 +53,7 @@ const DetailBody: FunctionComponent<Props> = ({ detail, type }) => {
           thumbupCount={thumbupCount}
           isQuestion={tags !== undefined}
         />
-        {state !== undefined && (
+        {state !== undefined && isAdoptable !== undefined && isAdoptable && (
           <Styled.SvgDiv fill={color} onClick={onCheck}>
             <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36">
               <path d="m6 14 8 8L30 6v8L14 30l-8-8v-8Z"></path>
