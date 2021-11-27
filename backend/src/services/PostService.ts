@@ -166,7 +166,7 @@ export default class PostService {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
-        this.postQuestionHasTagRepository.create(postQuestionHasTag);
+        await this.postQuestionHasTagRepository.save(postQuestionHasTag);
 
         // 유저 개인의 태그 저장
         let userHasTag = await this.userHasTagRepository.findOne({
@@ -182,11 +182,11 @@ export default class PostService {
           userHasTag.count++;
         }
 
-        this.userHasTagRepository.save(userHasTag);
+        await this.userHasTagRepository.save(userHasTag);
       }
     }
 
-    return newQuestion;
+    return await this.questionRepository.save(newQuestion);
   }
 
   public async updateQuestion(
@@ -313,14 +313,14 @@ export default class PostService {
       return false;
     }
   }
- public async turnOffRealtimeShare(userId: number, questionId: number) {
+  public async turnOffRealtimeShare(userId: number, questionId: number) {
     const question = await this.questionRepository.findOneQuestionById(
       questionId
     );
 
     if (question.userId !== userId)
-    if (question.realtimeShare === 0)
-      throw new CommonError("realtime share is already disabled");
+      if (question.realtimeShare === 0)
+        throw new CommonError("realtime share is already disabled");
 
     question.realtimeShare = 0;
     await this.questionRepository.save(question);
