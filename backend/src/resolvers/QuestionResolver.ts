@@ -8,7 +8,6 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
 import { PostQuestion } from "../entities/PostQuestion";
 import { Tag } from "../entities/Tag";
@@ -21,13 +20,6 @@ import UserService from "../services/UserService";
 import "reflect-metadata";
 import { Container } from "typeorm-typedi-extensions";
 import ThumbService from "../services/ThumbService";
-import AuthMiddleware from "../middlewares/AuthMiddleware";
-
-const getUserId = (headers: any): number => {
-  if (!headers.authorization) throw new Error("Auth Error");
-  const token = headers.authorization.split(" ")[1];
-  return (verify(token, "keyboard cat") as any).userId;
-};
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
@@ -108,9 +100,8 @@ export default class QuestionResolver {
   @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
   async addNewQuestion(
     @Arg("data") questionData: QuestionInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    const userId = getUserId(headers);
     const newQuestion = await this.postService.addNewQuestion(
       questionData,
       userId
@@ -125,11 +116,10 @@ export default class QuestionResolver {
     questionId: number,
     @Arg("data", { description: "수정할 질문글 내용" })
     fieldsToUpdate: QuestionInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
     const question = await this.postService.findOneQuestionById(questionId);
     const questionAuthor = question.userId;
-    const userId = getUserId(headers);
     if (questionAuthor !== userId) throw new Error("Not your Post!");
 
     const updateResult = await this.postService.updateQuestion(
@@ -146,11 +136,10 @@ export default class QuestionResolver {
   async deleteQuestion(
     @Arg("questionId", { description: "삭제할 질문글의 ID" })
     questionId: number,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<boolean> {
     const question = await this.postService.findOneQuestionById(questionId);
     const questionAuthor = question.userId;
-    const userId = getUserId(headers);
     if (questionAuthor !== userId) throw new Error("Not your Post!");
     const isDeleted = await this.postService.deleteQuestion(questionId);
 
@@ -192,8 +181,7 @@ export default class QuestionResolver {
   async getQuestionsRank(): Promise<PostQuestion[]> {
     return await this.postService.getQuestionsRank();
   }
-  
-  
+
   @Mutation(() => Boolean, {
     description: "실시간 공유 끄기 Mutation",
   })

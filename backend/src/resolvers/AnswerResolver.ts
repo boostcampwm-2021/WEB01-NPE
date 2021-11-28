@@ -7,22 +7,14 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
 import { User } from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
 import PostService from "../services/PostService";
 import UserService from "../services/UserService";
 import { Container } from "typeorm-typedi-extensions";
-import AuthenticationError from "../errors/AuthenticationError";
 import AuthorizationError from "../errors/AuthorizationError";
 import ThumbService from "../services/ThumbService";
-
-const getUserId = (headers: any): number => {
-  if (!headers.authorization) throw new AuthenticationError();
-  const token = headers.authorization.split(" ")[1];
-  return (verify(token, "keyboard cat") as any).userId;
-};
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
@@ -35,9 +27,8 @@ export default class AnswerResolver {
     @Arg("questionId", () => Int, { description: "질문글 ID" })
     questionId: number,
     @Arg("data") answerData: AnswerInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const userId = getUserId(headers);
     const newAnswer = await this.postService.addNewAnswer(
       answerData,
       userId,
@@ -59,9 +50,8 @@ export default class AnswerResolver {
     answerId: number,
     @Arg("data", { description: "수정할 답변글 내용" })
     answerInput: AnswerInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const userId = getUserId(headers);
     const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
@@ -78,9 +68,8 @@ export default class AnswerResolver {
   })
   async deleteAnswer(
     @Arg("answerId", { description: "삭제할 질문글의 ID" }) answerId: number,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const userId = getUserId(headers);
     const answer = await this.postService.findOneAnswerById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
