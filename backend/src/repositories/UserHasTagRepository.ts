@@ -1,10 +1,14 @@
-import Container, { Service } from "typedi";
+import { Service } from "typedi";
 import { EntityRepository, MoreThan, Repository } from "typeorm";
 import { UserHasTag } from "../entities/UserHasTag";
 
+export default interface UserHasTagRepository extends Repository<UserHasTag> {
+  findAllByUserId(userId: number): Promise<UserHasTag[]>;
+}
+
 @Service()
 @EntityRepository(UserHasTag)
-export default class UserHasTagRepository extends Repository<UserHasTag> {
+export class UserHasTagRepositoryImpl extends Repository<UserHasTag> {
   public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
     const data = await this.find({
       where: { userId, count: MoreThan(0) },

@@ -14,8 +14,9 @@ import * as Resolver from "./resolvers";
 import { authChecker } from "./middlewares/AuthChecker";
 import { graphqlHTTP } from "express-graphql";
 import { useContainer } from "typeorm";
-import { Container as typeDiContainer } from "typeorm-typedi-extensions";
+import { Container as typeDiContainer } from "typedi";
 import AuthMiddleware from "./middlewares/AuthMiddleware";
+import InitInjection from "./InjectionConfig";
 
 // typeorm Container로 typeDI Container사용
 useContainer(typeDiContainer);
@@ -29,6 +30,7 @@ useContainer(typeDiContainer);
   const app = express();
   await createConnection(DB_CONN_OPTIONS[env]);
 
+  InitInjection();
   app.use(cors());
 
   const gqMiddleware = await graphQLMiddleware();

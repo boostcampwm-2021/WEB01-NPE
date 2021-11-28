@@ -18,15 +18,15 @@ import PostService from "../services/PostService";
 import TagService from "../services/TagService";
 import UserService from "../services/UserService";
 import "reflect-metadata";
-import { Container } from "typeorm-typedi-extensions";
+import { Container } from "typedi";
 import ThumbService from "../services/ThumbService";
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
-  private userService: UserService = Container.get(UserService);
-  private tagService: TagService = Container.get(TagService);
-  private postService: PostService = Container.get(PostService);
-  private thumbService: ThumbService = Container.get(ThumbService);
+  private readonly userService: UserService = Container.get("UserService");
+  private readonly tagService: TagService = Container.get("TagService");
+  private readonly postService: PostService = Container.get("PostService");
+  private readonly thumbService: ThumbService = Container.get("ThumbService");
 
   @Query(() => PostQuestion, {
     description: "questionID를 통해 하나의 질문글 검색",

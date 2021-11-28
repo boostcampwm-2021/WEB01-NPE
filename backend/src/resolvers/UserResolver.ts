@@ -7,7 +7,6 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { sign } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
 import { PostQuestion } from "../entities/PostQuestion";
 import { User } from "../entities/User";
@@ -18,8 +17,8 @@ import Container, { Service } from "typedi";
 @Service()
 @Resolver(User)
 export default class UserResolver {
-  private userService: UserService = Container.get(UserService);
-  private postService: PostService = Container.get(PostService);
+  private readonly userService: UserService = Container.get("UserService");
+  private readonly postService: PostService = Container.get("PostService");
 
   @Query(() => User, {
     description: "User의 고유 ID를 통해 유저를 검색",

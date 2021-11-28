@@ -2,23 +2,32 @@ import { Tag } from "../entities/Tag";
 import { PostQuestion } from "../entities/PostQuestion";
 import { createQueryBuilder } from "typeorm";
 import "reflect-metadata";
-import { Service } from "typedi";
-import { InjectRepository } from "typeorm-typedi-extensions";
+import { Container, Service } from "typedi";
 import TagRepository from "../repositories/TagRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
 import UserRepository from "../repositories/UserRepository";
 import { User } from "../entities/User";
 
+export default interface TagService {
+  findAll(): Promise<Tag[]>;
+  findById(id: number): Promise<Tag>;
+  findByIds(ids: number[]): Promise<Tag[]>;
+  findByName(name: string): Promise<Tag>;
+  findAllIdsByQuestionId(questionId: number): Promise<number[]>;
+  findAllIdsByUserId(userId: number): Promise<number[]>;
+}
+
 @Service()
-export default class TagService {
-  constructor(
-    @InjectRepository()
-    private readonly tagRepository: TagRepository,
-    @InjectRepository()
-    private readonly questionRepository: QuestionRepository,
-    @InjectRepository()
-    private readonly userRepository: UserRepository
-  ) {}
+export class TagServiceImpl implements TagService {
+  private readonly tagRepository: TagRepository;
+  private readonly questionRepository: QuestionRepository;
+  private readonly userRepository: UserRepository;
+
+  constructor() {
+    this.tagRepository = Container.get("TagRepository");
+    this.questionRepository = Container.get("QuestionRepository");
+    this.userRepository = Container.get("UserRepository");
+  }
 
   public async findAll(): Promise<Tag[]> {
     return await this.tagRepository.findAll();

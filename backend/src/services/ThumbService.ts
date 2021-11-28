@@ -1,6 +1,5 @@
-import { Service } from "typedi";
 import { getConnection } from "typeorm";
-import { InjectRepository } from "typeorm-typedi-extensions";
+import { Container, Service } from "typedi";
 import { QuestionThumb } from "../entities/QuestionThumb";
 import { AnswerThumb } from "../entities/AnswerThumb";
 import AnswerRepository from "../repositories/AnswerRepository";
@@ -8,18 +7,26 @@ import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
 import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 
+export default interface ThumbService {
+  questionThumbUp(questionId: number, userId: number): Promise<boolean>;
+  questionThumbDown(questionId: number, userId: number): Promise<boolean>;
+  answerThumbUp(answerId: number, userId: number): Promise<boolean>;
+  answerThumbDown(answerId: number, userId: number): Promise<boolean>;
+}
+
 @Service()
-export default class ThumbService {
-  constructor(
-    @InjectRepository()
-    private readonly questionThumbRepository: QuestionThumbRepository,
-    @InjectRepository()
-    private readonly questionRepository: QuestionRepository,
-    @InjectRepository()
-    private readonly answerRepository: AnswerRepository,
-    @InjectRepository()
-    private readonly answerThumbRepository: AnswerThumbRepository
-  ) {}
+export class ThumbServiceImpl {
+  private readonly questionThumbRepository: QuestionThumbRepository;
+  private readonly questionRepository: QuestionRepository;
+  private readonly answerRepository: AnswerRepository;
+  private readonly answerThumbRepository: AnswerThumbRepository;
+
+  constructor() {
+    this.questionThumbRepository = Container.get("QuestionThumbRepository");
+    this.questionRepository = Container.get("QuestionRepository");
+    this.answerRepository = Container.get("AnswerRepository");
+    this.answerThumbRepository = Container.get("AnswerThumbRepository");
+  }
 
   public async questionThumbUp(
     questionId: number,

@@ -8,9 +8,8 @@ import NoSuchQuestionError from "../errors/NoSuchQuestionError";
 import AnswerInput from "../dto/AnswerInput";
 import QuestionInput from "../dto/QuestionInput";
 import SearchQuestionInput from "../dto/SearchQuestionInput";
-import { Service } from "typedi";
 import UserHasTagRepository from "../repositories/UserHasTagRepository";
-import { InjectRepository } from "typeorm-typedi-extensions";
+import { Container, Service } from "typedi";
 import PostQuestionHasTagRepository from "../repositories/PostQuestionHasTagRepostiory";
 import AnswerRepository from "../repositories/AnswerRepository";
 import UserRepository from "../repositories/UserRepository";
@@ -20,26 +19,58 @@ import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
 import AuthorizationError from "../errors/AuthorizationError";
 import CommonError from "../errors/CommonError";
 
-@Service()
-export default class PostService {
-  constructor(
-    @InjectRepository()
-    private readonly userRepository: UserRepository,
-    @InjectRepository()
-    private readonly userHasTagRepository: UserHasTagRepository,
-    @InjectRepository()
-    private readonly questionRepository: QuestionRepository,
-    @InjectRepository()
-    private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository,
-    @InjectRepository()
-    private readonly answerRepository: AnswerRepository,
-    @InjectRepository()
-    private readonly questionThumbRepository: QuestionThumbRepository,
-    @InjectRepository()
-    private readonly answerThumbRepository: AnswerThumbRepository
-  ) {}
+export default interface PostService {
+  findAllQuestionByArgs(args: SearchQuestionInput): Promise<PostQuestion[]>;
+  findAllQuestionByUserId(userId: number): Promise<PostQuestion[]>;
+  findAllAnswerByUserId(userId: number): Promise<PostAnswer[]>;
+  findAllAnswerByQuestionId(questionId: number): Promise<PostAnswer[]>;
+  findOneQuestionById(id: number): Promise<PostQuestion>;
+  viewOneQuestionById(id: number): Promise<PostQuestion>;
+  getQuestionsRank(): Promise<PostQuestion[]>;
+  addNewQuestion(args: QuestionInput, userId: number): Promise<PostQuestion>;
+  updateQuestion(
+    questionId: number,
+    fieldsToUpdate: Partial<QuestionInput>
+  ): Promise<PostQuestion>;
+  deleteQuestion(questionId: number): Promise<boolean>;
+  getAnswerCount(questionId: number): Promise<number>;
+  addNewAnswer(
+    args: AnswerInput,
+    userId: number,
+    questionId: number
+  ): Promise<PostAnswer>;
+  findOneAnswerById(answerId: number): Promise<PostAnswer>;
+  updateAnswer(answerId: number, answerInput: AnswerInput): Promise<PostAnswer>;
+  deleteAnswer(answerId: number): Promise<boolean>;
+  adoptAnswer(userId: number, answerId: number): Promise<boolean>;
+  turnOffRealtimeShare(userId: number, questionId: number): Promise<boolean>;
+}
 
-  private static DEFALUT_TAKE_QUESTIONS_COUNT = 20;
+@Service()
+export class PostServiceImpl implements PostService {
+  private readonly userRepository: UserRepository;
+  private readonly userHasTagRepository: UserHasTagRepository;
+  private readonly questionRepository: QuestionRepository;
+  private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository;
+  private readonly answerRepository: AnswerRepository;
+  private readonly questionThumbRepository: QuestionThumbRepository;
+  private readonly answerThumbRepository: AnswerThumbRepository;
+  private readonly DEFALUT_TAKE_QUESTIONS_COUNT: number;
+
+  constructor() {
+    this.userRepository = Container.get("UserRepository");
+    this.userHasTagRepository = Container.get("UserHasTagRepository");
+    this.postQuestionHasTagRepository = Container.get(
+      "PostQuestionHasTagRepository"
+    );
+    this.answerRepository = Container.get("AnswerRepository");
+    this.questionThumbRepository = Container.get("QuestionThumbRepository");
+    this.answerThumbRepository = Container.get("AnswerThumbRepository");
+    this.DEFALUT_TAKE_QUESTIONS_COUNT = Container.get<number>(
+      "DEFALUT_TAKE_QUESTIONS_COUNT"
+    );
+  }
+
   public async findAllQuestionByArgs(
     args: SearchQuestionInput
   ): Promise<PostQuestion[]> {
@@ -95,7 +126,7 @@ export default class PostService {
       .createQueryBuilder()
       .where(whereObj)
       .skip(skip ?? 0)
-      .take(take ?? PostService.DEFALUT_TAKE_QUESTIONS_COUNT)
+      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
       .orderBy("id", "DESC");
 
     const rows = await builder.getMany();

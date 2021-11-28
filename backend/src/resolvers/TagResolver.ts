@@ -1,12 +1,12 @@
 import { Arg, Int, Query, Resolver } from "type-graphql";
-import { Container } from "typeorm-typedi-extensions";
+import { Container } from "typedi";
 import { Tag } from "../entities/Tag";
 import { UserHasTag } from "../entities/UserHasTag";
 import TagService from "../services/TagService";
 
 @Resolver(Tag)
 export default class TagResolver {
-  private readonly tagService: TagService = Container.get(TagService);
+  private readonly tagService: TagService = Container.get("TagService");
 
   @Query(() => Tag, { description: "태그 ID로 부터 태그 얻기", nullable: true })
   async getTagById(
@@ -31,6 +31,7 @@ export default class TagResolver {
 
   @Query(() => [Tag], { description: "모든 태그 얻기", nullable: "items" })
   async getAllTags() {
+    console.log(await this.tagService.findAll());
     const allTags = await this.tagService.findAll();
 
     return allTags;

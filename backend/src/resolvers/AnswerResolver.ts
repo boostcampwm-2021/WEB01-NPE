@@ -12,15 +12,15 @@ import { User } from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
 import PostService from "../services/PostService";
 import UserService from "../services/UserService";
-import { Container } from "typeorm-typedi-extensions";
+import { Container } from "typedi";
 import AuthorizationError from "../errors/AuthorizationError";
 import ThumbService from "../services/ThumbService";
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
-  private readonly postService: PostService = Container.get(PostService);
-  private readonly userService: UserService = Container.get(UserService);
-  private readonly thumbService: ThumbService = Container.get(ThumbService);
+  private readonly postService: PostService = Container.get("PostService");
+  private readonly userService: UserService = Container.get("UserService");
+  private readonly thumbService: ThumbService = Container.get("ThumbService");
 
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
   async addNewAnswer(
