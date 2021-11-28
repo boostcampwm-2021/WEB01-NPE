@@ -6,25 +6,25 @@ import { Service } from "typedi";
 @Service()
 @EntityRepository(PostAnswer)
 export default class AnswerRepository extends Repository<PostAnswer> {
-  public async findOneAnswerById(answerId: number): Promise<PostAnswer> {
+  public async findById(answerId: number): Promise<PostAnswer> {
     const answer = await this.findOne({ id: answerId });
 
     return answer;
   }
 
-  public async findAllAnswerByUserId(userId: number): Promise<PostAnswer[]> {
+  public async findAllByUserId(userId: number): Promise<PostAnswer[]> {
     const data = await this.find({ userId });
 
     return data;
   }
 
-  public async findAllAnswerByQuestionId(id: number): Promise<PostAnswer[]> {
+  public async findAllByQuestionId(id: number): Promise<PostAnswer[]> {
     const data = await this.find({ postQuestionId: id });
 
     return data;
   }
 
-  public async updateAnswer(
+  public async modify(
     answerId: number,
     answerInput: AnswerInput
   ): Promise<PostAnswer> {

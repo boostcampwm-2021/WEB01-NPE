@@ -25,10 +25,11 @@ export default class ThumbService {
     questionId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.questionThumbRepository.findOne({
-      postQuestionId: questionId,
-      userId: userId,
-    });
+    // 이미 좋아요 혹은 싫어요 했는지 확인
+    const alreadyExists = await this.questionThumbRepository.exists(
+      questionId,
+      userId
+    );
     if (alreadyExists) return false;
 
     const newThumbUp = new QuestionThumb();
@@ -36,13 +37,11 @@ export default class ThumbService {
     newThumbUp.userId = userId;
     newThumbUp.value = 1;
 
-    const question = await this.questionRepository.findOneQuestionById(
-      questionId
-    );
+    const question = await this.questionRepository.findById(questionId);
     question.thumbupCount++;
 
     await getConnection()
-      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
         await transactionalEntityManager.save(newThumbUp);
         await transactionalEntityManager.save(question);
       })
@@ -51,14 +50,15 @@ export default class ThumbService {
       });
     return true;
   }
+
   public async questionThumbDown(
     questionId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.questionThumbRepository.findOne({
-      postQuestionId: questionId,
-      userId: userId,
-    });
+    const alreadyExists = await this.questionThumbRepository.exists(
+      questionId,
+      userId
+    );
     if (alreadyExists) return false;
 
     const newThumbDown = new QuestionThumb();
@@ -66,13 +66,11 @@ export default class ThumbService {
     newThumbDown.userId = userId;
     newThumbDown.value = -1;
 
-    const question = await this.questionRepository.findOneQuestionById(
-      questionId
-    );
+    const question = await this.questionRepository.findById(questionId);
     question.thumbupCount--;
 
     await getConnection()
-      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
         await transactionalEntityManager.save(newThumbDown);
         await transactionalEntityManager.save(question);
       })
@@ -86,10 +84,10 @@ export default class ThumbService {
     answerId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.answerThumbRepository.findOne({
-      postAnswerId: answerId,
-      userId: userId,
-    });
+    const alreadyExists = await this.answerThumbRepository.exists(
+      answerId,
+      userId
+    );
     if (alreadyExists) return false;
 
     const newThumbUp = new AnswerThumb();
@@ -97,11 +95,11 @@ export default class ThumbService {
     newThumbUp.userId = userId;
     newThumbUp.value = 1;
 
-    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount++;
 
     await getConnection()
-      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
         await transactionalEntityManager.save(newThumbUp);
         await transactionalEntityManager.save(answer);
       })
@@ -115,10 +113,10 @@ export default class ThumbService {
     answerId: number,
     userId: number
   ): Promise<boolean> {
-    const alreadyExists = await this.answerThumbRepository.findOne({
-      postAnswerId: answerId,
-      userId: userId,
-    });
+    const alreadyExists = await this.answerThumbRepository.exists(
+      answerId,
+      userId
+    );
     if (alreadyExists) return false;
 
     const newThumbDown = new AnswerThumb();
@@ -126,11 +124,11 @@ export default class ThumbService {
     newThumbDown.userId = userId;
     newThumbDown.value = -1;
 
-    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount--;
 
     await getConnection()
-      .transaction("SERIALIZABLE", async (transactionalEntityManager) => {
+      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
         await transactionalEntityManager.save(newThumbDown);
         await transactionalEntityManager.save(answer);
       })

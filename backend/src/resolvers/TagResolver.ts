@@ -1,17 +1,13 @@
 import { Arg, Int, Query, Resolver } from "type-graphql";
-import { getCustomRepository } from "typeorm";
 import { Container } from "typeorm-typedi-extensions";
 import { Tag } from "../entities/Tag";
 import { UserHasTag } from "../entities/UserHasTag";
-import UserHasTagRepository from "../repositories/UserHasTagRepository";
 import TagService from "../services/TagService";
 
 @Resolver(Tag)
 export default class TagResolver {
-  private readonly userHasTagRepository =
-    getCustomRepository(UserHasTagRepository);
+  private readonly tagService: TagService = Container.get(TagService);
 
-  private tagService: TagService = Container.get(TagService);
   @Query(() => Tag, { description: "태그 ID로 부터 태그 얻기", nullable: true })
   async getTagById(
     @Arg("id", () => Int, { description: "태그 ID" }) id: number
@@ -45,9 +41,7 @@ export default class TagResolver {
     @Arg("userId", () => Int, { description: "조회할 유저의 ID" })
     userId: number
   ) {
-    const data = await this.userHasTagRepository.getAllTagsUsedByUserByUserId(
-      userId
-    );
+    const data = await this.tagService.findAllIdsByUserId(userId);
 
     return data;
   }

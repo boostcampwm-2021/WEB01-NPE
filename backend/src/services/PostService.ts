@@ -111,18 +111,20 @@ export default class PostService {
   }
 
   public async findAllAnswerByUserId(userId: number): Promise<PostAnswer[]> {
-    const data = await this.answerRepository.find({ userId });
+    const data = await this.answerRepository.findAllByUserId(userId);
     return data;
   }
 
-  public async findAllAnswerByQuestionId(id: number): Promise<PostAnswer[]> {
-    const data = await this.answerRepository.find({ postQuestionId: id });
+  public async findAllAnswerByQuestionId(
+    questionId: number
+  ): Promise<PostAnswer[]> {
+    const data = await this.answerRepository.findAllByQuestionId(questionId);
 
     return data;
   }
 
   public async findOneQuestionById(id: number): Promise<PostQuestion> {
-    const question = await this.questionRepository.findOne({ id: id });
+    const question = await this.questionRepository.findById(id);
 
     if (!question) throw new NoSuchQuestionError("Check ID");
 
@@ -130,7 +132,7 @@ export default class PostService {
   }
 
   public async viewOneQuestionById(id: number): Promise<PostQuestion> {
-    const question = await this.questionRepository.findOneQuestionById(id);
+    const question = await this.questionRepository.findById(id);
 
     if (!question) throw new NoSuchQuestionError("Check ID");
     question.viewCount++;
@@ -150,73 +152,65 @@ export default class PostService {
 
   public async addNewQuestion(
     args: QuestionInput,
-    // 이후 ctx.user 로 수정
     userId: number
   ): Promise<PostQuestion> {
-    const newQuestion = new PostQuestion();
-    newQuestion.userId = userId;
-    newQuestion.title = args.title;
-    newQuestion.desc = args.desc;
-    newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
-    await this.questionRepository.save(newQuestion);
+    const newQuestion = await this.questionRepository.addNew(args, userId);
 
-    const author = await this.userRepository.findById(userId);
+    // 태그 존재하는지
     if (args.tagIds && args.tagIds.length > 0) {
       for (const tagId of args.tagIds) {
+        // 질문글-태그 관계
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
         await this.postQuestionHasTagRepository.save(postQuestionHasTag);
 
-        // 유저 개인의 태그 저장
+        // 유저-태그 관계
         let userHasTag = await this.userHasTagRepository.findOne({
           userId: userId,
           tagId: tagId,
         });
         if (!userHasTag) {
           userHasTag = new UserHasTag();
-          userHasTag.user = author;
+          userHasTag.userId = userId;
           userHasTag.tagId = tagId;
           userHasTag.count = 0;
         } else {
           userHasTag.count++;
         }
-
         await this.userHasTagRepository.save(userHasTag);
       }
     }
 
-    return await this.questionRepository.save(newQuestion);
+    return newQuestion;
   }
 
   public async updateQuestion(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ) {
-    const partialQuestion: PostQuestion = new PostQuestion();
-    const originQuestion = await this.questionRepository.findOneQuestionById(
-      questionId
+    const updatedQuestion = await this.questionRepository.modify(
+      questionId,
+      fieldsToUpdate
     );
-    partialQuestion.id = questionId;
-    partialQuestion.userId = originQuestion.userId;
-    partialQuestion.title = fieldsToUpdate.title;
-    partialQuestion.desc = fieldsToUpdate.desc;
-    partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
 
+    // 태그 여부 확인
     if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
+      // 기존 태그 삭제
       await this.postQuestionHasTagRepository.delete({
         postQuestionId: questionId,
       });
 
+      // 질문글-태그 관계
       for (const tagId of fieldsToUpdate.tagIds) {
         const tagEntity = new PostQuestionHasTag();
-        tagEntity.postQuestion = partialQuestion;
+        tagEntity.postQuestion = updatedQuestion;
         tagEntity.tagId = tagId;
-        this.postQuestionHasTagRepository.save(tagEntity);
+        await this.postQuestionHasTagRepository.save(tagEntity);
       }
     }
 
-    return await this.questionRepository.save(partialQuestion);
+    return updatedQuestion;
   }
 
   public async deleteQuestion(questionId: number): Promise<boolean> {
@@ -227,9 +221,7 @@ export default class PostService {
   }
 
   public async getAnswerCount(questionId: number): Promise<number> {
-    const question = await this.questionRepository.findOneQuestionById(
-      questionId
-    );
+    const question = await this.questionRepository.findById(questionId);
     if (!question) throw new NoSuchQuestionError();
 
     const count = await this.answerRepository.count({
@@ -244,9 +236,7 @@ export default class PostService {
     userId: number,
     questionId: number
   ): Promise<PostAnswer> {
-    const question = await this.questionRepository.findOneQuestionById(
-      questionId
-    );
+    const question = await this.questionRepository.findById(questionId);
     const newAnswer = new PostAnswer();
     newAnswer.postQuestionId = question.id;
     newAnswer.postQuestionUserId = question.userId;
@@ -261,7 +251,7 @@ export default class PostService {
   }
 
   public async findOneAnswerById(answerId: number): Promise<PostAnswer> {
-    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answer = await this.answerRepository.findById(answerId);
 
     return answer;
   }
@@ -270,7 +260,7 @@ export default class PostService {
     answerId: number,
     answerInput: AnswerInput
   ): Promise<PostAnswer> {
-    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answer = await this.answerRepository.findById(answerId);
     answer.desc = answerInput.desc;
 
     return await this.answerRepository.save(answer);
@@ -284,9 +274,9 @@ export default class PostService {
   }
 
   public async adoptAnswer(userId: number, answerId: number): Promise<boolean> {
-    const answer = await this.answerRepository.findOneAnswerById(answerId);
+    const answer = await this.answerRepository.findById(answerId);
     const answerAuthor = await this.userRepository.findById(answer.userId);
-    const question = await this.questionRepository.findOneQuestionById(
+    const question = await this.questionRepository.findById(
       answer.postQuestionId
     );
 
@@ -314,9 +304,7 @@ export default class PostService {
     }
   }
   public async turnOffRealtimeShare(userId: number, questionId: number) {
-    const question = await this.questionRepository.findOneQuestionById(
-      questionId
-    );
+    const question = await this.questionRepository.findById(questionId);
 
     if (question.userId !== userId)
       if (question.realtimeShare === 0)
