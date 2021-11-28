@@ -7,6 +7,12 @@ import { MDViewer } from "@components/atoms";
 import { AnswerDetailType } from "@src/types";
 import { useSession } from "next-auth/client";
 import { deleteAnswerById, adoptAnswer } from "@src/lib";
+
+import {
+  CANNOT_CONFIRM_MESSAGE,
+  DELETE_MESSAGE,
+  CONFIRM_MESSAGE,
+} from "@src/lib/message";
 interface Props {
   detail: AnswerDetailType;
   type: "Question" | "Answer";
@@ -23,7 +29,7 @@ const DetailBody: FunctionComponent<Props> = ({
   const [color, setColor] = useState<string>("");
 
   const onDelete = async () => {
-    if (window.confirm("삭제하시겠습니까?")) {
+    if (window.confirm(DELETE_MESSAGE)) {
       const { data } = await deleteAnswerById(Number(id));
       if (data) {
         Router.push("/");
@@ -34,10 +40,10 @@ const DetailBody: FunctionComponent<Props> = ({
   const onCheck = async () => {
     try {
       const { data } = await adoptAnswer(Number(id));
-      window.alert("채택되었습니다.");
+      window.alert(CONFIRM_MESSAGE);
       setColor("green");
     } catch {
-      window.alert("채택할 수 없습니다.");
+      window.alert(CANNOT_CONFIRM_MESSAGE);
     }
   };
 
