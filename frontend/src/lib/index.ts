@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import client from "./apolloClient";
 
 export const getAllTags = async () => {
@@ -420,6 +420,36 @@ export const postQuestion = async ({
           }
         ) {
           id
+        }
+      }
+    `,
+  });
+  return data;
+};
+
+export const postAnswer = async ({
+  questionId,
+  desc,
+}: {
+  questionId: number;
+  desc: string;
+}) => {
+  const data = await client.mutate({
+    variables: { questionId, desc },
+    mutation: gql`
+      mutation AddNewAnswer($questionId: Int!, $desc: String!) {
+        addNewAnswer(questionId: $questionId, data: { desc: $desc }) {
+          id
+          desc
+          author {
+            id
+            username
+            profileUrl
+            score
+          }
+          thumbupCount
+          createdAt
+          state
         }
       }
     `,
