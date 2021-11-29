@@ -23,6 +23,7 @@ const ResisterQuestion: FunctionComponent = () => {
   const [session] = useSession();
   const editorRef = useRef<any>(null);
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [isDescModal, setIsDescModal] = useState<boolean>(false);
   const [postQuestion] = useMutation(POST_QUESTION);
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
@@ -31,11 +32,8 @@ const ResisterQuestion: FunctionComponent = () => {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!session || !session.user) return;
-    if (title && title.length < 5) {
-      // window.alert("제목은 5자 이상으로 입력해주세요");
-      setIsModal(true);
-      return;
-    }
+    if (title && title.length < 5) return setIsModal(true);
+    if (getMarkdown().length < 10) return setIsDescModal(true);
     const { data } = await postQuestion({
       variables: {
         title: title,
@@ -74,6 +72,16 @@ const ResisterQuestion: FunctionComponent = () => {
           }}
         >
           제목은 5자 이상으로 입력해주세요
+        </Modal>
+      )}
+      {isDescModal && (
+        <Modal
+          show={isDescModal}
+          onClose={() => {
+            setIsDescModal(false);
+          }}
+        >
+          내용은 10자 이상 입력해주세요.
         </Modal>
       )}
     </Styled.Container>

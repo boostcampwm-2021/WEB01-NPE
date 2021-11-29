@@ -20,6 +20,7 @@ const AnswerRegister: FunctionComponent<Props> = ({
   onNewAnswer,
 }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [isDescModal, setIsDescModal] = useState<boolean>(false);
   const editorRef = useRef<any>(null);
   const [session] = useSession();
 
@@ -30,9 +31,9 @@ const AnswerRegister: FunctionComponent<Props> = ({
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!session || !session.user) {
-      return setIsModal(true);
-    }
+    if (!session || !session.user) return setIsModal(true);
+    if (getMarkdown().length < 10) return setIsDescModal(true);
+
     const newAnswer = (
       await postAnswer({
         variables: {
@@ -72,6 +73,16 @@ const AnswerRegister: FunctionComponent<Props> = ({
           }}
         >
           답변을 위해선 로그인이 필요합니다.
+        </Modal>
+      )}
+      {isDescModal && (
+        <Modal
+          show={isDescModal}
+          onClose={() => {
+            setIsDescModal(false);
+          }}
+        >
+          내용은 10자 이상 입력해주세요.
         </Modal>
       )}
     </Styled.AnswerRegister>
