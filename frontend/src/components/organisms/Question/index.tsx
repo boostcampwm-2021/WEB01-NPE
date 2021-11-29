@@ -31,6 +31,7 @@ const SearchResult: FunctionComponent<Props> = ({
     tags,
     viewCount,
     thumbupCount,
+    createdAt,
     answerCount,
   } = question;
   return (
@@ -50,6 +51,7 @@ const SearchResult: FunctionComponent<Props> = ({
               <QuestionTitle
                 text={title}
                 type={realtimeShare ? "online" : "offline"}
+                createdAt={createdAt}
               />
             </a>
           </Link>
