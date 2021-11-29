@@ -1,33 +1,27 @@
 import "reflect-metadata";
 import { Service } from "typedi";
 import { EntityRepository, getRepository, Repository } from "typeorm";
-import { InjectRepository } from "typeorm-typedi-extensions";
 import { Tag } from "../entities/Tag";
-import PostQuestionHasTagRepository from "./PostQuestionHasTagRepostiory";
 
 @Service()
 @EntityRepository(Tag)
 export default class TagRepository extends Repository<Tag> {
-  constructor(
-    @InjectRepository()
-    private readonly questionHasTagRepository: PostQuestionHasTagRepository
-  ) {
-    super();
-  }
-  public async getAllTags(): Promise<Tag[]> {
-    return this.find();
+  public async findAll(): Promise<Tag[]> {
+    return await this.find();
   }
 
-  public async findTagById(id: number): Promise<Tag> {
-    return this.findOne({ id });
+  public async findById(id: number): Promise<Tag> {
+    return await this.findOne({ id });
   }
 
-  public async getAllTagIdsByQuestionId(id: number): Promise<number[]> {
-    const tagRelations = await this.questionHasTagRepository.find({
-      postQuestionId: id,
+  public async findByName(name: string): Promise<Tag> {
+    return await this.findOne({ name });
+  }
+
+  public async findByIds(ids: number[]): Promise<Tag[]> {
+    if (ids.length === 0) return [];
+    return await this.find({
+      where: ids.map((id) => ({ id })),
     });
-    const tagIds = tagRelations.map((obj) => obj.tagId);
-
-    return tagIds;
   }
 }

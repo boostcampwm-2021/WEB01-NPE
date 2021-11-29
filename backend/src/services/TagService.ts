@@ -6,6 +6,8 @@ import { Service } from "typedi";
 import { InjectRepository } from "typeorm-typedi-extensions";
 import TagRepository from "../repositories/TagRepository";
 import QuestionRepository from "../repositories/QuestionRepository";
+import UserRepository from "../repositories/UserRepository";
+import { User } from "../entities/User";
 
 @Service()
 export default class TagService {
@@ -13,33 +15,44 @@ export default class TagService {
     @InjectRepository()
     private readonly tagRepository: TagRepository,
     @InjectRepository()
-    private readonly questionRepository: QuestionRepository
+    private readonly questionRepository: QuestionRepository,
+    @InjectRepository()
+    private readonly userRepository: UserRepository
   ) {}
 
   public async findAll(): Promise<Tag[]> {
-    return this.tagRepository.find();
+    return await this.tagRepository.findAll();
   }
 
   public async findById(id: number): Promise<Tag> {
-    return this.tagRepository.findOne({ id });
+    return await this.tagRepository.findById(id);
   }
 
   public async findByIds(ids: number[]): Promise<Tag[]> {
-    if (ids.length === 0) return [];
-    return await this.tagRepository.find({
-      where: ids.map((id) => ({ id })),
-    });
+    return await this.tagRepository.findByIds(ids);
   }
 
   public async findByName(name: string): Promise<Tag> {
-    return this.tagRepository.findOne({ name });
+    return await this.tagRepository.findByName(name);
   }
 
-  public async findAllIdsByQuestionId(id: number): Promise<number[]> {
-    const question = await this.questionRepository.findOne({ id: id });
+  public async findAllIdsByQuestionId(questionId: number): Promise<number[]> {
+    const question = await this.questionRepository.findById(questionId);
     const tagRelations = await createQueryBuilder()
       .relation(PostQuestion, "postQuestionHasTags")
       .of(question)
+      .loadMany();
+
+    const tagIds = tagRelations.map((obj) => obj.tagId);
+
+    return tagIds;
+  }
+
+  public async findAllIdsByUserId(userId: number): Promise<number[]> {
+    const user = await this.userRepository.findById(userId);
+    const tagRelations = await createQueryBuilder()
+      .relation(User, "userHasTags")
+      .of(user)
       .loadMany();
 
     const tagIds = tagRelations.map((obj) => obj.tagId);
