@@ -1,4 +1,4 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import client from "./apolloClient";
 
 export const getAllTags = async () => {
@@ -321,26 +321,6 @@ export const test = async (take: number, skip: number) => {
   return { loading, error, data };
 };
 
-export const POST_QUESTION = gql`
-  mutation addNewQuestion(
-    $title: String!
-    $desc: String!
-    $tagIds: [Int!]!
-    $realtimeShare: Boolean!
-  ) {
-    addNewQuestion(
-      data: {
-        title: $title
-        desc: $desc
-        tagIds: $tagIds
-        realtimeShare: $realtimeShare
-      }
-    ) {
-      id
-    }
-  }
-`;
-
 export const registerIfNotExists = async (
   id: number,
   username: string,
@@ -408,4 +388,112 @@ export const getQuestionsRank = async () => {
     `,
   });
   return { loading, error, data };
+};
+
+export const postQuestion = async ({
+  title,
+  desc,
+  tagIds,
+  realtimeShare,
+}: {
+  title: string;
+  desc: string;
+  tagIds: number[];
+  realtimeShare: boolean;
+}) => {
+  const data = await client.mutate({
+    variables: { title, desc, tagIds, realtimeShare },
+    mutation: gql`
+      mutation AddNewQuestion(
+        $title: String!
+        $desc: String!
+        $realtimeShare: Boolean
+        $tagIds: [Int]
+      ) {
+        addNewQuestion(
+          data: {
+            title: $title
+            desc: $desc
+            tagIds: $tagIds
+            realtimeShare: $realtimeShare
+            score: 10
+          }
+        ) {
+          id
+        }
+      }
+    `,
+  });
+  return data;
+};
+
+export const postAnswer = async ({
+  questionId,
+  desc,
+}: {
+  questionId: number;
+  desc: string;
+}) => {
+  const data = await client.mutate({
+    variables: { questionId, desc },
+    mutation: gql`
+      mutation AddNewAnswer($questionId: Int!, $desc: String!) {
+        addNewAnswer(questionId: $questionId, data: { desc: $desc }) {
+          id
+          desc
+          author {
+            id
+            username
+            profileUrl
+            score
+          }
+          thumbupCount
+          createdAt
+          state
+        }
+      }
+    `,
+  });
+  return data;
+};
+
+export const updateQuestion = async ({
+  title,
+  desc,
+  tagIds,
+  realtimeShare,
+  questionId,
+}: {
+  title: string;
+  desc: string;
+  tagIds: number[];
+  realtimeShare: boolean;
+  questionId: number;
+}) => {
+  const data = await client.mutate({
+    variables: { title, desc, tagIds, realtimeShare, questionId },
+    mutation: gql`
+      mutation UpdateQuestion(
+        $questionId: Int!
+        $title: String!
+        $desc: String!
+        $realtimeShare: Boolean
+        $tagIds: [Int]
+      ) {
+        updateQuestion(
+          questionId: $questionId
+          data: {
+            title: $title
+            desc: $desc
+            tagIds: $tagIds
+            realtimeShare: $realtimeShare
+            score: 10
+          }
+        ) {
+          id
+        }
+      }
+    `,
+  });
+  return data;
 };

@@ -9,6 +9,7 @@ import { QuestionDetailType } from "@src/types";
 import * as Styled from "./styled";
 import { useSession } from "next-auth/client";
 import { deleteQuestionById } from "@src/lib";
+import { DELETE_MESSAGE } from "@src/lib/message";
 
 interface Props {
   question: QuestionDetailType;
@@ -35,7 +36,7 @@ const QuestionDetail: FunctionComponent<Props> = ({
   const user = useSession();
 
   const onDeleteQuestion = async () => {
-    if (window.confirm("삭제하시겠습니까?")) {
+    if (window.confirm(DELETE_MESSAGE)) {
       try {
         const { data: isDeleted } = await deleteQuestionById(
           Number(question.id)
@@ -47,6 +48,10 @@ const QuestionDetail: FunctionComponent<Props> = ({
         setDeleteError(true);
       }
     }
+  };
+
+  const onEditQuestion = async () => {
+    Router.push(`/question/edit/${id}`);
   };
 
   return (
@@ -78,7 +83,11 @@ const QuestionDetail: FunctionComponent<Props> = ({
             text={`Asked ${createdAt.slice(0, 10)} View ${viewCount}`}
           ></ContentText>
           {user[0]?.userId === Number(author.id) && (
-            <span onClick={onDeleteQuestion}>삭제</span>
+            <>
+              <span onClick={onDeleteQuestion}>삭제 </span>
+
+              <span onClick={onEditQuestion}> 수정</span>
+            </>
           )}
         </Styled.QuestionHeaderInfo>
       </Styled.QuestionHeader>

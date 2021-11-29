@@ -27,9 +27,7 @@ const RealTimeModal: FunctionComponent<{
     if (!SOCKET) {
       const token = session.accessToken;
       const socket = Socket.connect(
-        process.env.NODE_ENV === "production"
-          ? `https://nullpointerexception.ml`
-          : `http://localhost:4000`,
+        process.env.NEXT_PUBLIC_SOCKET_URL as string,
         {
           path: "/socket",
           auth: { token },
