@@ -18,6 +18,7 @@ const AnswerRegister: FunctionComponent<Props> = ({
   value,
   onNewAnswer,
 }) => {
+  const [isDescModal, setIsDescModal] = useState<boolean>(false);
   const [isLoginMessageModal, setIsLoginMessageModal] = useState<boolean>(
     false
   );
@@ -29,9 +30,17 @@ const AnswerRegister: FunctionComponent<Props> = ({
   };
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!session || !session.user) {
-      return setIsLoginMessageModal(true);
-    }
+    if (!session || !session.user) return setIsLoginMessageModal(true);
+    if (getMarkdown().length < 10) return setIsDescModal(true);
+
+    const newAnswer = (
+      await postAnswer({
+        variables: {
+          questionId,
+          desc: getMarkdown(),
+        },
+      })
+    ).data.addNewAnswer as AnswerDetailType;
 
     try {
       const { data } = await postAnswer({
@@ -72,6 +81,16 @@ const AnswerRegister: FunctionComponent<Props> = ({
           }}
         >
           답변을 위해선 로그인이 필요합니다.
+        </Modal>
+      )}
+      {isDescModal && (
+        <Modal
+          show={isDescModal}
+          onClose={() => {
+            setIsDescModal(false);
+          }}
+        >
+          내용은 10자 이상 입력해주세요.
         </Modal>
       )}
     </Styled.AnswerRegister>
