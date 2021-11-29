@@ -456,3 +456,44 @@ export const postAnswer = async ({
   });
   return data;
 };
+
+export const updateQuestion = async ({
+  title,
+  desc,
+  tagIds,
+  realtimeShare,
+  questionId,
+}: {
+  title: string;
+  desc: string;
+  tagIds: number[];
+  realtimeShare: boolean;
+  questionId: number;
+}) => {
+  const data = await client.mutate({
+    variables: { title, desc, tagIds, realtimeShare, questionId },
+    mutation: gql`
+      mutation UpdateQuestion(
+        $questionId: Int!
+        $title: String!
+        $desc: String!
+        $realtimeShare: Boolean
+        $tagIds: [Int]
+      ) {
+        updateQuestion(
+          questionId: $questionId
+          data: {
+            title: $title
+            desc: $desc
+            tagIds: $tagIds
+            realtimeShare: $realtimeShare
+            score: 10
+          }
+        ) {
+          id
+        }
+      }
+    `,
+  });
+  return data;
+};
