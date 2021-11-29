@@ -30,7 +30,7 @@ const ResisterQuestion: FunctionComponent<Props> = ({
   const editorRef = useRef<any>(null);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [isDescModal, setIsDescModal] = useState<boolean>(false);
-  const [postQuestion] = useMutation(POST_QUESTION);
+
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
     return editorInstance.getMarkdown();
