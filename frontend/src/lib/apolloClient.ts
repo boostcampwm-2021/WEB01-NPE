@@ -8,10 +8,7 @@ import { setContext } from "@apollo/client/link/context";
 import { getSession } from "next-auth/client";
 import sign from "jwt-encode";
 
-const API_ENDPOINT =
-  process.env.NODE_ENV === "production"
-    ? `https://nullpointerexception.ml/graphql`
-    : `http://localhost:4000/graphql`;
+const API_ENDPOINT = process.env.NEXT_PUBLIC_APOLLO_API;
 
 const httpLink = createHttpLink({
   uri: API_ENDPOINT,
