@@ -3,3 +3,6 @@
 
 # DB 설정 파일
 ormconfig.json
+
+# 빌드된 파일
+dist/

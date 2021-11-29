@@ -4,15 +4,15 @@
     "target": "es2017",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "outDir": "dist",
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "noImplicitAny": true,
-    "typeRoots": ["./src"]
+    "typeRoots": ["/node_modules/@types", "./src/types"]
   },
-  "include": ["src", "test"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]
