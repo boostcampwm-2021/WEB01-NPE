@@ -38,6 +38,10 @@ const DetailBody: FunctionComponent<Props> = ({
   };
 
   const onCheck = async () => {
+    if (isAdoptable !== undefined && !isAdoptable) {
+      window.alert(CANNOT_CONFIRM_MESSAGE);
+      return;
+    }
     try {
       const { data } = await adoptAnswer(Number(id));
       window.alert(CONFIRM_MESSAGE);
@@ -59,7 +63,7 @@ const DetailBody: FunctionComponent<Props> = ({
           thumbupCount={thumbupCount}
           isQuestion={tags !== undefined}
         />
-        {state !== undefined && isAdoptable !== undefined && isAdoptable && (
+        {state !== undefined && (
           <Styled.SvgDiv fill={color} onClick={onCheck}>
             <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36">
               <path d="m6 14 8 8L30 6v8L14 30l-8-8v-8Z"></path>
