@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import router from "next/router";
 import { useSession } from "next-auth/client";
 
-import { POST_QUESTION } from "@src/lib";
+import { postQuestion } from "@src/lib";
 
 import {
   Button,
@@ -23,7 +23,7 @@ const ResisterQuestion: FunctionComponent = () => {
   const [session] = useSession();
   const editorRef = useRef<any>(null);
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [postQuestion] = useMutation(POST_QUESTION);
+  // const [postQuestion] = useMutation(POST_QUESTION);
   const getMarkdown = () => {
     const editorInstance = editorRef.current.getInstance();
     return editorInstance.getMarkdown();
@@ -32,20 +32,18 @@ const ResisterQuestion: FunctionComponent = () => {
     event.preventDefault();
     if (!session || !session.user) return;
     if (title && title.length < 5) {
-      // window.alert("제목은 5자 이상으로 입력해주세요");
       setIsModal(true);
       return;
     }
     const { data } = await postQuestion({
-      variables: {
-        title: title,
-        desc: getMarkdown(),
-        tagIds: tagList
-          .filter((tag) => tag.id !== "-1")
-          .map((tag) => Number(tag.id)),
-        realtimeShare: isLive,
-      },
+      title: title,
+      desc: getMarkdown(),
+      tagIds: tagList
+        .filter((tag) => tag.id !== "-1")
+        .map((tag) => Number(tag.id)),
+      realtimeShare: isLive,
     });
+
     if (!data) return;
     const questionId = data.addNewQuestion.id;
     router.push(`/question/${questionId}`);

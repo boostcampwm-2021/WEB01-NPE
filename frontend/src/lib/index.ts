@@ -321,26 +321,6 @@ export const test = async (take: number, skip: number) => {
   return { loading, error, data };
 };
 
-export const POST_QUESTION = gql`
-  mutation addNewQuestion(
-    $title: String!
-    $desc: String!
-    $tagIds: [Int!]!
-    $realtimeShare: Boolean!
-  ) {
-    addNewQuestion(
-      data: {
-        title: $title
-        desc: $desc
-        tagIds: $tagIds
-        realtimeShare: $realtimeShare
-      }
-    ) {
-      id
-    }
-  }
-`;
-
 export const registerIfNotExists = async (
   id: number,
   username: string,
@@ -408,4 +388,41 @@ export const getQuestionsRank = async () => {
     `,
   });
   return { loading, error, data };
+};
+
+export const postQuestion = async ({
+  title,
+  desc,
+  tagIds,
+  realtimeShare,
+}: {
+  title: string;
+  desc: string;
+  tagIds: number[];
+  realtimeShare: boolean;
+}) => {
+  const data = await client.mutate({
+    variables: { title, desc, tagIds, realtimeShare },
+    mutation: gql`
+      mutation AddNewQuestion(
+        $title: String!
+        $desc: String!
+        $realtimeShare: Boolean
+        $tagIds: [Int]
+      ) {
+        addNewQuestion(
+          data: {
+            title: $title
+            desc: $desc
+            tagIds: $tagIds
+            realtimeShare: $realtimeShare
+            score: 10
+          }
+        ) {
+          id
+        }
+      }
+    `,
+  });
+  return data;
 };
