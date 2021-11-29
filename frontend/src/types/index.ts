@@ -24,6 +24,7 @@ export interface QuestionType {
   title: string;
   viewCount: number;
   thumbupCount: number;
+  createdAt: string;
   answerCount: number;
 }
 

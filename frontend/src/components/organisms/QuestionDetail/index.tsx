@@ -60,6 +60,7 @@ const QuestionDetail: FunctionComponent<Props> = ({
         <QuestionTitle
           text={title}
           type={realtimeShare ? "online" : "offline"}
+          createdAt={createdAt}
         />
         <Styled.RealTimeRequest>
           {realtimeShare ? (
@@ -78,10 +79,7 @@ const QuestionDetail: FunctionComponent<Props> = ({
         </Styled.RealTimeRequest>
 
         <Styled.QuestionHeaderInfo>
-          <ContentText
-            type="Default"
-            text={`Asked ${createdAt.slice(0, 10)} View ${viewCount}`}
-          ></ContentText>
+          <ContentText type="Default" text={`View ${viewCount}`}></ContentText>
           {user[0]?.userId === Number(author.id) && (
             <>
               <span onClick={onDeleteQuestion}>삭제 </span>

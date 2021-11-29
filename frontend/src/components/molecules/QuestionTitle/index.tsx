@@ -6,16 +6,22 @@ import { TitleText, Indicator } from "@components/atoms";
 interface Props {
   type: string;
   text: string;
+  createdAt: string;
 }
 
-const QuestionTitle: FunctionComponent<Props> = ({ type, text }) => {
+const dateToString = (createdAt: string) => {
+  const date = new Date(createdAt);
+  return `questioned on ${date.getFullYear()}년 ${
+    date.getMonth() + 1
+  }월 ${date.getDate()}일`;
+};
+
+const QuestionTitle: FunctionComponent<Props> = ({ type, text, createdAt }) => {
   return (
     <Styled.QuestionTitle>
       <Styled.TextContainer>
         <TitleText text={text} type="Default" />
-        <Styled.QuestionDate>
-          questioned on 2021년 11월 11일
-        </Styled.QuestionDate>
+        <Styled.QuestionDate>{dateToString(createdAt)}</Styled.QuestionDate>
       </Styled.TextContainer>
       <Styled.IndicatorContainer>
         <Indicator type={type} />

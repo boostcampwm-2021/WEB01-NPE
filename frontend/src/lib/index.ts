@@ -180,6 +180,7 @@ export const getQuestions = async (
           id
           viewCount
           thumbupCount
+          createdAt
           author {
             id
             username
