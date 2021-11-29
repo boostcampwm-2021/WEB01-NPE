@@ -98,8 +98,8 @@ const MainPage: NextPage<Props> = ({ data, error, userRank, questionRank }) => {
           dataLength={questionList.length}
           next={getMorePost}
           hasMore={hasMore}
-          loader={<h3> Loading...</h3>}
-          endMessage={<h4>Nothing more to show</h4>}
+          loader={<></>}
+          endMessage={<></>}
         >
           <QuestionList questions={questionList} />
         </InfiniteScroll>
