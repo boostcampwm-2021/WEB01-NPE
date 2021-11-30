@@ -15,7 +15,7 @@ export interface TagType {
 }
 
 export interface QuestionType {
-  id: number;
+  id: number | string;
   __typename: string;
   author: AuthorType;
   desc: string;
@@ -28,17 +28,8 @@ export interface QuestionType {
   answerCount: number;
 }
 
-export interface QuestionDetailType {
+export interface QuestionDetailType extends QuestionType {
   id: string;
-  __typename: string;
-  author: AuthorType;
-  desc: string;
-  realtimeShare: boolean;
-  tags: TagType[];
-  title: string;
-  viewCount: number;
-  thumbupCount: number;
-  createdAt: string;
   score: number;
   answers: AnswerDetailType[];
   adopted: boolean;
