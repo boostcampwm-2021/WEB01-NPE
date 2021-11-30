@@ -1,42 +1,57 @@
-import testInjectionConfig from "../testInjectionConfig";
-import UserService from "../../src/services/UserService";
 import Container from "typedi";
+import UserRepository from "../../src/repositories/User/UserRepository";
+import UserService from "../../src/services/User/UserService";
+import UserServiceImpl from "../../src/services/User/UserServiceImpl";
+import faker from "faker";
 import { User } from "../../src/entities/User";
-import UserRepository from "../../src/repositories/UserRepository";
 import connection from "../connection";
-import { Connection } from "typeorm";
+import InjectionConfig from "../../src/InjectionConfig";
 
 describe("UserService", () => {
   let userService: UserService;
-  let userRepository: UserRepository;
-  let conn: Connection;
+
+  beforeEach(async () => {
+    userService = Container.get("UserService");
+  });
+
+  afterEach(async () => {
+    await connection.clear();
+  });
 
   beforeAll(async () => {
-    conn = await connection.connectIfNotExists();
-
-    testInjectionConfig();
-    userService = Container.get("UserService");
-    userRepository = Container.get("UserReposiory");
+    await connection.connectIfNotExists();
+    await connection.clear();
+    InjectionConfig();
   });
 
   afterAll(async () => {
     await connection.disconnect();
   });
 
-  it("register new User", async () => {
+  it("신규 유저 회원가입", async () => {
     // given
-    const spyUser = new User();
-    spyUser.id = 1;
-    spyUser.username = "david";
-    spyUser.socialUrl = "abc.com";
-    spyUser.profileUrl = "abc.com";
-    spyUser.score = 0;
-    spyOn(userRepository, "findById").and.returnValue(Promise.resolve(spyUser));
+    const newUser = new User();
+    const id = faker.datatype.number();
+    const username = faker.internet.userName();
+    const profileUrl = faker.image.avatar();
+    const socialUrl = faker.internet.url();
+    newUser.id = id;
+    newUser.username = username;
+    newUser.profileUrl = profileUrl;
+    newUser.socialUrl = socialUrl;
 
     // when
-    const user = await userService.findById(1);
+    const registeredUser = await userService.register(
+      id,
+      username,
+      profileUrl,
+      socialUrl
+    );
 
     // then
-    expect(user.username).toBe("david");
+    expect(registeredUser.id).toBe(id);
+    expect(registeredUser.username).toBe(username);
+    expect(registeredUser.profileUrl).toBe(profileUrl);
+    expect(registeredUser.socialUrl).toBe(socialUrl);
   });
 });

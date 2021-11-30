@@ -10,9 +10,13 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "noImplicitAny": true,
-    "typeRoots": ["/node_modules/@types", "./src/types"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/@jest",
+      "./src/types"
+    ]
   },
-  "include": ["src/**/*"],
+  "include": ["src", "test"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]

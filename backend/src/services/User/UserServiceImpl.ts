@@ -33,9 +33,8 @@ export default class UserServiceImpl implements UserService {
     newUser.username = username;
     newUser.profileUrl = profileUrl;
     newUser.socialUrl = socialUrl;
-    await this.userRepository.save(newUser);
 
-    return newUser;
+    return await this.userRepository.save(newUser);
   }
 
   public async getRank(): Promise<User[]> {

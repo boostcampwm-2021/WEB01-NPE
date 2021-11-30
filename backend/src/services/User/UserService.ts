@@ -1,6 +1,4 @@
-import { Container, Service } from "typedi";
 import { User } from "../../entities/User";
-import UserRepository from "../../repositories/User/UserRepository";
 
 export default interface UserService {
   findById(id: number): Promise<User>;

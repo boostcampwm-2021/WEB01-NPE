@@ -20,6 +20,19 @@ export default {
     }
   },
 
+  async clear() {
+    const connection = getConnection();
+    const entities = connection.entityMetadatas;
+
+    await Promise.all(entities.map((e) => this.deleteAll(e.name)));
+  },
+
+  async deleteAll(entityName: string) {
+    const connection = getConnection();
+    const repository = connection.getRepository(entityName);
+    return repository.clear();
+  },
+
   async disconnect() {
     if (getConnectionManager().has("default")) {
       await getConnection().close();

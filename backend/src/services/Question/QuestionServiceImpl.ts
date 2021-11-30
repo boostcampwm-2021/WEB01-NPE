@@ -34,9 +34,8 @@ export default class QuestionServiceImpl implements QuestionService {
     this.answerRepository = Container.get("AnswerRepository");
     this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
-    this.DEFALUT_TAKE_QUESTIONS_COUNT = Container.get<number>(
-      "DEFALUT_TAKE_QUESTIONS_COUNT"
-    );
+    this.DEFALUT_TAKE_QUESTIONS_COUNT =
+      Container.get<number>("DEFALUT_TAKE_QUESTIONS_COUNT") ?? 5;
   }
 
   public async search(args: SearchQuestionInput): Promise<PostQuestion[]> {
@@ -100,7 +99,7 @@ export default class QuestionServiceImpl implements QuestionService {
   }
 
   public async findAllByUserId(userId: number): Promise<PostQuestion[]> {
-    const questions = await this.questionRepository.find({ userId });
+    const questions = await this.questionRepository.findAllByUserId(userId);
 
     return questions;
   }
@@ -118,9 +117,8 @@ export default class QuestionServiceImpl implements QuestionService {
 
     if (!question) throw new NoSuchQuestionError("Check ID");
     question.viewCount++;
-    const viewedQuestion = await this.questionRepository.save(question);
 
-    return viewedQuestion;
+    return await this.questionRepository.save(question);
   }
 
   public async getRank(): Promise<PostQuestion[]> {
