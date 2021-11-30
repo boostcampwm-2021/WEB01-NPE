@@ -8,7 +8,6 @@ export default interface UserRepository extends Repository<User> {
   findByUsername(username: string): Promise<User>;
 }
 
-@Service()
 @EntityRepository(User)
 export class UserRepositoryImpl
   extends Repository<User>

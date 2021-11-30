@@ -6,7 +6,6 @@ export default interface UserHasTagRepository extends Repository<UserHasTag> {
   findAllByUserId(userId: number): Promise<UserHasTag[]>;
 }
 
-@Service()
 @EntityRepository(UserHasTag)
 export class UserHasTagRepositoryImpl extends Repository<UserHasTag> {
   public async findAllByUserId(userId: number): Promise<UserHasTag[]> {

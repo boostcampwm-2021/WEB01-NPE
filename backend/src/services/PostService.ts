@@ -46,7 +46,6 @@ export default interface PostService {
   turnOffRealtimeShare(userId: number, questionId: number): Promise<boolean>;
 }
 
-@Service()
 export class PostServiceImpl implements PostService {
   private readonly userRepository: UserRepository;
   private readonly userHasTagRepository: UserHasTagRepository;
@@ -64,6 +63,7 @@ export class PostServiceImpl implements PostService {
       "PostQuestionHasTagRepository"
     );
     this.answerRepository = Container.get("AnswerRepository");
+    this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
     this.answerThumbRepository = Container.get("AnswerThumbRepository");
     this.DEFALUT_TAKE_QUESTIONS_COUNT = Container.get<number>(

@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { Service } from "typedi";
 import { EntityRepository, Repository } from "typeorm";
 import { Tag } from "../entities/Tag";
 
@@ -10,7 +9,6 @@ export default interface TagRepository {
   findByIds(ids: number[]): Promise<Tag[]>;
 }
 
-@Service()
 @EntityRepository(Tag)
 export class TagRepositoryImpl
   extends Repository<Tag>

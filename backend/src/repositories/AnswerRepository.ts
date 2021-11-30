@@ -11,7 +11,6 @@ export default interface AnswerRepository extends Repository<PostAnswer> {
   deleteById(answerId: number): Promise<boolean>;
 }
 
-@Service()
 @EntityRepository(PostAnswer)
 export class AnswerRepositoryImpl
   extends Repository<PostAnswer>

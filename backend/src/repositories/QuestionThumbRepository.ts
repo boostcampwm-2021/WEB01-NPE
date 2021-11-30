@@ -7,7 +7,6 @@ export default interface QuestionThumbRepository {
   exists(questionId: number, userId: number): Promise<boolean>;
 }
 
-@Service()
 @EntityRepository(QuestionThumb)
 export class QuestionThumbRepositoryImpl extends Repository<QuestionThumb> {
   public async deleteByQuestionId(questionId: number): Promise<void> {

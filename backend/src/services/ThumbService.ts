@@ -14,7 +14,6 @@ export default interface ThumbService {
   answerThumbDown(answerId: number, userId: number): Promise<boolean>;
 }
 
-@Service()
 export class ThumbServiceImpl {
   private readonly questionThumbRepository: QuestionThumbRepository;
   private readonly questionRepository: QuestionRepository;

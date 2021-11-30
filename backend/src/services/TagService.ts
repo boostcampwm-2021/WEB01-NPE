@@ -17,7 +17,6 @@ export default interface TagService {
   findAllIdsByUserId(userId: number): Promise<number[]>;
 }
 
-@Service()
 export class TagServiceImpl implements TagService {
   private readonly tagRepository: TagRepository;
   private readonly questionRepository: QuestionRepository;

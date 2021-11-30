@@ -14,7 +14,6 @@ export default interface UserService {
   getUsersRank(): Promise<User[]>;
 }
 
-@Service()
 export class UserServiceImpl implements UserService {
   private readonly userRepository: UserRepository;
 

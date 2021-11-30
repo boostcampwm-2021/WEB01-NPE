@@ -31,7 +31,6 @@ export default class TagResolver {
 
   @Query(() => [Tag], { description: "모든 태그 얻기", nullable: "items" })
   async getAllTags() {
-    console.log(await this.tagService.findAll());
     const allTags = await this.tagService.findAll();
 
     return allTags;

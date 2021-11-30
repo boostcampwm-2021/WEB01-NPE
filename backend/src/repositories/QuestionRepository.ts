@@ -15,7 +15,6 @@ export default interface QuestionRepository extends Repository<PostQuestion> {
   ): Promise<PostQuestion>;
 }
 
-@Service()
 @EntityRepository(PostQuestion)
 export class QuestionRepositoryImpl
   extends Repository<PostQuestion>

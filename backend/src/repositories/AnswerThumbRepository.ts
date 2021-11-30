@@ -7,7 +7,6 @@ export default interface AnswerThumbRepository {
   exists(answerId: number, userId: number): Promise<boolean>;
 }
 
-@Service()
 @EntityRepository(AnswerThumb)
 export class AnswerThumbRepositoryImpl
   extends Repository<AnswerThumb>

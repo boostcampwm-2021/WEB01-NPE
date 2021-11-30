@@ -14,6 +14,9 @@ import { ThumbServiceImpl } from "./services/ThumbService";
 import { UserServiceImpl } from "./services/UserService";
 
 export default () => {
+  // Variables
+  Container.set("DEFALUT_TAKE_QUESTIONS_COUNT", 20);
+
   // Repositories
   Container.set("TagRepository", getCustomRepository(TagRepositoryImpl));
   Container.set("UserRepository", getCustomRepository(UserRepositoryImpl));
@@ -44,7 +47,4 @@ export default () => {
   Container.set("UserService", new UserServiceImpl());
   Container.set("PostService", new PostServiceImpl());
   Container.set("ThumbService", new ThumbServiceImpl());
-
-  // Other Variables
-  Container.set("DEFALUT_TAKE_QUESTIONS_COUNT", 20);
 };
