@@ -10,15 +10,16 @@ import {
 import { PostAnswer } from "../entities/PostAnswer";
 import { User } from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
-import PostService from "../services/PostService";
-import UserService from "../services/UserService";
+import UserService from "../services/User/UserService";
 import { Container } from "typedi";
 import AuthorizationError from "../errors/AuthorizationError";
-import ThumbService from "../services/ThumbService";
+import ThumbService from "../services/Thumb/ThumbService";
+import AnswerService from "../services/Answer/AnswerService";
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
-  private readonly postService: PostService = Container.get("PostService");
+  private readonly answerService: AnswerService =
+    Container.get("AnswerService");
   private readonly userService: UserService = Container.get("UserService");
   private readonly thumbService: ThumbService = Container.get("ThumbService");
 
@@ -29,7 +30,7 @@ export default class AnswerResolver {
     @Arg("data") answerData: AnswerInput,
     @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const newAnswer = await this.postService.addNewAnswer(
+    const newAnswer = await this.answerService.addNew(
       answerData,
       userId,
       questionId
@@ -52,15 +53,12 @@ export default class AnswerResolver {
     answerInput: AnswerInput,
     @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const answer = await this.postService.findOneAnswerById(answerId);
+    const answer = await this.answerService.findById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const updateResult = await this.postService.updateAnswer(
-      answerId,
-      answerInput
-    );
+    const updateResult = await this.answerService.update(answerId, answerInput);
 
-    return await this.postService.findOneAnswerById(answerId);
+    return await this.answerService.findById(answerId);
   }
 
   @Mutation(() => Boolean, {
@@ -70,10 +68,10 @@ export default class AnswerResolver {
     @Arg("answerId", { description: "삭제할 질문글의 ID" }) answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const answer = await this.postService.findOneAnswerById(answerId);
+    const answer = await this.answerService.findById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const isDeleted = await this.postService.deleteAnswer(answerId);
+    const isDeleted = await this.answerService.delete(answerId);
 
     return isDeleted;
   }
@@ -113,7 +111,7 @@ export default class AnswerResolver {
     answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const result = await this.postService.adoptAnswer(userId, answerId);
+    const result = await this.answerService.adopt(userId, answerId);
 
     return result;
   }

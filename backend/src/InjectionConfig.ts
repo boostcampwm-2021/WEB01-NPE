@@ -8,10 +8,11 @@ import QuestionThumbRepositoryImpl from "./repositories/QuestionThumb/QuestionTh
 import TagRepositoryImpl from "./repositories/Tag/TagRepositoryImpl";
 import UserHasTagRepositoryImpl from "./repositories/UserHasTag/UserHasTagRepositoryImpl";
 import UserRepositoryImpl from "./repositories/User/UserRepositoryImpl";
-import { PostServiceImpl } from "./services/PostService";
-import { TagServiceImpl } from "./services/TagService";
-import { ThumbServiceImpl } from "./services/ThumbService";
-import { UserServiceImpl } from "./services/UserService";
+import TagServiceImpl from "./services/Tag/TagServiceImpl";
+import ThumbServiceImpl from "./services/Thumb/ThumbServiceImpl";
+import UserServiceImpl from "./services/User/UserServiceImpl";
+import QuestionServiceImpl from "./services/Question/QuestionServiceImpl";
+import AnswerServiceImpl from "./services/Answer/AnswerServiceImpl";
 
 export default () => {
   // Variables
@@ -45,6 +46,7 @@ export default () => {
   // Services
   Container.set("TagService", new TagServiceImpl());
   Container.set("UserService", new UserServiceImpl());
-  Container.set("PostService", new PostServiceImpl());
+  Container.set("QuestionService", new QuestionServiceImpl());
+  Container.set("AnswerService", new AnswerServiceImpl());
   Container.set("ThumbService", new ThumbServiceImpl());
 };

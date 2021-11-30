@@ -1,23 +1,14 @@
-import { Tag } from "../entities/Tag";
-import { PostQuestion } from "../entities/PostQuestion";
+import Container from "typedi";
 import { createQueryBuilder } from "typeorm";
-import "reflect-metadata";
-import { Container, Service } from "typedi";
-import TagRepository from "../repositories/Tag/TagRepository";
-import QuestionRepository from "../repositories/Question/QuestionRepository";
-import UserRepository from "../repositories/User/UserRepository";
-import { User } from "../entities/User";
+import { PostQuestion } from "../../entities/PostQuestion";
+import { Tag } from "../../entities/Tag";
+import { User } from "../../entities/User";
+import QuestionRepository from "../../repositories/Question/QuestionRepository";
+import TagRepository from "../../repositories/Tag/TagRepository";
+import UserRepository from "../../repositories/User/UserRepository";
+import TagService from "./TagService";
 
-export default interface TagService {
-  findAll(): Promise<Tag[]>;
-  findById(id: number): Promise<Tag>;
-  findByIds(ids: number[]): Promise<Tag[]>;
-  findByName(name: string): Promise<Tag>;
-  findAllIdsByQuestionId(questionId: number): Promise<number[]>;
-  findAllIdsByUserId(userId: number): Promise<number[]>;
-}
-
-export class TagServiceImpl implements TagService {
+export default class TagServiceImpl implements TagService {
   private readonly tagRepository: TagRepository;
   private readonly questionRepository: QuestionRepository;
   private readonly userRepository: UserRepository;

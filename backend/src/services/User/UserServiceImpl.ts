@@ -1,20 +1,9 @@
-import { Container, Service } from "typedi";
-import { User } from "../entities/User";
-import UserRepository from "../repositories/User/UserRepository";
+import Container from "typedi";
+import { User } from "../../entities/User";
+import UserRepository from "../../repositories/User/UserRepository";
+import UserService from "./UserService";
 
-export default interface UserService {
-  findById(id: number): Promise<User>;
-  findByUsername(username: string): Promise<User>;
-  register(
-    id: number,
-    username: string,
-    profileUrl: string,
-    socialUrl: string
-  ): Promise<User>;
-  getUsersRank(): Promise<User[]>;
-}
-
-export class UserServiceImpl implements UserService {
+export default class UserServiceImpl implements UserService {
   private readonly userRepository: UserRepository;
 
   constructor() {
@@ -49,7 +38,7 @@ export class UserServiceImpl implements UserService {
     return newUser;
   }
 
-  public async getUsersRank(): Promise<User[]> {
+  public async getRank(): Promise<User[]> {
     const users = this.userRepository.find({
       take: 5,
       order: { score: "DESC" },

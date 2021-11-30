@@ -15,13 +15,13 @@ export default class AnswerRepositoryImpl
   }
 
   public async findAllByUserId(userId: number): Promise<PostAnswer[]> {
-    const data = await this.findAllByUserId(userId);
+    const data = await this.find({ userId: userId });
 
     return data;
   }
 
   public async findAllByQuestionId(questionId: number): Promise<PostAnswer[]> {
-    const data = await this.findAllByQuestionId(questionId);
+    const data = await this.find({ postQuestionId: questionId });
 
     return data;
   }

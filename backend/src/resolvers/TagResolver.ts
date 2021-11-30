@@ -2,7 +2,7 @@ import { Arg, Int, Query, Resolver } from "type-graphql";
 import { Container } from "typedi";
 import { Tag } from "../entities/Tag";
 import { UserHasTag } from "../entities/UserHasTag";
-import TagService from "../services/TagService";
+import TagService from "../services/Tag/TagService";
 
 @Resolver(Tag)
 export default class TagResolver {

@@ -14,18 +14,22 @@ import { Tag } from "../entities/Tag";
 import { User } from "../entities/User";
 import QuestionInput from "../dto/QuestionInput";
 import SearchQuestionInput from "../dto/SearchQuestionInput";
-import PostService from "../services/PostService";
-import TagService from "../services/TagService";
-import UserService from "../services/UserService";
+import TagService from "../services/Tag/TagService";
+import UserService from "../services/User/UserService";
 import "reflect-metadata";
 import { Container } from "typedi";
-import ThumbService from "../services/ThumbService";
+import ThumbService from "../services/Thumb/ThumbService";
+import QuestionService from "../services/Question/QuestionService";
+import AnswerService from "../services/Answer/AnswerService";
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
   private readonly userService: UserService = Container.get("UserService");
   private readonly tagService: TagService = Container.get("TagService");
-  private readonly postService: PostService = Container.get("PostService");
+  private readonly questionService: QuestionService =
+    Container.get("QuestionService");
+  private readonly answerService: AnswerService =
+    Container.get("AnswerService");
   private readonly thumbService: ThumbService = Container.get("ThumbService");
 
   @Query(() => PostQuestion, {
@@ -34,7 +38,7 @@ export default class QuestionResolver {
   async findOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await this.postService.findOneQuestionById(id);
+    const question = await this.questionService.findById(id);
     return question;
   }
 
@@ -44,7 +48,7 @@ export default class QuestionResolver {
   async viewOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await this.postService.viewOneQuestionById(id);
+    const question = await this.questionService.viewById(id);
     return question;
   }
 
@@ -60,16 +64,14 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async answers(@Root() question: PostQuestion): Promise<PostAnswer[]> {
-    const answers = await this.postService.findAllAnswerByQuestionId(
-      question.id
-    );
+    const answers = await this.answerService.findAllByQuestionId(question.id);
 
     return answers;
   }
 
   @FieldResolver(() => Int, { description: "해당 질문글에 달린 답변글의 개수" })
   async answerCount(@Root() question: PostQuestion): Promise<number> {
-    const count = this.postService.getAnswerCount(question.id);
+    const count = this.questionService.getAnswerCount(question.id);
 
     return count;
   }
@@ -92,7 +94,7 @@ export default class QuestionResolver {
   async searchQuestions(
     @Arg("searchQuery") searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const questions = await this.postService.findAllQuestionByArgs(searchQuery);
+    const questions = await this.questionService.search(searchQuery);
 
     return questions;
   }
@@ -102,10 +104,7 @@ export default class QuestionResolver {
     @Arg("data") questionData: QuestionInput,
     @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    const newQuestion = await this.postService.addNewQuestion(
-      questionData,
-      userId
-    );
+    const newQuestion = await this.questionService.addNew(questionData, userId);
 
     return newQuestion;
   }
@@ -118,16 +117,16 @@ export default class QuestionResolver {
     fieldsToUpdate: QuestionInput,
     @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    const question = await this.postService.findOneQuestionById(questionId);
+    const question = await this.questionService.findById(questionId);
     const questionAuthor = question.userId;
     if (questionAuthor !== userId) throw new Error("Not your Post!");
 
-    const updateResult = await this.postService.updateQuestion(
+    const updateResult = await this.questionService.update(
       questionId,
       fieldsToUpdate
     );
 
-    return await this.postService.findOneQuestionById(questionId);
+    return await this.questionService.findById(questionId);
   }
 
   @Mutation(() => Boolean, {
@@ -138,10 +137,10 @@ export default class QuestionResolver {
     questionId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const question = await this.postService.findOneQuestionById(questionId);
+    const question = await this.questionService.findById(questionId);
     const questionAuthor = question.userId;
     if (questionAuthor !== userId) throw new Error("Not your Post!");
-    const isDeleted = await this.postService.deleteQuestion(questionId);
+    const isDeleted = await this.questionService.delete(questionId);
 
     return isDeleted;
   }
@@ -179,7 +178,7 @@ export default class QuestionResolver {
     description: "질문글 좋아요 개수 역순으로 5개 가져오기",
   })
   async getQuestionsRank(): Promise<PostQuestion[]> {
-    return await this.postService.getQuestionsRank();
+    return await this.questionService.getRank();
   }
 
   @Mutation(() => Boolean, {
@@ -190,7 +189,7 @@ export default class QuestionResolver {
     @Arg("questionId", { description: "싫어요 표시할 질문글의 ID" })
     questionId: number
   ) {
-    const result = await this.postService.turnOffRealtimeShare(
+    const result = await this.questionService.turnOffRealtimeShare(
       userId,
       questionId
     );

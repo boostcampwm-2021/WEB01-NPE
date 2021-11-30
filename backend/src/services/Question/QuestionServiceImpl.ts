@@ -1,59 +1,28 @@
+import Container from "typedi";
 import { createQueryBuilder, In, Like, SelectQueryBuilder } from "typeorm";
-import { PostAnswer } from "../entities/PostAnswer";
-import { PostQuestion } from "../entities/PostQuestion";
-import { PostQuestionHasTag } from "../entities/PostQuestionHasTag";
-import { Tag } from "../entities/Tag";
-import { UserHasTag } from "../entities/UserHasTag";
-import NoSuchQuestionError from "../errors/NoSuchQuestionError";
-import AnswerInput from "../dto/AnswerInput";
-import QuestionInput from "../dto/QuestionInput";
-import SearchQuestionInput from "../dto/SearchQuestionInput";
-import UserHasTagRepository from "../repositories/UserHasTag/UserHasTagRepository";
-import { Container, Service } from "typedi";
-import PostQuestionHasTagRepository from "../repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";
-import AnswerRepository from "../repositories/Answer/AnswerRepository";
-import UserRepository from "../repositories/User/UserRepository";
-import QuestionRepository from "../repositories/Question/QuestionRepository";
-import AnswerThumbRepository from "../repositories/AnswerThumb/AnswerThumbRepository";
-import QuestionThumbRepository from "../repositories/QuestionThumb/QuestionThumbRepository";
-import AuthorizationError from "../errors/AuthorizationError";
-import CommonError from "../errors/CommonError";
+import QuestionInput from "../../dto/QuestionInput";
+import SearchQuestionInput from "../../dto/SearchQuestionInput";
+import { PostQuestion } from "../../entities/PostQuestion";
+import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
+import { Tag } from "../../entities/Tag";
+import { UserHasTag } from "../../entities/UserHasTag";
+import CommonError from "../../errors/CommonError";
+import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
+import AnswerRepository from "../../repositories/Answer/AnswerRepository";
+import PostQuestionHasTagRepository from "../../repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";
+import QuestionRepository from "../../repositories/Question/QuestionRepository";
+import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
+import UserRepository from "../../repositories/User/UserRepository";
+import UserHasTagRepository from "../../repositories/UserHasTag/UserHasTagRepository";
+import QuestionService from "./QuestionService";
 
-export default interface PostService {
-  findAllQuestionByArgs(args: SearchQuestionInput): Promise<PostQuestion[]>;
-  findAllQuestionByUserId(userId: number): Promise<PostQuestion[]>;
-  findAllAnswerByUserId(userId: number): Promise<PostAnswer[]>;
-  findAllAnswerByQuestionId(questionId: number): Promise<PostAnswer[]>;
-  findOneQuestionById(id: number): Promise<PostQuestion>;
-  viewOneQuestionById(id: number): Promise<PostQuestion>;
-  getQuestionsRank(): Promise<PostQuestion[]>;
-  addNewQuestion(args: QuestionInput, userId: number): Promise<PostQuestion>;
-  updateQuestion(
-    questionId: number,
-    fieldsToUpdate: Partial<QuestionInput>
-  ): Promise<PostQuestion>;
-  deleteQuestion(questionId: number): Promise<boolean>;
-  getAnswerCount(questionId: number): Promise<number>;
-  addNewAnswer(
-    args: AnswerInput,
-    userId: number,
-    questionId: number
-  ): Promise<PostAnswer>;
-  findOneAnswerById(answerId: number): Promise<PostAnswer>;
-  updateAnswer(answerId: number, answerInput: AnswerInput): Promise<PostAnswer>;
-  deleteAnswer(answerId: number): Promise<boolean>;
-  adoptAnswer(userId: number, answerId: number): Promise<boolean>;
-  turnOffRealtimeShare(userId: number, questionId: number): Promise<boolean>;
-}
-
-export class PostServiceImpl implements PostService {
+export default class QuestionServiceImpl implements QuestionService {
   private readonly userRepository: UserRepository;
   private readonly userHasTagRepository: UserHasTagRepository;
   private readonly questionRepository: QuestionRepository;
   private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository;
   private readonly answerRepository: AnswerRepository;
   private readonly questionThumbRepository: QuestionThumbRepository;
-  private readonly answerThumbRepository: AnswerThumbRepository;
   private readonly DEFALUT_TAKE_QUESTIONS_COUNT: number;
 
   constructor() {
@@ -65,15 +34,12 @@ export class PostServiceImpl implements PostService {
     this.answerRepository = Container.get("AnswerRepository");
     this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
-    this.answerThumbRepository = Container.get("AnswerThumbRepository");
     this.DEFALUT_TAKE_QUESTIONS_COUNT = Container.get<number>(
       "DEFALUT_TAKE_QUESTIONS_COUNT"
     );
   }
 
-  public async findAllQuestionByArgs(
-    args: SearchQuestionInput
-  ): Promise<PostQuestion[]> {
+  public async search(args: SearchQuestionInput): Promise<PostQuestion[]> {
     const { author, tagIDs, skip, take } = args;
     const { title, desc, realtimeShare } = args;
 
@@ -133,28 +99,13 @@ export class PostServiceImpl implements PostService {
     return rows;
   }
 
-  public async findAllQuestionByUserId(
-    userId: number
-  ): Promise<PostQuestion[]> {
+  public async findAllByUserId(userId: number): Promise<PostQuestion[]> {
     const questions = await this.questionRepository.find({ userId });
 
     return questions;
   }
 
-  public async findAllAnswerByUserId(userId: number): Promise<PostAnswer[]> {
-    const data = await this.answerRepository.findAllByUserId(userId);
-    return data;
-  }
-
-  public async findAllAnswerByQuestionId(
-    questionId: number
-  ): Promise<PostAnswer[]> {
-    const data = await this.answerRepository.findAllByQuestionId(questionId);
-
-    return data;
-  }
-
-  public async findOneQuestionById(id: number): Promise<PostQuestion> {
+  public async findById(id: number): Promise<PostQuestion> {
     const question = await this.questionRepository.findById(id);
 
     if (!question) throw new NoSuchQuestionError("Check ID");
@@ -162,7 +113,7 @@ export class PostServiceImpl implements PostService {
     return question;
   }
 
-  public async viewOneQuestionById(id: number): Promise<PostQuestion> {
+  public async viewById(id: number): Promise<PostQuestion> {
     const question = await this.questionRepository.findById(id);
 
     if (!question) throw new NoSuchQuestionError("Check ID");
@@ -172,7 +123,7 @@ export class PostServiceImpl implements PostService {
     return viewedQuestion;
   }
 
-  public async getQuestionsRank(): Promise<PostQuestion[]> {
+  public async getRank(): Promise<PostQuestion[]> {
     const questions = this.questionRepository.find({
       take: 5,
       order: { thumbupCount: "DESC" },
@@ -181,7 +132,7 @@ export class PostServiceImpl implements PostService {
     return questions;
   }
 
-  public async addNewQuestion(
+  public async addNew(
     args: QuestionInput,
     userId: number
   ): Promise<PostQuestion> {
@@ -216,7 +167,7 @@ export class PostServiceImpl implements PostService {
     return newQuestion;
   }
 
-  public async updateQuestion(
+  public async update(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ) {
@@ -244,7 +195,7 @@ export class PostServiceImpl implements PostService {
     return updatedQuestion;
   }
 
-  public async deleteQuestion(questionId: number): Promise<boolean> {
+  public async delete(questionId: number): Promise<boolean> {
     const result = await this.questionRepository.deleteById(questionId);
     await this.questionThumbRepository.deleteByQuestionId(questionId);
 
@@ -262,78 +213,6 @@ export class PostServiceImpl implements PostService {
     return count;
   }
 
-  public async addNewAnswer(
-    args: AnswerInput,
-    userId: number,
-    questionId: number
-  ): Promise<PostAnswer> {
-    const question = await this.questionRepository.findById(questionId);
-    const newAnswer = new PostAnswer();
-    newAnswer.postQuestionId = question.id;
-    newAnswer.postQuestionUserId = question.userId;
-    newAnswer.userId = userId;
-    newAnswer.desc = args.desc;
-
-    const author = await this.userRepository.findById(userId);
-    author.score += 10;
-    await this.userRepository.save(author);
-
-    return await this.answerRepository.save(newAnswer);
-  }
-
-  public async findOneAnswerById(answerId: number): Promise<PostAnswer> {
-    const answer = await this.answerRepository.findById(answerId);
-
-    return answer;
-  }
-
-  public async updateAnswer(
-    answerId: number,
-    answerInput: AnswerInput
-  ): Promise<PostAnswer> {
-    const answer = await this.answerRepository.findById(answerId);
-    answer.desc = answerInput.desc;
-
-    return await this.answerRepository.save(answer);
-  }
-
-  public async deleteAnswer(answerId: number): Promise<boolean> {
-    await this.answerRepository.deleteById(answerId);
-    await this.answerThumbRepository.deleteByAnswerId(answerId);
-
-    return true;
-  }
-
-  public async adoptAnswer(userId: number, answerId: number): Promise<boolean> {
-    const answer = await this.answerRepository.findById(answerId);
-    const answerAuthor = await this.userRepository.findById(answer.userId);
-    const question = await this.questionRepository.findById(
-      answer.postQuestionId
-    );
-
-    if (answer.postQuestionUserId !== userId)
-      throw new AuthorizationError(
-        "you don't have permission! It is not your question."
-      );
-
-    if (answer.userId === userId)
-      throw new CommonError("you can't adopt your answer");
-
-    if (question.adopted === 1)
-      throw new CommonError("question already adopted another answer");
-
-    if (answer.state === 0) {
-      question.adopted = 1;
-      answer.state = 1;
-      answerAuthor.score += 50;
-      await this.answerRepository.save(answer);
-      await this.userRepository.save(answerAuthor);
-      await this.questionRepository.save(question);
-      return true;
-    } else {
-      return false;
-    }
-  }
   public async turnOffRealtimeShare(userId: number, questionId: number) {
     const question = await this.questionRepository.findById(questionId);
 
