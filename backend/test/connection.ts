@@ -14,8 +14,9 @@ export default {
   async connectIfNotExists() {
     if (!getConnectionManager().has("default")) {
       useContainer(Container);
-      // connect to sqlite DB
       return await createConnection(TEST_MYSQL_OPT);
+    } else {
+      return getConnection();
     }
   },
 

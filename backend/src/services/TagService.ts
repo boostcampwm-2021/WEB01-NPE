@@ -3,9 +3,9 @@ import { PostQuestion } from "../entities/PostQuestion";
 import { createQueryBuilder } from "typeorm";
 import "reflect-metadata";
 import { Container, Service } from "typedi";
-import TagRepository from "../repositories/TagRepository";
-import QuestionRepository from "../repositories/QuestionRepository";
-import UserRepository from "../repositories/UserRepository";
+import TagRepository from "../repositories/Tag/TagRepository";
+import QuestionRepository from "../repositories/Question/QuestionRepository";
+import UserRepository from "../repositories/User/UserRepository";
 import { User } from "../entities/User";
 
 export default interface TagService {

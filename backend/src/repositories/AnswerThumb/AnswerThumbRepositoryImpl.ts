@@ -1,14 +1,9 @@
-import { Service } from "typedi";
 import { EntityRepository, Repository } from "typeorm";
-import { AnswerThumb } from "../entities/AnswerThumb";
-
-export default interface AnswerThumbRepository {
-  deleteByAnswerId(answerId: number): Promise<void>;
-  exists(answerId: number, userId: number): Promise<boolean>;
-}
+import { AnswerThumb } from "../../entities/AnswerThumb";
+import AnswerThumbRepository from "./AnswerThumbRepository";
 
 @EntityRepository(AnswerThumb)
-export class AnswerThumbRepositoryImpl
+export default class AnswerThumbRepositoryImpl
   extends Repository<AnswerThumb>
   implements AnswerThumbRepository
 {

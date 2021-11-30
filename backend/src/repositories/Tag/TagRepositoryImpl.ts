@@ -1,16 +1,9 @@
-import "reflect-metadata";
 import { EntityRepository, Repository } from "typeorm";
-import { Tag } from "../entities/Tag";
-
-export default interface TagRepository {
-  findAll(): Promise<Tag[]>;
-  findById(id: number): Promise<Tag>;
-  findByName(name: string): Promise<Tag>;
-  findByIds(ids: number[]): Promise<Tag[]>;
-}
+import { Tag } from "../../entities/Tag";
+import TagRepository from "./TagRepository";
 
 @EntityRepository(Tag)
-export class TagRepositoryImpl
+export default class TagRepositoryImpl
   extends Repository<Tag>
   implements TagRepository
 {
