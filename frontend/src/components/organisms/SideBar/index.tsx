@@ -26,6 +26,7 @@ const SideBar: FunctionComponent<Props> = ({
   const [allTagList, setAllTagList] = useState<TagType[]>([]);
 
   const onSubmit = (newTag: TagType) => {
+    if (selectedTags.find((tag) => tag.name === newTag.name)) return;
     setSelectedTags([...selectedTags, newTag]);
   };
   const onDelete = (deletedTag: string): void => {
