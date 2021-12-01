@@ -6,3 +6,6 @@ ormconfig.json
 
 # 빌드된 파일
 dist/
+
+# 환경변수 파일
+.env
