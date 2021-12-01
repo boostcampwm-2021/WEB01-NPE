@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Provider from "next-auth/providers";
 import sign from "jwt-encode";
-import { signIn } from "next-auth/client";
 import { registerIfNotExists } from "@src/lib";
 
 export default NextAuth({
@@ -23,7 +22,10 @@ export default NextAuth({
     },
     async session(session, user) {
       session.userId = Number(user.sub);
-      session.accessToken = sign(session, "keyboard cat");
+      session.accessToken = sign(
+        session,
+        process.env.NEXT_PUBLIC_JWT_KEY as string
+      );
 
       return session;
     },
