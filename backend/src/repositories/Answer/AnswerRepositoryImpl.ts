@@ -1,11 +1,13 @@
 import { EntityRepository, Repository } from "typeorm";
-import { PostAnswer } from "../entities/PostAnswer";
-import AnswerInput from "../dto/AnswerInput";
-import { Service } from "typedi";
+import AnswerInput from "../../dto/AnswerInput";
+import { PostAnswer } from "../../entities/PostAnswer";
+import AnswerRepository from "./AnswerRepository";
 
-@Service()
 @EntityRepository(PostAnswer)
-export default class AnswerRepository extends Repository<PostAnswer> {
+export default class AnswerRepositoryImpl
+  extends Repository<PostAnswer>
+  implements AnswerRepository
+{
   public async findById(answerId: number): Promise<PostAnswer> {
     const answer = await this.findOne({ id: answerId });
 
@@ -13,13 +15,13 @@ export default class AnswerRepository extends Repository<PostAnswer> {
   }
 
   public async findAllByUserId(userId: number): Promise<PostAnswer[]> {
-    const data = await this.find({ userId });
+    const data = await this.find({ userId: userId });
 
     return data;
   }
 
-  public async findAllByQuestionId(id: number): Promise<PostAnswer[]> {
-    const data = await this.find({ postQuestionId: id });
+  public async findAllByQuestionId(questionId: number): Promise<PostAnswer[]> {
+    const data = await this.find({ postQuestionId: questionId });
 
     return data;
   }
@@ -28,7 +30,7 @@ export default class AnswerRepository extends Repository<PostAnswer> {
     answerId: number,
     answerInput: AnswerInput
   ): Promise<PostAnswer> {
-    const answer = await this.findOne({ id: answerId });
+    const answer = await this.findById(answerId);
     answer.desc = answerInput.desc;
 
     return await this.save(answer);

@@ -1,10 +1,12 @@
-import { Service } from "typedi";
 import { EntityRepository, Repository } from "typeorm";
-import { AnswerThumb } from "../entities/AnswerThumb";
+import { AnswerThumb } from "../../entities/AnswerThumb";
+import AnswerThumbRepository from "./AnswerThumbRepository";
 
-@Service()
 @EntityRepository(AnswerThumb)
-export default class AnswerThumbRepository extends Repository<AnswerThumb> {
+export default class AnswerThumbRepositoryImpl
+  extends Repository<AnswerThumb>
+  implements AnswerThumbRepository
+{
   public async deleteByAnswerId(answerId: number): Promise<void> {
     await this.delete({ postAnswerId: answerId });
   }

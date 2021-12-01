@@ -1,11 +1,12 @@
-import "reflect-metadata";
-import { Service } from "typedi";
 import { EntityRepository, Repository } from "typeorm";
-import { User } from "../entities/User";
+import { User } from "../../entities/User";
+import UserRepository from "./UserRepository";
 
-@Service()
 @EntityRepository(User)
-export default class UserRepository extends Repository<User> {
+export default class UserRepositoryImpl
+  extends Repository<User>
+  implements UserRepository
+{
   public async findById(id: number): Promise<User> {
     const user = await this.findOne({ id });
 

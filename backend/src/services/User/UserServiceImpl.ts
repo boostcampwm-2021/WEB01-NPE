@@ -1,14 +1,15 @@
-import { Service } from "typedi";
-import { InjectRepository } from "typeorm-typedi-extensions";
-import { User } from "../entities/User";
-import UserRepository from "../repositories/UserRepository";
+import Container from "typedi";
+import { User } from "../../entities/User";
+import UserRepository from "../../repositories/User/UserRepository";
+import UserService from "./UserService";
 
-@Service()
-export default class UserService {
-  constructor(
-    @InjectRepository()
-    private readonly userRepository: UserRepository
-  ) {}
+export default class UserServiceImpl implements UserService {
+  private readonly userRepository: UserRepository;
+
+  constructor() {
+    this.userRepository = Container.get("UserRepository");
+  }
+
   public async findById(id: number): Promise<User> {
     const user = await this.userRepository.findById(id);
 
@@ -32,12 +33,11 @@ export default class UserService {
     newUser.username = username;
     newUser.profileUrl = profileUrl;
     newUser.socialUrl = socialUrl;
-    await this.userRepository.save(newUser);
 
-    return newUser;
+    return await this.userRepository.save(newUser);
   }
 
-  public async getUsersRank(): Promise<User[]> {
+  public async getRank(): Promise<User[]> {
     const users = this.userRepository.find({
       take: 5,
       order: { score: "DESC" },

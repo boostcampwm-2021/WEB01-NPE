@@ -1,11 +1,12 @@
-import "reflect-metadata";
-import { Service } from "typedi";
-import { EntityRepository, getRepository, Repository } from "typeorm";
-import { Tag } from "../entities/Tag";
+import { EntityRepository, Repository } from "typeorm";
+import { Tag } from "../../entities/Tag";
+import TagRepository from "./TagRepository";
 
-@Service()
 @EntityRepository(Tag)
-export default class TagRepository extends Repository<Tag> {
+export default class TagRepositoryImpl
+  extends Repository<Tag>
+  implements TagRepository
+{
   public async findAll(): Promise<Tag[]> {
     return await this.find();
   }

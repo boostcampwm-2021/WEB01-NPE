@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Length, MaxLength } from "class-validator";
 import { Field, InputType, Int } from "type-graphql";
 

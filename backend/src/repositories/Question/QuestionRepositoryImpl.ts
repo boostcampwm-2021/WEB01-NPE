@@ -1,12 +1,14 @@
-import { EntityRepository, getRepository, Repository } from "typeorm";
-import { PostQuestion } from "../entities/PostQuestion";
-import NoSuchQuestionError from "../errors/NoSuchQuestionError";
-import QuestionInput from "../dto/QuestionInput";
-import { Service } from "typedi";
+import { EntityRepository, Repository } from "typeorm";
+import QuestionInput from "../../dto/QuestionInput";
+import { PostQuestion } from "../../entities/PostQuestion";
+import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
+import QuestionRepository from "./QuestionRepository";
 
-@Service()
 @EntityRepository(PostQuestion)
-export default class QuestionRepository extends Repository<PostQuestion> {
+export default class QuestionRepositoryImpl
+  extends Repository<PostQuestion>
+  implements QuestionRepository
+{
   public async addNew(
     args: QuestionInput,
     userId: number

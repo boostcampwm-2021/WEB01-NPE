@@ -1,25 +1,24 @@
-import { Service } from "typedi";
+import Container from "typedi";
 import { getConnection } from "typeorm";
-import { InjectRepository } from "typeorm-typedi-extensions";
-import { QuestionThumb } from "../entities/QuestionThumb";
-import { AnswerThumb } from "../entities/AnswerThumb";
-import AnswerRepository from "../repositories/AnswerRepository";
-import AnswerThumbRepository from "../repositories/AnswerThumbRepository";
-import QuestionRepository from "../repositories/QuestionRepository";
-import QuestionThumbRepository from "../repositories/QuestionThumbRepository";
+import { AnswerThumb } from "../../entities/AnswerThumb";
+import { QuestionThumb } from "../../entities/QuestionThumb";
+import AnswerRepository from "../../repositories/Answer/AnswerRepository";
+import AnswerThumbRepository from "../../repositories/AnswerThumb/AnswerThumbRepository";
+import QuestionRepository from "../../repositories/Question/QuestionRepository";
+import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
 
-@Service()
-export default class ThumbService {
-  constructor(
-    @InjectRepository()
-    private readonly questionThumbRepository: QuestionThumbRepository,
-    @InjectRepository()
-    private readonly questionRepository: QuestionRepository,
-    @InjectRepository()
-    private readonly answerRepository: AnswerRepository,
-    @InjectRepository()
-    private readonly answerThumbRepository: AnswerThumbRepository
-  ) {}
+export default class ThumbServiceImpl {
+  private readonly questionThumbRepository: QuestionThumbRepository;
+  private readonly questionRepository: QuestionRepository;
+  private readonly answerRepository: AnswerRepository;
+  private readonly answerThumbRepository: AnswerThumbRepository;
+
+  constructor() {
+    this.questionThumbRepository = Container.get("QuestionThumbRepository");
+    this.questionRepository = Container.get("QuestionRepository");
+    this.answerRepository = Container.get("AnswerRepository");
+    this.answerThumbRepository = Container.get("AnswerThumbRepository");
+  }
 
   public async questionThumbUp(
     questionId: number,
