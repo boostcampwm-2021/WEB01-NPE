@@ -7,28 +7,25 @@ import AnswerThumbRepositoryImpl from "../src/repositories/AnswerThumb/AnswerThu
 import QuestionThumbRepositoryImpl from "../src/repositories/QuestionThumb/QuestionThumbRepositoryImpl";
 import PostQuestionHasTagRepositoryImpl from "../src/repositories/PostQuestionHasTag/PostQuestionHasTagRepositoryImpl";
 import UserHasTagRepositoryImpl from "../src/repositories/UserHasTag/UserHasTagRepositoryImpl";
-jest.mock(`../src/repositories/Tag/TagRepositoryImpl`);
-jest.mock(`../src/repositories/User/UserRepositoryImpl`);
-jest.mock(`../src/repositories/Question/QuestionRepositoryImpl`);
-jest.mock(`../src/repositories/Answer/AnswerRepositoryImpl`);
-jest.mock(`../src/repositories/AnswerThumb/AnswerThumbRepositoryImpl`);
-jest.mock(`../src/repositories/QuestionThumb/QuestionThumbRepositoryImpl`);
-jest.mock(
-  `../src/repositories/PostQuestionHasTag/PostQuestionHasTagRepositoryImpl`
-);
-jest.mock(`../src/repositories/UserHasTag/UserHasTagRepositoryImpl`);
+import { getCustomRepository } from "typeorm";
 
 export default () => {
-  // mocking repository 생성
-  const userRepositoryImpl = new UserRepositoryImpl();
-  const tagRepositoryImpl = new TagRepositoryImpl();
-  const userHasTagRepositoryImpl = new UserHasTagRepositoryImpl();
-  const questionRepositoryImpl = new QuestionRepositoryImpl();
-  const postQuestionHasTagRepositoryImpl =
-    new PostQuestionHasTagRepositoryImpl();
-  const answerRepositoryImpl = new AnswerRepositoryImpl();
-  const questionThumbRepositoryImpl = new QuestionThumbRepositoryImpl();
-  const answerThumbRepositoryImpl = new AnswerThumbRepositoryImpl();
+  const userRepositoryImpl = getCustomRepository(UserRepositoryImpl);
+  const tagRepositoryImpl = getCustomRepository(TagRepositoryImpl);
+  const userHasTagRepositoryImpl = getCustomRepository(
+    UserHasTagRepositoryImpl
+  );
+  const questionRepositoryImpl = getCustomRepository(QuestionRepositoryImpl);
+  const postQuestionHasTagRepositoryImpl = getCustomRepository(
+    PostQuestionHasTagRepositoryImpl
+  );
+  const answerRepositoryImpl = getCustomRepository(AnswerRepositoryImpl);
+  const questionThumbRepositoryImpl = getCustomRepository(
+    QuestionThumbRepositoryImpl
+  );
+  const answerThumbRepositoryImpl = getCustomRepository(
+    AnswerThumbRepositoryImpl
+  );
 
   // 컨테이너에 mocking된 repository 등록
   Container.set("UserRepository", userRepositoryImpl);

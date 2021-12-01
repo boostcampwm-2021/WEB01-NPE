@@ -74,7 +74,7 @@ export class PostQuestion {
   postAnswers: PostAnswer[];
 
   @ManyToOne(() => User, (user) => user.postQuestions, {
-    onDelete: "NO ACTION",
+    onDelete: "CASCADE",
     onUpdate: "NO ACTION",
   })
   @JoinColumn([{ name: "user_id", referencedColumnName: "id" }])

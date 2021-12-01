@@ -1,7 +1,9 @@
 import "reflect-metadata";
 import {
+  Connection,
   ConnectionOptions,
   createConnection,
+  EntityManager,
   getConnection,
   getConnectionManager,
   useContainer,
@@ -11,13 +13,14 @@ const TEST_MYSQL_OPT: ConnectionOptions =
   require("../ormconfig.json")["test-mysql"];
 
 export default {
+  conn: null,
+
   async connectIfNotExists() {
     if (!getConnectionManager().has("default")) {
       useContainer(Container);
-      return await createConnection(TEST_MYSQL_OPT);
-    } else {
-      return getConnection();
+      this.conn = await createConnection(TEST_MYSQL_OPT);
     }
+    return this.conn;
   },
 
   async clear() {
@@ -30,7 +33,18 @@ export default {
   async deleteAll(entityName: string) {
     const connection = getConnection();
     const repository = connection.getRepository(entityName);
-    return repository.clear();
+    return repository.delete({});
+  },
+
+  async transaction(cb: (m: EntityManager) => Promise<void>) {
+    const queryRunner = getConnection().createQueryRunner();
+    await queryRunner.startTransaction("READ UNCOMMITTED");
+    const manager = queryRunner.manager;
+
+    await cb(manager);
+
+    await queryRunner.rollbackTransaction();
+    await queryRunner.release();
   },
 
   async disconnect() {

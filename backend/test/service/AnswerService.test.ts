@@ -1,34 +1,34 @@
 import Container from "typedi";
 import AnswerInput from "../../src/dto/AnswerInput";
-import QuestionRepository from "../../src/repositories/Question/QuestionRepository";
 import AnswerService from "../../src/services/Answer/AnswerService";
-import AnswerServiceImpl from "../../src/services/Answer/AnswerServiceImpl";
-import testInjectionConfig from "../testInjectionConfig";
 import faker from "faker";
-import { PostQuestion } from "../../src/entities/PostQuestion";
-import AnswerRepository from "../../src/repositories/Answer/AnswerRepository";
 import { User } from "../../src/entities/User";
 import InjectionConfig from "../../src/InjectionConfig";
 import connection from "../connection";
-import UserRepository from "../../src/repositories/User/UserRepository";
+import { Connection, EntityManager } from "typeorm";
+import { TransactionalTestContext } from "typeorm-transactional-tests";
+import QuestionMock from "../mockdata/QuestionMock";
+import UserMock from "../mockdata/userMock";
 
 describe("AnswerService", () => {
   let answerService: AnswerService;
-  let userRepository: UserRepository;
-  let questionRepository: QuestionRepository;
+  let conn: Connection;
+  let transactionalContext: TransactionalTestContext;
+  let entityManager: EntityManager;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     answerService = Container.get("AnswerService");
-    userRepository = Container.get("UserRepository");
-    questionRepository = Container.get("QuestionRepository");
+    transactionalContext = new TransactionalTestContext(conn);
+    await transactionalContext.start();
+    entityManager = conn.manager;
   });
 
   afterEach(async () => {
-    await connection.clear();
+    await transactionalContext.finish();
   });
 
   beforeAll(async () => {
-    await connection.connectIfNotExists();
+    conn = await connection.connectIfNotExists();
     InjectionConfig();
   });
 
@@ -36,48 +36,34 @@ describe("AnswerService", () => {
     await connection.disconnect();
   });
 
-  it("새 답변글 등록", async () => {
+  it("답변글 등록시 점수 증가", async () => {
     // given
-    const questionId = faker.datatype.number();
-    const questionUserId = faker.datatype.number();
-    const questionUserScore = faker.datatype.number();
-    const questionUsername = faker.datatype.string(10);
+    const questionUser = new UserMock().getOne();
+    await entityManager.save(questionUser);
 
-    const answerUserId = faker.datatype.number();
-    const answerUserScore = faker.datatype.number();
-    const answerUsername = faker.datatype.string(10);
+    const question = new QuestionMock().getOne();
+    question.userId = questionUser.id;
+    await entityManager.save(question);
+
+    const answerUser = new UserMock().getOne();
+    const beforeScore = answerUser.score;
+    await entityManager.save(answerUser);
 
     const answerInput = new AnswerInput();
-    answerInput.desc = faker.random.words(5);
-
-    const questionUser = new User();
-    questionUser.id = questionUserId;
-    questionUser.username = questionUsername;
-    questionUser.score = questionUserScore;
-    await userRepository.save(questionUser);
-
-    const question = new PostQuestion();
-    question.id = questionId;
-    question.userId = questionUserId;
-    question.title = faker.datatype.string(20);
-    question.desc = faker.datatype.string(20);
-    question.realtimeShare = 0;
-    await questionRepository.save(question);
-
-    const answerUser = new User();
-    answerUser.id = answerUserId;
-    answerUser.username = answerUsername;
-    answerUser.score = answerUserScore;
-    await userRepository.save(answerUser);
+    answerInput.desc = faker.random.words(20);
 
     // when
     const addedAnswer = await answerService.addNew(
       answerInput,
-      answerUserId,
-      questionId
+      answerUser.id,
+      question.id
     );
+    const answeredUser = await entityManager.findOne(User, {
+      id: answerUser.id,
+    });
 
     // then
-    expect(addedAnswer.postQuestionId).toBe(questionId);
+    expect(addedAnswer.postQuestionId).toBe(question.id);
+    expect(answeredUser.score).toBe(beforeScore + 10);
   });
 });
