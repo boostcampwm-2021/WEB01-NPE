@@ -20,6 +20,10 @@ export const HeaderDiv = styled.header`
   box-shadow: 0 5px 15px -10px rgba(0, 0, 0, 0.3);
 `;
 
+export const LogoDiv = styled.div`
+  min-width: 321px;
+`;
+
 export const SearchForm = styled.form<SearchProps>`
   flex-grow: 1;
   min-width: 250px;
