@@ -1,5 +1,4 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from "react";
-import { useSession } from "next-auth/client";
 import * as Socket from "socket.io-client";
 import Image from "next/image";
 
