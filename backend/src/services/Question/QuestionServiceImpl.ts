@@ -154,7 +154,7 @@ export default class QuestionServiceImpl implements QuestionService {
           userHasTag = new UserHasTag();
           userHasTag.userId = userId;
           userHasTag.tagId = tagId;
-          userHasTag.count = 0;
+          userHasTag.count = 1;
         } else {
           userHasTag.count++;
         }

@@ -23,6 +23,7 @@
     "class-validator": "^0.13.1",
     "faker": "^5.5.3",
     "jest": "^27.3.1",
+    "jest-sorted": "^1.0.12",
     "jest-when": "^3.4.2",
     "nodemon": "^2.0.14",
     "sql-formatter": "^4.0.2",
