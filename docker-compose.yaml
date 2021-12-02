@@ -18,4 +18,4 @@ services:
       NODE_ENV: $NODE_ENV
       PM2_PUBLIC_KEY: $PM2_PUBLIC_KEY
       PM2_SECRET_KEY: $PM2_SECRET_KEY
-    command: sh -c "npm run start:socket & pm2-runtime src/App.js"
+    command: sh -c "yarn start"
