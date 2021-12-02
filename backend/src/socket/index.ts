@@ -24,13 +24,10 @@ interface CodeType {
 interface UsersType2 {
   [roomName: string]: string[];
 }
-let streamUsers: any = [];
 
-let test: UsersType2 = {};
+let streamUsers: UsersType2 = {};
 const users: UsersType = {};
 const codes: CodeType = {};
-let streamUserList: any = {};
-const socketToRoom: any = {};
 export default (io: socketio.Server) => {
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
@@ -72,18 +69,15 @@ export default (io: socketio.Server) => {
     });
 
     socket.on("join", () => {
-      console.log("join!!");
-      if (test[roomName] === undefined) {
-        test[roomName] = [socket.id];
+      if (streamUsers[roomName] === undefined) {
+        streamUsers[roomName] = [socket.id];
       } else {
-        test[roomName].push(socket.id);
+        streamUsers[roomName].push(socket.id);
       }
 
-      io.to(socket.id).emit("all_users", test[roomName]);
+      io.to(socket.id).emit("all_users", streamUsers[roomName]);
     });
     socket.on("sendMessage", (msg) => {
-      console.log(msg);
-      const data = { id: socket.id, msg };
       io.emit("respondMessage", msg);
     });
 
@@ -92,7 +86,9 @@ export default (io: socketio.Server) => {
       io.to(roomName).emit("user exit", [socket!.id, userName]);
       delete users[roomName][socket!.id];
       io.to(roomName).emit("user count", Object.keys(users[roomName]).length);
-      test[roomName] = test[roomName].filter((user: any) => user !== socket.id);
+      streamUsers[roomName] = streamUsers[roomName].filter(
+        (user: any) => user !== socket.id
+      );
       io.emit("user_exit", { id: socket.id });
     });
 
