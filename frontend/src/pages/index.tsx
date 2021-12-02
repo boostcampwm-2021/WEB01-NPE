@@ -33,7 +33,7 @@ const MainPage: NextPage<Props> = ({ data, error, userRank, questionRank }) => {
 
   const [questionList, setQuestionList] = useState(data.searchQuestions);
   const [hasMore, setHasMore] = useState(true);
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(5);
 
   const reset = () => {
     setTagList([]);
