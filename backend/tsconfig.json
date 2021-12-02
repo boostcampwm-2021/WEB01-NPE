@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
-    "target": "es2017",
+    "target": "es2015",
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "dist",
@@ -10,13 +10,22 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "noImplicitAny": true,
+    "removeComments": true,
+    "baseUrl": "src",
+    "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@jest",
       "./src/types"
     ]
   },
-  "include": ["src", "test"],
+  "include": [
+    "src",
+    "package.json",
+    "package-lock.json",
+    "./.env",
+    "ormconfig.json"
+  ],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]

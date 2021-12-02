@@ -14,4 +14,8 @@ services:
     ports:
       - "1234:1234"
       - "4000:4000"
-    command: sh -c "npm run start"
+    environment:
+      NODE_ENV: $NODE_ENV
+      PM2_PUBLIC_KEY: $PM2_PUBLIC_KEY
+      PM2_SECRET_KEY: $PM2_SECRET_KEY
+    command: sh -c "npm run start:socket & pm2-runtime src/App.js"
