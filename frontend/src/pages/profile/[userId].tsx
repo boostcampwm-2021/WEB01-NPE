@@ -7,7 +7,7 @@ import { HeaderText, TitleText, ContentText, Chart } from "@components/atoms";
 import { Header } from "@components/organisms/";
 import { SEOHeader } from "@components/templates";
 import { getUserProfileData } from "@src/lib";
-import { AnswerType, AuthorType, QuestionType } from "@src/types";
+import { AnswerType, AuthorType, QuestionType, TagType } from "@src/types";
 import ProfileAnswerSummary from "@src/components/organisms/ProfileAnswerSummary";
 import ProfileQuestionSummary from "@src/components/organisms/ProfileQuestionSummary";
 import { ChartData } from "chart.js";
@@ -126,23 +126,20 @@ const ProfilePage: NextPage<Props> = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = Number(context.query.userId);
 
-  try {
-    const { data } = await getUserProfileData(userId);
+  const { data } = await getUserProfileData(userId);
 
-    return {
-      props: {
-        userProfileData: data.findUserById,
-        userTagCountChartData: makeTagCountChartData(data.getUserUsedTagCount),
-        answerStateChartData: makeAnswerStateChartData(
-          data.findUserById.postAnswers
-        ),
-      },
-    };
-  } catch {
-    return {
-      notFound: true,
-    };
-  }
+  return {
+    props: {
+      userProfileData: data.findUserById,
+      userTagCountChartData: makeTagCountChartData(
+        data.getUserUsedTagCount,
+        data.getAllTags
+      ),
+      answerStateChartData: makeAnswerStateChartData(
+        data.findUserById.postAnswers
+      ),
+    },
+  };
 };
 
 const makeTagCountChartData = (
@@ -150,13 +147,17 @@ const makeTagCountChartData = (
     {
       userId: number;
       tagId: number;
-      tag: { id: number; name: string };
       count: number;
     }
-  ]
+  ],
+  tagList: TagType[]
 ): ChartData<"doughnut"> & ChartData<"bar"> => {
   return {
-    labels: list.map((obj) => obj.tag.name),
+    labels: list.map((obj) => {
+      return tagList
+        .filter((tag) => obj.tagId === Number(tag.id))
+        .map((tag) => tag.name);
+    }),
     datasets: [
       {
         data: list.map((obj) => obj.count),

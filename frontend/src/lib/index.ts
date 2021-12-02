@@ -261,11 +261,11 @@ export const getUserProfileData = async (userId: number) => {
         getUserUsedTagCount(userId: ${userId}) {
           userId
           tagId
-          tag {
-            id
-            name
-          }
           count
+        }
+        getAllTags {
+          id
+          name
         }
       }
     `,

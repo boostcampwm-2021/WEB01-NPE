@@ -1,3 +1,4 @@
+import { UserHasTag } from "entities/UserHasTag";
 import Container from "typedi";
 import { createQueryBuilder } from "typeorm";
 import { PostQuestion } from "../../entities/PostQuestion";
@@ -47,15 +48,13 @@ export default class TagServiceImpl implements TagService {
     return tagIds;
   }
 
-  public async findAllIdsByUserId(userId: number): Promise<number[]> {
+  public async findAllIdsByUserId(userId: number): Promise<UserHasTag[]> {
     const user = await this.userRepository.findById(userId);
     const tagRelations = await createQueryBuilder()
       .relation(User, "userHasTags")
       .of(user)
       .loadMany();
 
-    const tagIds = tagRelations.map((obj) => obj.tagId);
-
-    return tagIds;
+    return tagRelations;
   }
 }
