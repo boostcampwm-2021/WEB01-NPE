@@ -224,6 +224,7 @@ const ImageDiv = styled.div`
   width: 192px;
   height: 192px;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const TextDiv = styled.div`

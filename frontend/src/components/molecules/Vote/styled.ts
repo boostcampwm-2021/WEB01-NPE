@@ -7,6 +7,10 @@ export const Vote = styled.div`
   text-align: center;
 `;
 
-export const UpArrowDiv = styled.div``;
-export const DownArrowDiv = styled.div``;
+export const UpArrowDiv = styled.div`
+  cursor: pointer;
+`;
+export const DownArrowDiv = styled.div`
+  cursor: pointer;
+`;
 export const ThubmUpDiv = styled.div``;

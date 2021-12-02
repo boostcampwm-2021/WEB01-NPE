@@ -44,3 +44,7 @@ export const Modal = styled.div`
   background: white;
   overflow: auto;
 `;
+
+export const SubButton = styled.span`
+  cursor: pointer;
+`;

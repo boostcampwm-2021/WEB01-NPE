@@ -82,9 +82,14 @@ const QuestionDetail: FunctionComponent<Props> = ({
           <ContentText type="Default" text={`View ${viewCount}`}></ContentText>
           {user[0]?.userId === Number(author.id) && (
             <>
-              <span onClick={onDeleteQuestion}>삭제 </span>
+              <Styled.SubButton onClick={onDeleteQuestion}>
+                삭제{" "}
+              </Styled.SubButton>
 
-              <span onClick={onEditQuestion}> 수정</span>
+              <Styled.SubButton onClick={onEditQuestion}>
+                {" "}
+                수정
+              </Styled.SubButton>
             </>
           )}
         </Styled.QuestionHeaderInfo>
