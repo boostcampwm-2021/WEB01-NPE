@@ -21,6 +21,23 @@ import InitInjection from "./InjectionConfig";
 // typeorm Container로 typeDI Container사용
 useContainer(typeDiContainer);
 
+const graphQLMiddleware = async () => {
+  const schema = await buildSchema({
+    resolvers: [
+      Resolver.UserResolver,
+      Resolver.QuestionResolver,
+      Resolver.TagResolver,
+      Resolver.AnswerResolver,
+    ],
+    globalMiddlewares: [Auth],
+  });
+
+  return graphqlHTTP({
+    schema: schema,
+    graphiql: process.env.NODE_ENV !== "production",
+  });
+};
+
 (async () => {
   let env = "";
   if (["production", "test", "development"].includes(process.env.NODE_ENV))
@@ -36,7 +53,7 @@ useContainer(typeDiContainer);
   const gqMiddleware = await graphQLMiddleware();
   app.use("/graphql", gqMiddleware);
 
-  let server: Server = null;
+  let server: Server;
   if (env === "production") {
     console.info("!!! THIS IS PRODUCTION MODE !!!");
     server = app.listen(4000, () =>
@@ -57,20 +74,3 @@ useContainer(typeDiContainer);
   });
   socketModule(io);
 })();
-
-const graphQLMiddleware = async () => {
-  const schema = await buildSchema({
-    resolvers: [
-      Resolver.UserResolver,
-      Resolver.QuestionResolver,
-      Resolver.TagResolver,
-      Resolver.AnswerResolver,
-    ],
-    globalMiddlewares: [Auth],
-  });
-
-  return graphqlHTTP({
-    schema: schema,
-    graphiql: process.env.NODE_ENV !== "production",
-  });
-};

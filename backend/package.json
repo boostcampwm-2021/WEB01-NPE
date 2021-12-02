@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec ts-node src/App.ts & npx y-websocket-server",
+    "build": "tsc -p .",
     "test": "jest",
     "start:dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/App.ts & npx y-websocket-server",
     "start:test": "cross-env NODE_ENV=test nodemon --exec ts-node src/App.ts & npx y-websocket-server",
+    "start:socket": "npx y-websocket-server",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
   },
   "author": "",
