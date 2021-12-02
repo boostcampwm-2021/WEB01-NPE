@@ -1,5 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { useSession } from "next-auth/client";
+import React, { FunctionComponent, useEffect, useState, useRef } from "react";
 import * as Socket from "socket.io-client";
 import Image from "next/image";
 
@@ -20,13 +19,11 @@ interface ChatType {
   date: string;
 }
 
-// let users: { [socketId: string]: UserType } = {};
-
 const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
-  const [session, loading] = useSession();
   const [chats, setChats] = useState<ChatType[]>([]);
   const [users, setUsers] = useState<{ [socketId: string]: UserType }>({});
   const [userCount, setUserCount] = useState<number>(0);
+  const scrollRef = useRef<any>(null);
   useEffect(() => {
     socket.on("chat", (chatItem: ChatType) => {
       setChats((chatList: ChatType[]) => [...chatList, chatItem]);
@@ -67,6 +64,10 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
       setUserCount(count);
     });
   }, []);
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: "smooth" });
+  }, [chats]);
+
   const onKeyPress = (event: KeyboardEvent) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -135,7 +136,10 @@ const LiveChat: FunctionComponent<{ socket: Socket.Socket }> = ({ socket }) => {
         채팅
         <Styled.UserCount>{userCount}</Styled.UserCount>
       </Styled.ChatHeader>
-      <Styled.Messages>{chats.map(showChat)}</Styled.Messages>
+      <Styled.Messages>
+        {chats.map(showChat)}
+        <Styled.MessageEnd ref={scrollRef}></Styled.MessageEnd>
+      </Styled.Messages>
       <Styled.InputContainer>
         <Styled.Input
           name="chat"

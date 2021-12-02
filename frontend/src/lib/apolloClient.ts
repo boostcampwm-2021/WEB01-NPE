@@ -18,7 +18,10 @@ const authLink = setContext(async (_, { headers }) => {
   const session = await getSession();
   if (!session || !session.userId) return {};
 
-  const token = sign({ userId: session.userId }, "keyboard cat");
+  const token = sign(
+    { userId: session.userId },
+    process.env.NEXT_PUBLIC_JWT_KEY as string
+  );
 
   return {
     headers: {

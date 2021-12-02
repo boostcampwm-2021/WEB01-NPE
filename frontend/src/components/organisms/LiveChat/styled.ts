@@ -38,6 +38,8 @@ export const Message = styled.li`
   margin-bottom: 10px;
 `;
 
+export const MessageEnd = styled.div``;
+
 export const UserInformation = styled.div`
   display: flex;
 `;

@@ -7,38 +7,30 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { verify } from "jsonwebtoken";
 import { PostAnswer } from "../entities/PostAnswer";
 import { User } from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
-import PostService from "../services/PostService";
-import UserService from "../services/UserService";
-import { Container } from "typeorm-typedi-extensions";
-import AuthenticationError from "../errors/AuthenticationError";
+import UserService from "../services/User/UserService";
+import { Container } from "typedi";
 import AuthorizationError from "../errors/AuthorizationError";
-import ThumbService from "../services/ThumbService";
-
-const getUserId = (headers: any): number => {
-  if (!headers.authorization) throw new AuthenticationError();
-  const token = headers.authorization.split(" ")[1];
-  return (verify(token, "keyboard cat") as any).userId;
-};
+import ThumbService from "../services/Thumb/ThumbService";
+import AnswerService from "../services/Answer/AnswerService";
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
-  private readonly postService: PostService = Container.get(PostService);
-  private readonly userService: UserService = Container.get(UserService);
-  private readonly thumbService: ThumbService = Container.get(ThumbService);
+  private readonly answerService: AnswerService =
+    Container.get("AnswerService");
+  private readonly userService: UserService = Container.get("UserService");
+  private readonly thumbService: ThumbService = Container.get("ThumbService");
 
   @Mutation(() => PostAnswer, { description: "답변글 작성 Mutation" })
   async addNewAnswer(
     @Arg("questionId", () => Int, { description: "질문글 ID" })
     questionId: number,
     @Arg("data") answerData: AnswerInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const userId = getUserId(headers);
-    const newAnswer = await this.postService.addNewAnswer(
+    const newAnswer = await this.answerService.addNew(
       answerData,
       userId,
       questionId
@@ -59,18 +51,14 @@ export default class AnswerResolver {
     answerId: number,
     @Arg("data", { description: "수정할 답변글 내용" })
     answerInput: AnswerInput,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const userId = getUserId(headers);
-    const answer = await this.postService.findOneAnswerById(answerId);
+    const answer = await this.answerService.findById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const updateResult = await this.postService.updateAnswer(
-      answerId,
-      answerInput
-    );
+    const updateResult = await this.answerService.update(answerId, answerInput);
 
-    return await this.postService.findOneAnswerById(answerId);
+    return await this.answerService.findById(answerId);
   }
 
   @Mutation(() => Boolean, {
@@ -78,13 +66,12 @@ export default class AnswerResolver {
   })
   async deleteAnswer(
     @Arg("answerId", { description: "삭제할 질문글의 ID" }) answerId: number,
-    @Ctx("headers") headers: any
+    @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const userId = getUserId(headers);
-    const answer = await this.postService.findOneAnswerById(answerId);
+    const answer = await this.answerService.findById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const isDeleted = await this.postService.deleteAnswer(answerId);
+    const isDeleted = await this.answerService.delete(answerId);
 
     return isDeleted;
   }
@@ -124,7 +111,7 @@ export default class AnswerResolver {
     answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const result = await this.postService.adoptAnswer(userId, answerId);
+    const result = await this.answerService.adopt(userId, answerId);
 
     return result;
   }

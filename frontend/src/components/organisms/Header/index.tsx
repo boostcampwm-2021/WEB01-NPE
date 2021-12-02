@@ -95,11 +95,13 @@ const Header: FunctionComponent<Props> = ({ type, setTexts, onResetState }) => {
 
   return (
     <Styled.HeaderDiv>
-      <Link href="/">
-        <a onClick={onResetAll}>
-          <Logo type="Default" />
-        </a>
-      </Link>
+      <Styled.LogoDiv>
+        <Link href="/">
+          <a onClick={onResetAll}>
+            <Logo type="Default" />
+          </a>
+        </Link>
+      </Styled.LogoDiv>
 
       <Styled.SearchForm {...headerProps} onSubmit={submitSearch}>
         <Input text={"Search..."} size={"medium"} ref={searchText} />

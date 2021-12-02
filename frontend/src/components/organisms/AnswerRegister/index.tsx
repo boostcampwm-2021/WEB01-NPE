@@ -33,15 +33,6 @@ const AnswerRegister: FunctionComponent<Props> = ({
     if (!session || !session.user) return setIsLoginMessageModal(true);
     if (getMarkdown().length < 10) return setIsDescModal(true);
 
-    const newAnswer = (
-      await postAnswer({
-        variables: {
-          questionId,
-          desc: getMarkdown(),
-        },
-      })
-    ).data.addNewAnswer as AnswerDetailType;
-
     try {
       const { data } = await postAnswer({
         questionId: Number(questionId),

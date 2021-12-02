@@ -1,3 +1,4 @@
+import "dotenv/config.js";
 import "reflect-metadata";
 import express from "express";
 import cors from "cors";
@@ -11,11 +12,11 @@ import socketModule from "./socket";
 import { Server } from "http";
 import { buildSchema } from "type-graphql";
 import * as Resolver from "./resolvers";
-import { authChecker } from "./middlewares/AuthChecker";
 import { graphqlHTTP } from "express-graphql";
 import { useContainer } from "typeorm";
-import { Container as typeDiContainer } from "typeorm-typedi-extensions";
-import AuthMiddleware from "./middlewares/AuthMiddleware";
+import { Container as typeDiContainer } from "typedi";
+import Auth from "./middlewares/Auth";
+import InitInjection from "./InjectionConfig";
 
 // typeorm Container로 typeDI Container사용
 useContainer(typeDiContainer);
@@ -29,6 +30,7 @@ useContainer(typeDiContainer);
   const app = express();
   await createConnection(DB_CONN_OPTIONS[env]);
 
+  InitInjection();
   app.use(cors());
 
   const gqMiddleware = await graphQLMiddleware();
@@ -64,8 +66,7 @@ const graphQLMiddleware = async () => {
       Resolver.TagResolver,
       Resolver.AnswerResolver,
     ],
-    authChecker: authChecker,
-    globalMiddlewares: [AuthMiddleware],
+    globalMiddlewares: [Auth],
   });
 
   return graphqlHTTP({

@@ -38,14 +38,18 @@ export class User {
     description: "유저가 작성한 질문글",
     nullable: "items",
   })
-  @OneToMany(() => PostQuestion, (postQuestion) => postQuestion.user)
+  @OneToMany(() => PostQuestion, (postQuestion) => postQuestion.user, {
+    cascade: true,
+  })
   postQuestions: PostQuestion[];
 
   @Field(() => [PostAnswer], {
     description: "유저가 작성한 답변글",
     nullable: "items",
   })
-  @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.user)
+  @OneToMany(() => PostAnswer, (postAnswer) => postAnswer.user, {
+    cascade: true,
+  })
   postAnswers: PostAnswer[];
 
   @OneToMany(() => UserHasTag, (userHasTag) => userHasTag.user)
