@@ -19,13 +19,7 @@
       "./src/types"
     ]
   },
-  "include": [
-    "src",
-    "package.json",
-    "package-lock.json",
-    "./.env",
-    "ormconfig.json"
-  ],
+  "include": ["src", "package.json", "yarn.lock", "ormconfig.json"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]
