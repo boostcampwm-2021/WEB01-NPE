@@ -21,11 +21,11 @@ interface CodeType {
   };
 }
 
-interface UsersType2 {
+interface StreamUser {
   [roomName: string]: string[];
 }
 
-let streamUsers: UsersType2 = {};
+const streamUsers: StreamUser = {};
 const users: UsersType = {};
 const codes: CodeType = {};
 export default (io: socketio.Server) => {
