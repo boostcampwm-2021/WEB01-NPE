@@ -3,7 +3,8 @@ import React, { useEffect, useRef, FunctionComponent } from "react";
 interface Props {
   stream: MediaStream;
 }
-const Audio: FunctionComponent<Props> = ({ stream }) => {
+
+const LiveAudio: FunctionComponent<Props> = ({ stream }) => {
   const ref = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     if (ref.current) {
@@ -14,4 +15,4 @@ const Audio: FunctionComponent<Props> = ({ stream }) => {
   return <audio ref={ref} autoPlay></audio>;
 };
 
-export default Audio;
+export default LiveAudio;
