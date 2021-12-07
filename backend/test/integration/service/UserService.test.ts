@@ -1,9 +1,7 @@
 import Container from "typedi";
-import UserService from "../../src/services/User/UserService";
-import faker from "faker";
-import { User } from "../../src/entities/User";
+import UserService from "../../../src/services/User/UserService";
 import connection from "../connection";
-import InjectionConfig from "../../src/InjectionConfig";
+import InjectionConfig from "../../../src/InjectionConfig";
 import { TransactionalTestContext } from "typeorm-transactional-tests";
 import { Connection, EntityManager } from "typeorm";
 import UserMock from "../mockdata/userMock";
