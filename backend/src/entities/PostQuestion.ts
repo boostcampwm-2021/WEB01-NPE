@@ -1,5 +1,4 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   Index,
@@ -11,7 +10,7 @@ import {
 import { PostAnswer } from "./PostAnswer";
 import { User } from "./User";
 import { PostQuestionHasTag } from "./PostQuestionHasTag";
-import { ObjectType, Field, ID, Int, Float, Authorized } from "type-graphql";
+import { ObjectType, Field, ID, Int, Float } from "type-graphql";
 
 @Index("fk_post_question_user_idx", ["userId"], {})
 @Entity("post_question")

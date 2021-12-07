@@ -1,4 +1,4 @@
-import { UserHasTag } from "entities/UserHasTag";
+import { UserHasTag } from "../../entities/UserHasTag";
 import Container from "typedi";
 import { createQueryBuilder } from "typeorm";
 import { PostQuestion } from "../../entities/PostQuestion";

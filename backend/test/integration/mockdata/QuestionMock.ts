@@ -1,7 +1,7 @@
-import { PostQuestion } from "../../../src/entities/PostQuestion";
+import { PostQuestion } from "@src/entities/PostQuestion";
 import Mock from "./mock";
 import faker from "faker";
-import QuestionInput from "../../../src/dto/QuestionInput";
+import QuestionInput from "@src/dto/QuestionInput";
 
 export default class QuestionMock implements Mock<PostQuestion> {
   getOne() {

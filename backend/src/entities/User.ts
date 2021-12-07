@@ -1,5 +1,5 @@
 import { Field, ID, Int, ObjectType } from "type-graphql";
-import { Column, Entity, OneToMany, BaseEntity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { PostAnswer } from "./PostAnswer";
 import { PostQuestion } from "./PostQuestion";
 import { UserHasTag } from "./UserHasTag";

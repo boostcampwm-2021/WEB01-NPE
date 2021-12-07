@@ -11,7 +11,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "removeComments": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
     "resolveJsonModule": true,
     "typeRoots": [
       "./node_modules/@types",
@@ -19,7 +22,7 @@
       "./src/types"
     ]
   },
-  "include": ["src", "package.json", "yarn.lock", "ormconfig.json"],
+  "include": ["src", "test", "package.json", "yarn.lock", "ormconfig.json"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]

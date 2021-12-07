@@ -1,8 +1,9 @@
 import "dotenv/config.js";
+import "module-alias/register";
 import "reflect-metadata";
 import express from "express";
 import cors from "cors";
-import { ConnectionOptions, createConnection, getConnection } from "typeorm";
+import { ConnectionOptions, createConnection } from "typeorm";
 const DB_CONN_OPTIONS: Record<
   string,
   ConnectionOptions
