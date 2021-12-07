@@ -1,8 +1,12 @@
 import { EntityRepository, Repository } from "typeorm";
 import { QuestionThumb } from "../../entities/QuestionThumb";
+import QuestionThumbRepository from "./QuestionThumbRepository";
 
 @EntityRepository(QuestionThumb)
-export default class QuestionThumbRepositoryImpl extends Repository<QuestionThumb> {
+export default class QuestionThumbRepositoryImpl
+  extends Repository<QuestionThumb>
+  implements QuestionThumbRepository
+{
   public async deleteByQuestionId(questionId: number): Promise<void> {
     await this.delete({ postQuestionId: questionId });
   }
@@ -12,5 +16,17 @@ export default class QuestionThumbRepositoryImpl extends Repository<QuestionThum
 
     if (thumb) return true;
     else return false;
+  }
+
+  public async addNew(
+    value: 1 | -1,
+    questionId: number,
+    userId: number
+  ): Promise<QuestionThumb> {
+    const newThumb = new QuestionThumb();
+    newThumb.postQuestionId = questionId;
+    newThumb.userId = userId;
+    newThumb.value = value;
+    return await this.save(newThumb);
   }
 }

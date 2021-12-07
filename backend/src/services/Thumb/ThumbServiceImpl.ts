@@ -1,7 +1,4 @@
 import Container from "typedi";
-import { getConnection } from "typeorm";
-import { AnswerThumb } from "../../entities/AnswerThumb";
-import { QuestionThumb } from "../../entities/QuestionThumb";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
 import AnswerThumbRepository from "../../repositories/AnswerThumb/AnswerThumbRepository";
 import QuestionRepository from "../../repositories/Question/QuestionRepository";
@@ -31,22 +28,12 @@ export default class ThumbServiceImpl {
     );
     if (alreadyExists) return false;
 
-    const newThumbUp = new QuestionThumb();
-    newThumbUp.postQuestionId = questionId;
-    newThumbUp.userId = userId;
-    newThumbUp.value = 1;
+    await this.questionThumbRepository.addNew(1, questionId, userId);
 
     const question = await this.questionRepository.findById(questionId);
     question.thumbupCount++;
+    await this.questionRepository.save(question);
 
-    await getConnection()
-      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(newThumbUp);
-        await transactionalEntityManager.save(question);
-      })
-      .catch((error) => {
-        throw error;
-      });
     return true;
   }
 
@@ -60,22 +47,12 @@ export default class ThumbServiceImpl {
     );
     if (alreadyExists) return false;
 
-    const newThumbDown = new QuestionThumb();
-    newThumbDown.postQuestionId = questionId;
-    newThumbDown.userId = userId;
-    newThumbDown.value = -1;
+    await this.questionThumbRepository.addNew(-1, questionId, userId);
 
     const question = await this.questionRepository.findById(questionId);
     question.thumbupCount--;
+    await this.questionRepository.save(question);
 
-    await getConnection()
-      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(newThumbDown);
-        await transactionalEntityManager.save(question);
-      })
-      .catch((error) => {
-        throw error;
-      });
     return true;
   }
 
@@ -89,22 +66,12 @@ export default class ThumbServiceImpl {
     );
     if (alreadyExists) return false;
 
-    const newThumbUp = new AnswerThumb();
-    newThumbUp.postAnswerId = answerId;
-    newThumbUp.userId = userId;
-    newThumbUp.value = 1;
+    await this.answerThumbRepository.addNew(1, answerId, userId);
 
     const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount++;
+    await this.answerRepository.save(answer);
 
-    await getConnection()
-      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(newThumbUp);
-        await transactionalEntityManager.save(answer);
-      })
-      .catch((error) => {
-        throw error;
-      });
     return true;
   }
 
@@ -118,22 +85,12 @@ export default class ThumbServiceImpl {
     );
     if (alreadyExists) return false;
 
-    const newThumbDown = new AnswerThumb();
-    newThumbDown.postAnswerId = answerId;
-    newThumbDown.userId = userId;
-    newThumbDown.value = -1;
+    await this.answerThumbRepository.addNew(-1, answerId, userId);
 
     const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount--;
+    await this.answerRepository.save(answer);
 
-    await getConnection()
-      .transaction("REPEATABLE READ", async (transactionalEntityManager) => {
-        await transactionalEntityManager.save(newThumbDown);
-        await transactionalEntityManager.save(answer);
-      })
-      .catch((error) => {
-        throw error;
-      });
     return true;
   }
 }

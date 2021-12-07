@@ -1,4 +1,4 @@
-import { PostAnswer } from "../../src/entities/PostAnswer";
+import { PostAnswer } from "@src/entities/PostAnswer";
 import Mock from "./mock";
 import faker from "faker";
 

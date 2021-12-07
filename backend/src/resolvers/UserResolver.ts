@@ -14,6 +14,7 @@ import UserService from "../services/User/UserService";
 import Container, { Service } from "typedi";
 import QuestionService from "../services/Question/QuestionService";
 import AnswerService from "../services/Answer/AnswerService";
+import UserDto from "../dto/UserDto";
 
 @Service()
 @Resolver(User)
@@ -66,21 +67,13 @@ export default class UserResolver {
     description: "유저 id가 존재하지 않을 시 생성. 신규 유저인 경우 true 반환",
   })
   async registerIfNotExists(
-    @Arg("id", { description: "Github ID" }) id: number,
-    @Arg("username", { description: "Github 유저 이름" }) username: string,
-    @Arg("profileUrl", { description: "Github 프로필 URL" }) profileUrl: string,
-    @Arg("socialUrl", { description: "github URL" }) socialUrl: string
+    @Arg("user", { description: "User Dto" }) userDto: UserDto
   ) {
-    let data = await this.userService.findById(id);
+    let data = await this.userService.findById(userDto.id);
     let isNewUser = false;
     if (!data) {
       isNewUser = true;
-      data = await this.userService.register(
-        id,
-        username,
-        profileUrl,
-        socialUrl
-      );
+      data = await this.userService.register(userDto);
     }
 
     return isNewUser;

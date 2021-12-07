@@ -1,4 +1,4 @@
-import { UserHasTag } from "entities/UserHasTag";
+import { UserHasTag } from "@src/entities/UserHasTag";
 import { Tag } from "../../entities/Tag";
 
 export default interface TagService {
@@ -7,5 +7,5 @@ export default interface TagService {
   findByIds(ids: number[]): Promise<Tag[]>;
   findByName(name: string): Promise<Tag>;
   findAllIdsByQuestionId(questionId: number): Promise<number[]>;
-  findAllIdsByUserId(userId: number): Promise<UserHasTag[]>;
+  findAllByUserId(userId: number): Promise<UserHasTag[]>;
 }

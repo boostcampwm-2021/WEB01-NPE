@@ -1,4 +1,4 @@
-import { Length, MaxLength } from "class-validator";
+import { Length } from "class-validator";
 import { Field, InputType, Int } from "type-graphql";
 
 @InputType({ description: "질문글 작성/수정시 사용되는 인자들" })

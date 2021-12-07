@@ -1,9 +1,9 @@
 import Container from "typedi";
-import AnswerInput from "../../src/dto/AnswerInput";
-import AnswerService from "../../src/services/Answer/AnswerService";
+import AnswerInput from "@src/dto/AnswerInput";
+import AnswerService from "@src/services/Answer/AnswerService";
 import faker from "faker";
-import { User } from "../../src/entities/User";
-import InjectionConfig from "../../src/InjectionConfig";
+import { User } from "@src/entities/User";
+import InjectionConfig from "@src/InjectionConfig";
 import connection from "../connection";
 import { Connection, EntityManager } from "typeorm";
 import { TransactionalTestContext } from "typeorm-transactional-tests";

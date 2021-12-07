@@ -1,3 +1,4 @@
+import UserDto from "@src/dto/UserDto";
 import Container from "typedi";
 import { User } from "../../entities/User";
 import UserRepository from "../../repositories/User/UserRepository";
@@ -22,17 +23,12 @@ export default class UserServiceImpl implements UserService {
     return user;
   }
 
-  public async register(
-    id: number,
-    username: string,
-    profileUrl: string,
-    socialUrl: string
-  ): Promise<User> {
+  public async register(userDto: UserDto): Promise<User> {
     const newUser = new User();
-    newUser.id = id;
-    newUser.username = username;
-    newUser.profileUrl = profileUrl;
-    newUser.socialUrl = socialUrl;
+    newUser.id = userDto.id;
+    newUser.username = userDto.username;
+    newUser.profileUrl = userDto.profileUrl;
+    newUser.socialUrl = userDto.socialUrl;
 
     return await this.userRepository.save(newUser);
   }

@@ -4,7 +4,6 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  BaseEntity,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./User";
