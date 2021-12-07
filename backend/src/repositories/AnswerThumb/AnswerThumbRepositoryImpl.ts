@@ -1,3 +1,4 @@
+import { QuestionThumb } from "@src/entities/QuestionThumb";
 import { EntityRepository, Repository } from "typeorm";
 import { AnswerThumb } from "../../entities/AnswerThumb";
 import AnswerThumbRepository from "./AnswerThumbRepository";
@@ -16,5 +17,17 @@ export default class AnswerThumbRepositoryImpl
 
     if (thumb) return true;
     else return false;
+  }
+
+  public async addNew(
+    value: 1 | -1,
+    answerId: number,
+    userId: number
+  ): Promise<AnswerThumb> {
+    const newThumb = new AnswerThumb();
+    newThumb.postAnswerId = answerId;
+    newThumb.userId = userId;
+    newThumb.value = value;
+    return await this.save(newThumb);
   }
 }
