@@ -1,6 +1,7 @@
-import { Service } from "typedi";
-import { EntityRepository, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
 
 export default interface PostQuestionHasTagRepository
-  extends Repository<PostQuestionHasTag> {}
+  extends Repository<PostQuestionHasTag> {
+  findAllTagIdsByQuestionId(questionId: number): Promise<number[]>;
+}

@@ -1,23 +1,24 @@
 import { UserHasTag } from "../../entities/UserHasTag";
 import Container from "typedi";
 import { createQueryBuilder } from "typeorm";
-import { PostQuestion } from "../../entities/PostQuestion";
 import { Tag } from "../../entities/Tag";
 import { User } from "../../entities/User";
-import QuestionRepository from "../../repositories/Question/QuestionRepository";
 import TagRepository from "../../repositories/Tag/TagRepository";
-import UserRepository from "../../repositories/User/UserRepository";
 import TagService from "./TagService";
+import PostQuestionHasTagRepository from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";
+import UserHasTagRepository from "@src/repositories/UserHasTag/UserHasTagRepository";
 
 export default class TagServiceImpl implements TagService {
   private readonly tagRepository: TagRepository;
-  private readonly questionRepository: QuestionRepository;
-  private readonly userRepository: UserRepository;
+  private readonly userHasTagRepository: UserHasTagRepository;
+  private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository;
 
   constructor() {
     this.tagRepository = Container.get("TagRepository");
-    this.questionRepository = Container.get("QuestionRepository");
-    this.userRepository = Container.get("UserRepository");
+    this.postQuestionHasTagRepository = Container.get(
+      "PostQuestionHasTagRepository"
+    );
+    this.userHasTagRepository = Container.get("UserHasTagRepository");
   }
 
   public async findAll(): Promise<Tag[]> {
@@ -37,24 +38,16 @@ export default class TagServiceImpl implements TagService {
   }
 
   public async findAllIdsByQuestionId(questionId: number): Promise<number[]> {
-    const question = await this.questionRepository.findById(questionId);
-    const tagRelations = await createQueryBuilder()
-      .relation(PostQuestion, "postQuestionHasTags")
-      .of(question)
-      .loadMany();
-
-    const tagIds = tagRelations.map((obj) => obj.tagId);
+    const tagIds =
+      await this.postQuestionHasTagRepository.findAllTagIdsByQuestionId(
+        questionId
+      );
 
     return tagIds;
   }
 
-  public async findAllIdsByUserId(userId: number): Promise<UserHasTag[]> {
-    const user = await this.userRepository.findById(userId);
-    const tagRelations = await createQueryBuilder()
-      .relation(User, "userHasTags")
-      .of(user)
-      .loadMany();
-
-    return tagRelations;
+  public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
+    const tagIds = await this.userHasTagRepository.findAllByUserId(userId);
+    return tagIds;
   }
 }

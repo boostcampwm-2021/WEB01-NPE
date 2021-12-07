@@ -41,7 +41,7 @@ export default class TagResolver {
     @Arg("userId", () => Int, { description: "조회할 유저의 ID" })
     userId: number
   ) {
-    const data = await this.tagService.findAllIdsByUserId(userId);
+    const data = await this.tagService.findAllByUserId(userId);
 
     return data;
   }

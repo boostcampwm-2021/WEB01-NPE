@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import { EntityRepository, Repository } from "typeorm";
 import { Tag } from "../../entities/Tag";
 
 export default interface TagRepository {
