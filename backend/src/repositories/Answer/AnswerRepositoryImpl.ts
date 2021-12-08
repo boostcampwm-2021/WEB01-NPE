@@ -26,6 +26,10 @@ export default class AnswerRepositoryImpl
     return data;
   }
 
+  public async saveOrUpdate(entity: PostAnswer): Promise<PostAnswer> {
+    return await this.save(entity);
+  }
+
   public async modify(
     answerId: number,
     answerInput: AnswerInput
@@ -40,5 +44,11 @@ export default class AnswerRepositoryImpl
     const deleteResult = await this.delete({ id: answerId });
 
     return deleteResult.affected > 0;
+  }
+
+  public async countByQuestionId(questionId: number) {
+    return await this.count({
+      postQuestionId: questionId,
+    });
   }
 }

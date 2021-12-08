@@ -3,7 +3,7 @@ import SearchQuestionInput from "../../dto/SearchQuestionInput";
 import { PostQuestion } from "../../entities/PostQuestion";
 
 export default interface QuestionService {
-  search(args: SearchQuestionInput): Promise<PostQuestion[]>;
+  search(searchQuery: SearchQuestionInput): Promise<PostQuestion[]>;
   findAllByUserId(userId: number): Promise<PostQuestion[]>;
   findById(id: number): Promise<PostQuestion>;
   viewById(id: number): Promise<PostQuestion>;

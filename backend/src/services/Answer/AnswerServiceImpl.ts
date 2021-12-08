@@ -47,9 +47,9 @@ export default class AnswerServiceImpl implements AnswerService {
 
     const author = await this.userRepository.findById(userId);
     author.score += 10;
-    await this.userRepository.save(author);
+    await this.userRepository.saveOrUpdate(author);
 
-    return await this.answerRepository.save(newAnswer);
+    return await this.answerRepository.saveOrUpdate(newAnswer);
   }
 
   public async findById(answerId: number): Promise<PostAnswer> {
@@ -65,7 +65,7 @@ export default class AnswerServiceImpl implements AnswerService {
     const answer = await this.answerRepository.findById(answerId);
     answer.desc = answerInput.desc;
 
-    return await this.answerRepository.save(answer);
+    return await this.answerRepository.saveOrUpdate(answer);
   }
 
   public async delete(answerId: number): Promise<boolean> {
@@ -97,9 +97,9 @@ export default class AnswerServiceImpl implements AnswerService {
       question.adopted = 1;
       answer.state = 1;
       answerAuthor.score += 50;
-      await this.answerRepository.save(answer);
-      await this.userRepository.save(answerAuthor);
-      await this.questionRepository.save(question);
+      await this.answerRepository.saveOrUpdate(answer);
+      await this.userRepository.saveOrUpdate(answerAuthor);
+      await this.questionRepository.saveOrUpdate(question);
       return true;
     } else {
       return false;
