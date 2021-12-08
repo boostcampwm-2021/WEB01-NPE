@@ -1,8 +1,6 @@
 import { UserHasTag } from "../../entities/UserHasTag";
 import Container from "typedi";
-import { createQueryBuilder } from "typeorm";
 import { Tag } from "../../entities/Tag";
-import { User } from "../../entities/User";
 import TagRepository from "../../repositories/Tag/TagRepository";
 import TagService from "./TagService";
 import PostQuestionHasTagRepository from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";

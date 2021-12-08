@@ -24,20 +24,11 @@ export default class UserServiceImpl implements UserService {
   }
 
   public async register(userDto: UserDto): Promise<User> {
-    const newUser = new User();
-    newUser.id = userDto.id;
-    newUser.username = userDto.username;
-    newUser.profileUrl = userDto.profileUrl;
-    newUser.socialUrl = userDto.socialUrl;
-
-    return await this.userRepository.save(newUser);
+    return await this.userRepository.addNew(userDto);
   }
 
   public async getRank(): Promise<User[]> {
-    const users = this.userRepository.find({
-      take: 5,
-      order: { score: "DESC" },
-    });
+    const users = this.userRepository.findAndOrderByScoreDesc(5);
 
     return users;
   }

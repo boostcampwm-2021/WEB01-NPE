@@ -47,7 +47,7 @@ export default class AnswerServiceImpl implements AnswerService {
 
     const author = await this.userRepository.findById(userId);
     author.score += 10;
-    await this.userRepository.save(author);
+    await this.userRepository.saveOrUpdate(author);
 
     return await this.answerRepository.save(newAnswer);
   }
@@ -98,7 +98,7 @@ export default class AnswerServiceImpl implements AnswerService {
       answer.state = 1;
       answerAuthor.score += 50;
       await this.answerRepository.save(answer);
-      await this.userRepository.save(answerAuthor);
+      await this.userRepository.saveOrUpdate(answerAuthor);
       await this.questionRepository.save(question);
       return true;
     } else {
