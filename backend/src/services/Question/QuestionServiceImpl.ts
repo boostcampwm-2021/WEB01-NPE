@@ -1,15 +1,14 @@
+import NoSuchUserError from "../../errors/NoSuchUserError";
 import Container from "typedi";
-import { createQueryBuilder, In, Like, SelectQueryBuilder } from "typeorm";
 import QuestionInput from "../../dto/QuestionInput";
 import SearchQuestionInput from "../../dto/SearchQuestionInput";
 import { PostQuestion } from "../../entities/PostQuestion";
 import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
-import { Tag } from "../../entities/Tag";
 import { UserHasTag } from "../../entities/UserHasTag";
 import CommonError from "../../errors/CommonError";
 import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
-import PostQuestionHasTagRepository from "../../repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";
+import PostQuestionHasTagRepository from "../../repositories/PostQuestionHasTag/PostQuestionHasTagRepository";
 import QuestionRepository from "../../repositories/Question/QuestionRepository";
 import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
 import UserRepository from "../../repositories/User/UserRepository";
@@ -38,64 +37,32 @@ export default class QuestionServiceImpl implements QuestionService {
       Container.get<number>("DEFALUT_TAKE_QUESTIONS_COUNT") ?? 5;
   }
 
-  public async search(args: SearchQuestionInput): Promise<PostQuestion[]> {
-    const { author, tagIDs, skip, take } = args;
-    const { title, desc, realtimeShare } = args;
+  public async search(
+    searchQuery: SearchQuestionInput
+  ): Promise<PostQuestion[]> {
+    const { author, skip, take } = searchQuery;
 
-    const whereObj: Record<string, unknown> = {};
-
-    if (realtimeShare) whereObj.realtimeShare = realtimeShare;
-    if (title) whereObj.title = Like(`%${title}%`);
-    if (desc) whereObj.desc = Like(`%${desc}%`);
-
+    // 작성자 존재 확인
     if (author) {
-      const user = await this.userRepository.findByUsername(author);
-      if (user) whereObj.userId = user.id;
-      else return [];
-    }
-
-    function subQueryBuilderFromTagId(
-      tagId: number,
-      qb: SelectQueryBuilder<unknown>
-    ) {
-      return qb
-        .subQuery()
-        .from(Tag, "t")
-        .select("t_q.post_question_id", "qid")
-        .where(`t.id=${tagId}`)
-        .leftJoin(PostQuestionHasTag, "t_q", "t.id=t_q.tag_id");
-    }
-
-    if (tagIDs && tagIDs.length) {
-      let tagQueryBuilder = createQueryBuilder()
-        .select("t0.qid")
-        .from((qb) => subQueryBuilderFromTagId(tagIDs[0], qb), "t0");
-
-      for (let i = 1; i < tagIDs.length; i++) {
-        tagQueryBuilder.innerJoin(
-          (qb) => subQueryBuilderFromTagId(tagIDs[i], qb),
-          // alias
-          `t${i}`,
-          // ON
-          `t0.qid=t${i}.qid`
-        );
+      const user = this.userRepository.findByUsername(author);
+      if (!user) {
+        throw new NoSuchUserError("No Such User! Check Username");
       }
-
-      const qidArray = (await tagQueryBuilder.getRawMany()).map(
-        (qid) => qid.qid
-      );
-      whereObj.id = In(qidArray);
     }
 
-    const builder = this.questionRepository
-      .createQueryBuilder()
-      .where(whereObj)
-      .skip(skip ?? 0)
-      .take(take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT)
-      .orderBy("id", "DESC");
+    // where 조건 object 생성
+    const whereObj = await this.questionRepository.buildWhereBySearchQuery(
+      searchQuery
+    );
 
-    const rows = await builder.getMany();
-    return rows;
+    // 해당 조건들로 Repository에서 검색
+    const questions = await this.questionRepository.findByArgs(
+      whereObj,
+      skip ?? 0,
+      take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT
+    );
+
+    return questions;
   }
 
   public async findAllByUserId(userId: number): Promise<PostQuestion[]> {
@@ -118,14 +85,11 @@ export default class QuestionServiceImpl implements QuestionService {
     if (!question) throw new NoSuchQuestionError("Check ID");
     question.viewCount++;
 
-    return await this.questionRepository.save(question);
+    return await this.questionRepository.saveOrUpdate(question);
   }
 
   public async getRank(): Promise<PostQuestion[]> {
-    const questions = this.questionRepository.find({
-      take: 5,
-      order: { thumbupCount: "DESC" },
-    });
+    const questions = this.questionRepository.findAndOrderByThumbCountDesc(5);
 
     return questions;
   }
@@ -143,13 +107,15 @@ export default class QuestionServiceImpl implements QuestionService {
         const postQuestionHasTag = new PostQuestionHasTag();
         postQuestionHasTag.postQuestion = newQuestion;
         postQuestionHasTag.tagId = tagId;
-        await this.postQuestionHasTagRepository.save(postQuestionHasTag);
+        await this.postQuestionHasTagRepository.saveOrUpdate(
+          postQuestionHasTag
+        );
 
         // 유저-태그 관계
-        let userHasTag = await this.userHasTagRepository.findOne({
-          userId: userId,
-          tagId: tagId,
-        });
+        let userHasTag = await this.userHasTagRepository.findByUserIdAndTagId(
+          userId,
+          tagId
+        );
         if (!userHasTag) {
           userHasTag = new UserHasTag();
           userHasTag.userId = userId;
@@ -158,7 +124,7 @@ export default class QuestionServiceImpl implements QuestionService {
         } else {
           userHasTag.count++;
         }
-        await this.userHasTagRepository.save(userHasTag);
+        await this.userHasTagRepository.saveOrUpdate(userHasTag);
       }
     }
 
@@ -177,16 +143,14 @@ export default class QuestionServiceImpl implements QuestionService {
     // 태그 여부 확인
     if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
       // 기존 태그 삭제
-      await this.postQuestionHasTagRepository.delete({
-        postQuestionId: questionId,
-      });
+      await this.postQuestionHasTagRepository.deleteByQuestionId(questionId);
 
       // 질문글-태그 관계
       for (const tagId of fieldsToUpdate.tagIds) {
         const tagEntity = new PostQuestionHasTag();
         tagEntity.postQuestion = updatedQuestion;
         tagEntity.tagId = tagId;
-        await this.postQuestionHasTagRepository.save(tagEntity);
+        await this.postQuestionHasTagRepository.saveOrUpdate(tagEntity);
       }
     }
 
@@ -204,9 +168,7 @@ export default class QuestionServiceImpl implements QuestionService {
     const question = await this.questionRepository.findById(questionId);
     if (!question) throw new NoSuchQuestionError();
 
-    const count = await this.answerRepository.count({
-      postQuestionId: questionId,
-    });
+    const count = await this.answerRepository.countByQuestionId(questionId);
 
     return count;
   }
@@ -219,7 +181,7 @@ export default class QuestionServiceImpl implements QuestionService {
         throw new CommonError("realtime share is already disabled");
 
     question.realtimeShare = 0;
-    await this.questionRepository.save(question);
+    await this.questionRepository.saveOrUpdate(question);
 
     return true;
   }

@@ -3,7 +3,7 @@ import Container from "typedi";
 import { Tag } from "../../entities/Tag";
 import TagRepository from "../../repositories/Tag/TagRepository";
 import TagService from "./TagService";
-import PostQuestionHasTagRepository from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepostiory";
+import PostQuestionHasTagRepository from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepository";
 import UserHasTagRepository from "@src/repositories/UserHasTag/UserHasTagRepository";
 
 export default class TagServiceImpl implements TagService {

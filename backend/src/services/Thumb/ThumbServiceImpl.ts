@@ -32,7 +32,7 @@ export default class ThumbServiceImpl {
 
     const question = await this.questionRepository.findById(questionId);
     question.thumbupCount++;
-    await this.questionRepository.save(question);
+    await this.questionRepository.saveOrUpdate(question);
 
     return true;
   }
@@ -51,7 +51,7 @@ export default class ThumbServiceImpl {
 
     const question = await this.questionRepository.findById(questionId);
     question.thumbupCount--;
-    await this.questionRepository.save(question);
+    await this.questionRepository.saveOrUpdate(question);
 
     return true;
   }
@@ -70,7 +70,7 @@ export default class ThumbServiceImpl {
 
     const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount++;
-    await this.answerRepository.save(answer);
+    await this.answerRepository.saveOrUpdate(answer);
 
     return true;
   }
@@ -89,7 +89,7 @@ export default class ThumbServiceImpl {
 
     const answer = await this.answerRepository.findById(answerId);
     answer.thumbupCount--;
-    await this.answerRepository.save(answer);
+    await this.answerRepository.saveOrUpdate(answer);
 
     return true;
   }

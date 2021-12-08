@@ -23,4 +23,18 @@ export default class UserHasTagRepositoryImpl
 
     return data;
   }
+
+  public async findByUserIdAndTagId(
+    userId: number,
+    tagId: number
+  ): Promise<UserHasTag> {
+    return await this.findOne({
+      userId: userId,
+      tagId: tagId,
+    });
+  }
+
+  public async saveOrUpdate(userHasTag: UserHasTag) {
+    return await this.save(userHasTag);
+  }
 }

@@ -1,8 +1,6 @@
 import { QuestionThumb } from "@src/entities/QuestionThumb";
-import { Repository } from "typeorm";
 
-export default interface QuestionThumbRepository
-  extends Repository<QuestionThumb> {
+export default interface QuestionThumbRepository {
   deleteByQuestionId(questionId: number): Promise<void>;
   addNew(
     value: 1 | -1,
