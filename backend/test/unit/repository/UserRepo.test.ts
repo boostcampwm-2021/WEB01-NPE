@@ -18,14 +18,15 @@ describe("UserRepository", () => {
     const user = new User();
     user.id = USER_ID;
     user.username = "David";
+
     instance.findOne = jest.fn();
 
     // when
-    when(instance.findOne).calledWith({ id: USER_ID }).mockResolvedValue(user);
-    const resultUser = await instance.findById(USER_ID);
+    await instance.findById(USER_ID);
 
     // then
-    expect(resultUser).toBe(user);
+    expect(instance.findOne).toBeCalledWith({ id: USER_ID });
+    expect(instance.findOne).toBeCalledTimes(1);
   });
 
   it("findByUsername", async () => {
@@ -34,16 +35,15 @@ describe("UserRepository", () => {
     const user = new User();
     user.id = 1;
     user.username = USER_USERNAME;
+
     instance.findOne = jest.fn();
-    when(instance.findOne)
-      .calledWith({ username: USER_USERNAME })
-      .mockResolvedValue(user);
 
     // when
-    const resultUser = await instance.findByUsername(USER_USERNAME);
+    await instance.findByUsername(USER_USERNAME);
 
     // then
-    expect(resultUser).toBe(user);
+    expect(instance.findOne).toBeCalledWith({ username: USER_USERNAME });
+    expect(instance.findOne).toBeCalledTimes(1);
   });
 
   it("addNew", async () => {
