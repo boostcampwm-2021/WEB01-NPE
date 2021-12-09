@@ -58,7 +58,7 @@ export default class AnswerServiceImpl implements AnswerService {
     return answer;
   }
 
-  public async update(
+  public async modify(
     answerId: number,
     answerInput: AnswerInput
   ): Promise<PostAnswer> {

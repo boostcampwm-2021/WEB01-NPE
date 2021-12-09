@@ -10,7 +10,7 @@ export default interface AnswerService {
     questionId: number
   ): Promise<PostAnswer>;
   findById(answerId: number): Promise<PostAnswer>;
-  update(answerId: number, answerInput: AnswerInput): Promise<PostAnswer>;
+  modify(answerId: number, answerInput: AnswerInput): Promise<PostAnswer>;
   delete(answerId: number): Promise<boolean>;
   adopt(userId: number, answerId: number): Promise<boolean>;
 }

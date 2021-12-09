@@ -56,7 +56,7 @@ export default class AnswerResolver {
     const answer = await this.answerService.findById(answerId);
     const anwerAuthorId = answer.userId;
     if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const updateResult = await this.answerService.update(answerId, answerInput);
+    const updateResult = await this.answerService.modify(answerId, answerInput);
 
     return await this.answerService.findById(answerId);
   }
