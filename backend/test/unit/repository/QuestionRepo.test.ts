@@ -32,17 +32,6 @@ describe("QuestionRepository", () => {
     expect(resultQuestion.realtimeShare).toBe(1);
   });
 
-  it("findById Id에 해당하는 글 없을시 에러", async () => {
-    // given
-    instance.findOne = jest.fn().mockResolvedValue(null);
-
-    // when
-    const testFn = () => instance.findById(1);
-
-    // then
-    expect(testFn).rejects.toThrowError(NoSuchQuestionError);
-  });
-
   it("modify", async () => {
     // given
     const USER_ID = 1;
