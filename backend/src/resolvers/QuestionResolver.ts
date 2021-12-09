@@ -121,7 +121,7 @@ export default class QuestionResolver {
     const questionAuthor = question.userId;
     if (questionAuthor !== userId) throw new Error("Not your Post!");
 
-    const updateResult = await this.questionService.update(
+    const updateResult = await this.questionService.modify(
       questionId,
       fieldsToUpdate
     );

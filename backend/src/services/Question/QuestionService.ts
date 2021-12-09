@@ -9,7 +9,7 @@ export default interface QuestionService {
   viewById(id: number): Promise<PostQuestion>;
   getRank(): Promise<PostQuestion[]>;
   addNew(args: QuestionInput, userId: number): Promise<PostQuestion>;
-  update(
+  modify(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ): Promise<PostQuestion>;

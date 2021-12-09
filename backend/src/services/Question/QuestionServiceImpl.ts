@@ -131,7 +131,7 @@ export default class QuestionServiceImpl implements QuestionService {
     return newQuestion;
   }
 
-  public async update(
+  public async modify(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ) {
