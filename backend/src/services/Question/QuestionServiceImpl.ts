@@ -14,6 +14,7 @@ import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionTh
 import UserRepository from "../../repositories/User/UserRepository";
 import UserHasTagRepository from "../../repositories/UserHasTag/UserHasTagRepository";
 import QuestionService from "./QuestionService";
+import AuthenticationError from "../../errors/AuthenticationError";
 
 export default class QuestionServiceImpl implements QuestionService {
   private readonly userRepository: UserRepository;
@@ -44,7 +45,7 @@ export default class QuestionServiceImpl implements QuestionService {
 
     // 작성자 존재 확인
     if (author) {
-      const user = this.userRepository.findByUsername(author);
+      const user = await this.userRepository.findByUsername(author);
       if (!user) {
         throw new NoSuchUserError("No Such User! Check Username");
       }
@@ -80,9 +81,8 @@ export default class QuestionServiceImpl implements QuestionService {
   }
 
   public async viewById(id: number): Promise<PostQuestion> {
-    const question = await this.questionRepository.findById(id);
+    const question = await this.findById(id);
 
-    if (!question) throw new NoSuchQuestionError("Check ID");
     question.viewCount++;
 
     return await this.questionRepository.saveOrUpdate(question);
@@ -131,7 +131,7 @@ export default class QuestionServiceImpl implements QuestionService {
     return newQuestion;
   }
 
-  public async update(
+  public async modify(
     questionId: number,
     fieldsToUpdate: Partial<QuestionInput>
   ) {
@@ -165,8 +165,8 @@ export default class QuestionServiceImpl implements QuestionService {
   }
 
   public async getAnswerCount(questionId: number): Promise<number> {
-    const question = await this.questionRepository.findById(questionId);
-    if (!question) throw new NoSuchQuestionError();
+    // check exists
+    const question = await this.findById(questionId);
 
     const count = await this.answerRepository.countByQuestionId(questionId);
 
@@ -177,8 +177,10 @@ export default class QuestionServiceImpl implements QuestionService {
     const question = await this.questionRepository.findById(questionId);
 
     if (question.userId !== userId)
-      if (question.realtimeShare === 0)
-        throw new CommonError("realtime share is already disabled");
+      throw new AuthenticationError("not your question!");
+
+    if (question.realtimeShare === 0)
+      throw new CommonError("realtime share is already disabled");
 
     question.realtimeShare = 0;
     await this.questionRepository.saveOrUpdate(question);

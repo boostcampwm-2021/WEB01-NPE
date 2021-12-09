@@ -11,7 +11,6 @@ import {
 } from "typeorm";
 import QuestionInput from "../../dto/QuestionInput";
 import { PostQuestion } from "../../entities/PostQuestion";
-import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
 import QuestionRepository from "./QuestionRepository";
 
 @EntityRepository(PostQuestion)
@@ -39,8 +38,6 @@ export default class QuestionRepositoryImpl
 
   public async findById(id: number): Promise<PostQuestion> {
     const question = await this.findOne({ id });
-
-    if (!question) throw new NoSuchQuestionError("Check ID");
 
     return question;
   }
