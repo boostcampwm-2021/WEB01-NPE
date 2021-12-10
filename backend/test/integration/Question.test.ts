@@ -1,14 +1,14 @@
 import Container from "typedi";
 import QuestionService from "@src/services/Question/QuestionService";
-import connection from "../connection";
+import connection from "./connection";
 import InjectionConfig from "@src/InjectionConfig";
 import { Connection, EntityManager } from "typeorm";
 import { TransactionalTestContext } from "typeorm-transactional-tests";
-import UserMock from "../mockdata/userMock";
-import QuestionMock from "../mockdata/QuestionMock";
+import UserMock from "./mockdata/userMock";
+import QuestionMock from "./mockdata/QuestionMock";
 import faker from "faker";
 import "jest-sorted";
-import TagMock from "../mockdata/TagMock";
+import TagMock from "./mockdata/TagMock";
 import { PostQuestionHasTag } from "@src/entities/PostQuestionHasTag";
 import { UserHasTag } from "@src/entities/UserHasTag";
 import { PostQuestion } from "@src/entities/PostQuestion";
