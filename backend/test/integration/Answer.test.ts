@@ -4,11 +4,11 @@ import AnswerService from "@src/services/Answer/AnswerService";
 import faker from "faker";
 import { User } from "@src/entities/User";
 import InjectionConfig from "@src/InjectionConfig";
-import connection from "../connection";
+import connection from "./connection";
 import { Connection, EntityManager } from "typeorm";
 import { TransactionalTestContext } from "typeorm-transactional-tests";
-import QuestionMock from "../mockdata/QuestionMock";
-import UserMock from "../mockdata/userMock";
+import QuestionMock from "./mockdata/QuestionMock";
+import UserMock from "./mockdata/userMock";
 
 describe("AnswerService", () => {
   let answerService: AnswerService;
