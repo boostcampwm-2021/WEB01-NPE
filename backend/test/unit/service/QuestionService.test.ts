@@ -14,16 +14,21 @@ import CommonError from "@src/errors/CommonError";
 
 describe("QuestionService", () => {
   let instance: QuestionServiceImpl;
+  let questionRepo: QuestionRepository;
+  let userRepo: UserRepository;
+  let questionThumbRepo: QuestionThumbRepository;
 
   beforeEach(() => {
     InjectRepo();
     instance = new QuestionServiceImpl();
+
+    questionRepo = Container.get("QuestionRepository");
+    userRepo = Container.get("UserRepository");
+    questionThumbRepo = Container.get("QuestionThumbRepository");
   });
 
   it("findById Id에 해당하는 글 없을시 에러", async () => {
     // given
-    const questionRepo: QuestionRepository =
-      Container.get("QuestionRepository");
     questionRepo.findById = jest.fn().mockResolvedValue(null);
 
     // when
@@ -38,7 +43,6 @@ describe("QuestionService", () => {
     const searchQuery = new SearchQuestionInput();
     searchQuery.author = "David";
 
-    const userRepo: UserRepository = Container.get("UserRepository");
     userRepo.findByUsername = jest.fn().mockResolvedValue(null);
 
     // when
@@ -54,8 +58,6 @@ describe("QuestionService", () => {
     question.viewCount = 1;
 
     instance.findById = jest.fn().mockResolvedValue(question);
-    const questionRepo: QuestionRepository =
-      Container.get("QuestionRepository");
     questionRepo.saveOrUpdate = jest
       .fn()
       .mockImplementation((q: PostQuestion) => q);
@@ -71,11 +73,6 @@ describe("QuestionService", () => {
     // given
     const QUESTION_ID = 1;
 
-    const questionRepo: QuestionRepository =
-      Container.get("QuestionRepository");
-    const questionThumbRepo: QuestionThumbRepository = Container.get(
-      "QuestionThumbRepository"
-    );
     questionRepo.deleteById = jest.fn();
     questionThumbRepo.deleteByQuestionId = jest.fn();
 
@@ -100,8 +97,6 @@ describe("QuestionService", () => {
     question.userId = QUESTION_AUTHOR_ID;
     question.realtimeShare = 1;
 
-    const questionRepo: QuestionRepository =
-      Container.get("QuestionRepository");
     questionRepo.findById = jest.fn().mockResolvedValue(question);
 
     // when
@@ -121,8 +116,6 @@ describe("QuestionService", () => {
     question.userId = USER_ID;
     question.realtimeShare = 0;
 
-    const questionRepo: QuestionRepository =
-      Container.get("QuestionRepository");
     questionRepo.findById = jest.fn().mockResolvedValue(question);
 
     // when
