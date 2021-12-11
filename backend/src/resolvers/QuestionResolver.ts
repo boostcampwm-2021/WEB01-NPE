@@ -8,10 +8,10 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { PostAnswer } from "../entities/PostAnswer";
-import { PostQuestion } from "../entities/PostQuestion";
-import { Tag } from "../entities/Tag";
-import { User } from "../entities/User";
+import PostAnswer from "../entities/PostAnswer";
+import PostQuestion from "../entities/PostQuestion";
+import Tag from "../entities/Tag";
+import User from "../entities/User";
 import QuestionInput from "../dto/QuestionInput";
 import SearchQuestionInput from "../dto/SearchQuestionInput";
 import TagService from "../services/Tag/TagService";
@@ -117,16 +117,11 @@ export default class QuestionResolver {
     fieldsToUpdate: QuestionInput,
     @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    const question = await this.questionService.findById(questionId);
-    const questionAuthor = question.userId;
-    if (questionAuthor !== userId) throw new Error("Not your Post!");
-
-    const updateResult = await this.questionService.modify(
+    return await this.questionService.modify(
       questionId,
-      fieldsToUpdate
+      fieldsToUpdate,
+      userId
     );
-
-    return await this.questionService.findById(questionId);
   }
 
   @Mutation(() => Boolean, {

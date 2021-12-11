@@ -1,6 +1,6 @@
 import Container from "typedi";
 import AnswerInput from "../../dto/AnswerInput";
-import { PostAnswer } from "../../entities/PostAnswer";
+import PostAnswer from "../../entities/PostAnswer";
 import AuthorizationError from "../../errors/AuthorizationError";
 import CommonError from "../../errors/CommonError";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
@@ -90,11 +90,11 @@ export default class AnswerServiceImpl implements AnswerService {
     if (answer.userId === userId)
       throw new CommonError("you can't adopt your answer");
 
-    if (question.adopted === 1)
+    if (question.adopted === true)
       throw new CommonError("question already adopted another answer");
 
     if (answer.state === 0) {
-      question.adopted = 1;
+      question.adopted = true;
       answer.state = 1;
       answerAuthor.score += 50;
       await this.answerRepository.saveOrUpdate(answer);

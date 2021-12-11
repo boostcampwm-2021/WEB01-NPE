@@ -1,4 +1,4 @@
-import { PostAnswer } from "../../entities/PostAnswer";
+import PostAnswer from "../../entities/PostAnswer";
 import AnswerInput from "../../dto/AnswerInput";
 
 export default interface AnswerRepository {

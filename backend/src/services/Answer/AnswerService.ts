@@ -1,5 +1,5 @@
 import AnswerInput from "../../dto/AnswerInput";
-import { PostAnswer } from "../../entities/PostAnswer";
+import PostAnswer from "../../entities/PostAnswer";
 
 export default interface AnswerService {
   findAllByUserId(userId: number): Promise<PostAnswer[]>;

@@ -7,8 +7,8 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { PostAnswer } from "../entities/PostAnswer";
-import { User } from "../entities/User";
+import PostAnswer from "../entities/PostAnswer";
+import User from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
 import UserService from "../services/User/UserService";
 import { Container } from "typedi";

@@ -1,18 +1,8 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
+import Thumb from "./abstract/Thumb";
 
-@Index("fk_answer_thumb_user", ["userId"], {})
-@Index("fk_answer_thumb_post_answer", ["postAnswerId"], {})
-@Entity("answer_thumb")
-export class AnswerThumb {
-  @PrimaryGeneratedColumn({ type: "int", name: "id" })
-  id: number;
-
-  @Column("int", { name: "user_id" })
-  userId: number;
-
-  @Column("int", { name: "post_answer_id" })
-  postAnswerId: number;
-
+@Entity()
+export default class AnswerThumb extends Thumb {
   @Column("int")
-  value: number;
+  postAnswerId: number;
 }

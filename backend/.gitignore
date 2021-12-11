@@ -9,3 +9,6 @@ dist/
 
 # 환경변수 파일
 .env
+
+# legacy
+src/entities/legacy

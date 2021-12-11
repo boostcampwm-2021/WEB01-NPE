@@ -1,6 +1,6 @@
-import { QuestionThumb } from "@src/entities/QuestionThumb";
+import { ThumbValue } from "@src/entities/abstract/Thumb";
 import { EntityRepository, Repository } from "typeorm";
-import { AnswerThumb } from "../../entities/AnswerThumb";
+import AnswerThumb from "../../entities/AnswerThumb";
 import AnswerThumbRepository from "./AnswerThumbRepository";
 
 @EntityRepository(AnswerThumb)
@@ -20,7 +20,7 @@ export default class AnswerThumbRepositoryImpl
   }
 
   public async addNew(
-    value: 1 | -1,
+    value: ThumbValue,
     answerId: number,
     userId: number
   ): Promise<AnswerThumb> {

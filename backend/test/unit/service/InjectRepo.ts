@@ -1,11 +1,9 @@
 import Container from "typedi";
 import AnswerRepositoryImpl from "@src/repositories/Answer/AnswerRepositoryImpl";
 import AnswerThumbRepositoryImpl from "@src/repositories/AnswerThumb/AnswerThumbRepositoryImpl";
-import PostQuestionHasTagRepositoryImpl from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepositoryImpl";
 import QuestionRepositoryImpl from "@src/repositories/Question/QuestionRepositoryImpl";
 import QuestionThumbRepositoryImpl from "@src/repositories/QuestionThumb/QuestionThumbRepositoryImpl";
 import TagRepositoryImpl from "@src/repositories/Tag/TagRepositoryImpl";
-import UserHasTagRepositoryImpl from "@src/repositories/UserHasTag/UserHasTagRepositoryImpl";
 import UserRepositoryImpl from "@src/repositories/User/UserRepositoryImpl";
 
 export default () => {
@@ -19,9 +17,9 @@ export default () => {
   Container.set("AnswerRepository", new AnswerRepositoryImpl());
   Container.set("AnswerThumbRepository", new AnswerThumbRepositoryImpl());
   Container.set("QuestionThumbRepository", new QuestionThumbRepositoryImpl());
-  Container.set(
-    "PostQuestionHasTagRepository",
-    new PostQuestionHasTagRepositoryImpl()
-  );
-  Container.set("UserHasTagRepository", new UserHasTagRepositoryImpl());
+  // Container.set(
+  //   "PostQuestionHasTagRepository",
+  //   new PostQuestionHasTagRepositoryImpl()
+  // );
+  // Container.set("UserHasTagRepository", new UserHasTagRepositoryImpl());
 };

@@ -1,22 +1,13 @@
-import { UserHasTag } from "../../entities/UserHasTag";
 import Container from "typedi";
-import { Tag } from "../../entities/Tag";
+import Tag from "../../entities/Tag";
 import TagRepository from "../../repositories/Tag/TagRepository";
 import TagService from "./TagService";
-import PostQuestionHasTagRepository from "@src/repositories/PostQuestionHasTag/PostQuestionHasTagRepository";
-import UserHasTagRepository from "@src/repositories/UserHasTag/UserHasTagRepository";
 
 export default class TagServiceImpl implements TagService {
   private readonly tagRepository: TagRepository;
-  private readonly userHasTagRepository: UserHasTagRepository;
-  private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository;
 
   constructor() {
     this.tagRepository = Container.get("TagRepository");
-    this.postQuestionHasTagRepository = Container.get(
-      "PostQuestionHasTagRepository"
-    );
-    this.userHasTagRepository = Container.get("UserHasTagRepository");
   }
 
   public async findAll(): Promise<Tag[]> {
@@ -36,16 +27,14 @@ export default class TagServiceImpl implements TagService {
   }
 
   public async findAllIdsByQuestionId(questionId: number): Promise<number[]> {
-    const tagIds =
-      await this.postQuestionHasTagRepository.findAllTagIdsByQuestionId(
-        questionId
-      );
+    const tags = await this.tagRepository.findByQuestionId(questionId);
+    const tagIds = tags.map((tag) => tag.id);
 
     return tagIds;
   }
 
-  public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
-    const tagIds = await this.userHasTagRepository.findAllByUserId(userId);
-    return tagIds;
-  }
+  // public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
+  //   const tagIds = await this.userHasTagRepository.findAllByUserId(userId);
+  //   return tagIds;
+  // }
 }

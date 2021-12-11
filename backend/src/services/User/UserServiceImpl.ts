@@ -1,6 +1,6 @@
 import UserDto from "@src/dto/UserDto";
 import Container from "typedi";
-import { User } from "../../entities/User";
+import User from "../../entities/User";
 import UserRepository from "../../repositories/User/UserRepository";
 import UserService from "./UserService";
 

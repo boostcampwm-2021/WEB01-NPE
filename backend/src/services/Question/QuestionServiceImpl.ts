@@ -2,46 +2,36 @@ import NoSuchUserError from "../../errors/NoSuchUserError";
 import Container from "typedi";
 import QuestionInput from "../../dto/QuestionInput";
 import SearchQuestionInput from "../../dto/SearchQuestionInput";
-import { PostQuestion } from "../../entities/PostQuestion";
-import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
-import { UserHasTag } from "../../entities/UserHasTag";
+import PostQuestion from "../../entities/PostQuestion";
 import CommonError from "../../errors/CommonError";
 import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
-import PostQuestionHasTagRepository from "../../repositories/PostQuestionHasTag/PostQuestionHasTagRepository";
 import QuestionRepository from "../../repositories/Question/QuestionRepository";
 import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
 import UserRepository from "../../repositories/User/UserRepository";
-import UserHasTagRepository from "../../repositories/UserHasTag/UserHasTagRepository";
 import QuestionService from "./QuestionService";
 import AuthenticationError from "../../errors/AuthenticationError";
+import TagRepository from "@src/repositories/Tag/TagRepository";
 
 export default class QuestionServiceImpl implements QuestionService {
   private readonly userRepository: UserRepository;
-  private readonly userHasTagRepository: UserHasTagRepository;
   private readonly questionRepository: QuestionRepository;
-  private readonly postQuestionHasTagRepository: PostQuestionHasTagRepository;
   private readonly answerRepository: AnswerRepository;
   private readonly questionThumbRepository: QuestionThumbRepository;
-  private readonly DEFALUT_TAKE_QUESTIONS_COUNT: number;
+  private readonly tagRepository: TagRepository;
 
   constructor() {
     this.userRepository = Container.get("UserRepository");
-    this.userHasTagRepository = Container.get("UserHasTagRepository");
-    this.postQuestionHasTagRepository = Container.get(
-      "PostQuestionHasTagRepository"
-    );
     this.answerRepository = Container.get("AnswerRepository");
     this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
-    this.DEFALUT_TAKE_QUESTIONS_COUNT =
-      Container.get<number>("DEFALUT_TAKE_QUESTIONS_COUNT") ?? 5;
+    this.tagRepository = Container.get("TagRepository");
   }
 
   public async search(
     searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const { author, skip, take } = searchQuery;
+    const { author } = searchQuery;
 
     // 작성자 존재 확인
     if (author) {
@@ -51,19 +41,7 @@ export default class QuestionServiceImpl implements QuestionService {
       }
     }
 
-    // where 조건 object 생성
-    const whereObj = await this.questionRepository.buildWhereBySearchQuery(
-      searchQuery
-    );
-
-    // 해당 조건들로 Repository에서 검색
-    const questions = await this.questionRepository.findByArgs(
-      whereObj,
-      skip ?? 0,
-      take ?? this.DEFALUT_TAKE_QUESTIONS_COUNT
-    );
-
-    return questions;
+    return await this.questionRepository.findByArgs(searchQuery);
   }
 
   public async findAllByUserId(userId: number): Promise<PostQuestion[]> {
@@ -98,61 +76,39 @@ export default class QuestionServiceImpl implements QuestionService {
     args: QuestionInput,
     userId: number
   ): Promise<PostQuestion> {
-    const newQuestion = await this.questionRepository.addNew(args, userId);
+    const tags = args.tagIds.length
+      ? await this.tagRepository.findByIds(args.tagIds)
+      : [];
+    const newQuestion = await this.questionRepository.addNew(
+      args,
+      tags,
+      userId
+    );
 
-    // 태그 존재하는지
-    if (args.tagIds && args.tagIds.length > 0) {
-      for (const tagId of args.tagIds) {
-        // 질문글-태그 관계
-        const postQuestionHasTag = new PostQuestionHasTag();
-        postQuestionHasTag.postQuestion = newQuestion;
-        postQuestionHasTag.tagId = tagId;
-        await this.postQuestionHasTagRepository.saveOrUpdate(
-          postQuestionHasTag
-        );
-
-        // 유저-태그 관계
-        let userHasTag = await this.userHasTagRepository.findByUserIdAndTagId(
-          userId,
-          tagId
-        );
-        if (!userHasTag) {
-          userHasTag = new UserHasTag();
-          userHasTag.userId = userId;
-          userHasTag.tagId = tagId;
-          userHasTag.count = 1;
-        } else {
-          userHasTag.count++;
-        }
-        await this.userHasTagRepository.saveOrUpdate(userHasTag);
-      }
-    }
+    // 유저-태그 관계
 
     return newQuestion;
   }
 
   public async modify(
     questionId: number,
-    fieldsToUpdate: Partial<QuestionInput>
+    fieldsToUpdate: QuestionInput,
+    userId: number
   ) {
+    const question = await this.questionRepository.findById(questionId);
+    if (question.userId !== userId)
+      throw new AuthenticationError("not your post!");
+
+    const tags = fieldsToUpdate.tagIds.length
+      ? await this.tagRepository.findByIds(fieldsToUpdate.tagIds)
+      : [];
     const updatedQuestion = await this.questionRepository.modify(
       questionId,
-      fieldsToUpdate
+      fieldsToUpdate,
+      tags
     );
 
-    // 태그 여부 확인
-    if (fieldsToUpdate.tagIds && fieldsToUpdate.tagIds.length > 0) {
-      // 기존 태그 삭제
-      await this.postQuestionHasTagRepository.deleteByQuestionId(questionId);
-
-      // 질문글-태그 관계
-      for (const tagId of fieldsToUpdate.tagIds) {
-        const tagEntity = new PostQuestionHasTag();
-        tagEntity.postQuestion = updatedQuestion;
-        tagEntity.tagId = tagId;
-        await this.postQuestionHasTagRepository.saveOrUpdate(tagEntity);
-      }
-    }
+    // 유저-태그 관계
 
     return updatedQuestion;
   }
@@ -165,9 +121,6 @@ export default class QuestionServiceImpl implements QuestionService {
   }
 
   public async getAnswerCount(questionId: number): Promise<number> {
-    // check exists
-    const question = await this.findById(questionId);
-
     const count = await this.answerRepository.countByQuestionId(questionId);
 
     return count;
@@ -179,10 +132,10 @@ export default class QuestionServiceImpl implements QuestionService {
     if (question.userId !== userId)
       throw new AuthenticationError("not your question!");
 
-    if (question.realtimeShare === 0)
+    if (question.realtimeShare === false)
       throw new CommonError("realtime share is already disabled");
 
-    question.realtimeShare = 0;
+    question.realtimeShare = true;
     await this.questionRepository.saveOrUpdate(question);
 
     return true;

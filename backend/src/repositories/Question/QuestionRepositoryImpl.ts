@@ -1,17 +1,16 @@
 import SearchQuestionInput from "../../dto/SearchQuestionInput";
-import { PostQuestionHasTag } from "../../entities/PostQuestionHasTag";
-import { Tag } from "../../entities/Tag";
 import {
   createQueryBuilder,
   EntityRepository,
+  FindConditions,
   In,
   Like,
   Repository,
-  SelectQueryBuilder,
 } from "typeorm";
 import QuestionInput from "../../dto/QuestionInput";
-import { PostQuestion } from "../../entities/PostQuestion";
+import PostQuestion from "../../entities/PostQuestion";
 import QuestionRepository from "./QuestionRepository";
+import Tag from "@src/entities/Tag";
 
 @EntityRepository(PostQuestion)
 export default class QuestionRepositoryImpl
@@ -20,13 +19,15 @@ export default class QuestionRepositoryImpl
 {
   public async addNew(
     args: QuestionInput,
+    tags: Tag[],
     userId: number
   ): Promise<PostQuestion> {
     const newQuestion = new PostQuestion();
     newQuestion.userId = userId;
     newQuestion.title = args.title;
     newQuestion.desc = args.desc;
-    newQuestion.realtimeShare = args.realtimeShare ? 1 : 0;
+    newQuestion.realtimeShare = args.realtimeShare;
+    newQuestion.tags = tags;
     return await this.save(newQuestion);
   }
 
@@ -51,7 +52,8 @@ export default class QuestionRepositoryImpl
 
   public async modify(
     questionId: number,
-    fieldsToUpdate: Partial<QuestionInput>
+    fieldsToUpdate: Partial<QuestionInput>,
+    tags: Tag[]
   ) {
     const partialQuestion: PostQuestion = new PostQuestion();
     const originQuestion = await this.findById(questionId);
@@ -59,7 +61,8 @@ export default class QuestionRepositoryImpl
     partialQuestion.userId = originQuestion.userId;
     partialQuestion.title = fieldsToUpdate.title;
     partialQuestion.desc = fieldsToUpdate.desc;
-    partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare ? 1 : 0;
+    partialQuestion.realtimeShare = fieldsToUpdate.realtimeShare;
+    partialQuestion.tags = tags;
 
     return await this.save(partialQuestion);
   }
@@ -78,62 +81,29 @@ export default class QuestionRepositoryImpl
   }
 
   public async findByArgs(
-    where: object,
-    skip: number,
-    take: number
-  ): Promise<PostQuestion[]> {
-    const queryBuilder = this.createQueryBuilder()
-      .where(where)
-      .skip(skip)
-      .take(take)
-      .orderBy("id", "DESC");
-
-    return await queryBuilder.getMany();
-  }
-
-  public async buildWhereBySearchQuery(
     searchQuery: SearchQuestionInput
-  ): Promise<Record<string, unknown>> {
+  ): Promise<PostQuestion[]> {
     const { tagIDs, title, desc, realtimeShare } = searchQuery;
-    const whereObj: Record<string, unknown> = {};
+    const skip = searchQuery.skip ?? 0;
+    const take = searchQuery.take ?? 30;
 
-    if (realtimeShare) whereObj.realtimeShare = realtimeShare;
-    if (title) whereObj.title = Like(`%${title}%`);
-    if (desc) whereObj.desc = Like(`%${desc}%`);
+    const where: FindConditions<PostQuestion> = {};
+    if (realtimeShare) where.realtimeShare = realtimeShare;
+    if (title) where.title = Like(`%${title}%`);
+    if (desc) where.desc = Like(`%${desc}%`);
 
-    function subQueryBuilderFromTagId(
-      tagId: number,
-      qb: SelectQueryBuilder<unknown>
-    ) {
-      return qb
-        .subQuery()
-        .from(Tag, "t")
-        .select("t_q.post_question_id", "qid")
-        .where(`t.id=${tagId}`)
-        .leftJoin(PostQuestionHasTag, "t_q", "t.id=t_q.tag_id");
+    if (tagIDs && tagIDs.length > 0) {
+      const questoinIds: { qid: number }[] = await createQueryBuilder()
+        .select("postQuestionId", "qid")
+        .from("question_tags", "q_t")
+        .where("tagId IN (:ids)", { ids: tagIDs })
+        .groupBy("qid")
+        .having("COUNT(qid) = :len", { len: tagIDs.length })
+        .getRawMany();
+
+      where.id = In(questoinIds.map((questionIdObj) => questionIdObj.qid));
     }
 
-    if (tagIDs && tagIDs.length) {
-      let tagQueryBuilder = createQueryBuilder()
-        .select("t0.qid")
-        .from((qb) => subQueryBuilderFromTagId(tagIDs[0], qb), "t0");
-
-      for (let i = 1; i < tagIDs.length; i++) {
-        tagQueryBuilder.innerJoin(
-          (qb) => subQueryBuilderFromTagId(tagIDs[i], qb),
-          // alias
-          `t${i}`,
-          // ON
-          `t0.qid=t${i}.qid`
-        );
-      }
-
-      const qidArray = (await tagQueryBuilder.getRawMany()).map(
-        (qid) => qid.qid
-      );
-      whereObj.id = In(qidArray);
-    }
-
-    return whereObj;
+    return await this.find({ where, skip, take, order: { createdAt: "DESC" } });
   }
 }
