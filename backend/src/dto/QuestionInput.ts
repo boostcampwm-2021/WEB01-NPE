@@ -17,9 +17,6 @@ export default class QuestionInput {
   })
   realtimeShare: boolean;
 
-  @Field(() => Int, { description: "채택시 지급할 점수", defaultValue: 0 })
-  score: number;
-
   @Field(() => [Int], {
     description: "할당할 태그 id",
     nullable: "itemsAndList",

@@ -27,7 +27,6 @@ export const getOneQuestionByID = async (id: number) => {
           realtimeShare
           createdAt
           thumbupCount
-          score
           author {
             id
             username
@@ -67,7 +66,6 @@ export const viewOneQuestionByID = async (id: number) => {
         realtimeShare
         createdAt
         thumbupCount
-        score
         adopted
         author {
           id
@@ -417,7 +415,6 @@ export const postQuestion = async ({
             desc: $desc
             tagIds: $tagIds
             realtimeShare: $realtimeShare
-            score: 10
           }
         ) {
           id
@@ -488,7 +485,6 @@ export const updateQuestion = async ({
             desc: $desc
             tagIds: $tagIds
             realtimeShare: $realtimeShare
-            score: 10
           }
         ) {
           id

@@ -1,5 +1,5 @@
 import UserDto from "@src/dto/UserDto";
-import { User } from "../../entities/User";
+import User from "../../entities/User";
 
 export default interface UserService {
   findById(id: number): Promise<User>;

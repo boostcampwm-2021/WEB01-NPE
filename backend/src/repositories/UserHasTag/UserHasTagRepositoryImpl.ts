@@ -1,5 +1,5 @@
-import { EntityRepository, MoreThan, Repository } from "typeorm";
-import { UserHasTag } from "../../entities/UserHasTag";
+import UserHasTag from "../../entities/UserHasTag";
+import { EntityRepository, In, Repository } from "typeorm";
 import UserHasTagRepository from "./UserHasTagRepository";
 
 @EntityRepository(UserHasTag)
@@ -7,34 +7,32 @@ export default class UserHasTagRepositoryImpl
   extends Repository<UserHasTag>
   implements UserHasTagRepository
 {
-  public async findAllTagIdsByUserId(userId: number): Promise<UserHasTag[]> {
-    const relationRows = await this.find({
-      where: { userId: userId },
-    });
-
-    return relationRows;
+  public async findByUserId(userId: number): Promise<UserHasTag[]> {
+    return await this.find({ userId });
   }
 
-  public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
-    const data = await this.find({
-      where: { userId, count: MoreThan(0) },
-      relations: ["tag"],
-    });
-
-    return data;
-  }
-
-  public async findByUserIdAndTagId(
+  public async addNewRelations(
     userId: number,
-    tagId: number
-  ): Promise<UserHasTag> {
-    return await this.findOne({
-      userId: userId,
-      tagId: tagId,
+    tagIds: number[]
+  ): Promise<UserHasTag[]> {
+    const entities: UserHasTag[] = tagIds.map((tagId) => {
+      const entity = new UserHasTag();
+      entity.userId = userId;
+      entity.tagId = tagId;
+
+      return entity;
     });
+
+    return await this.save(entities);
   }
 
-  public async saveOrUpdate(userHasTag: UserHasTag) {
-    return await this.save(userHasTag);
+  public async increseAll(userId: number, tagIds: number[]): Promise<boolean> {
+    await this.createQueryBuilder()
+      .update(UserHasTag)
+      .where({ userId: userId, tagId: In(tagIds) })
+      .set({ count: () => "count + 1" })
+      .execute();
+
+    return true;
   }
 }

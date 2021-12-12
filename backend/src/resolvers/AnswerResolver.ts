@@ -7,17 +7,21 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { PostAnswer } from "../entities/PostAnswer";
-import { User } from "../entities/User";
+import PostAnswer from "../entities/PostAnswer";
+import User from "../entities/User";
 import AnswerInput from "../dto/AnswerInput";
 import UserService from "../services/User/UserService";
 import { Container } from "typedi";
-import AuthorizationError from "../errors/AuthorizationError";
 import ThumbService from "../services/Thumb/ThumbService";
 import AnswerService from "../services/Answer/AnswerService";
+import AuthenticationError from "../errors/AuthenticationError";
+import CommonError from "../errors/CommonError";
+import QuestionService from "../services/Question/QuestionService";
 
 @Resolver(PostAnswer)
 export default class AnswerResolver {
+  private readonly questionService: QuestionService =
+    Container.get("QuestionService");
   private readonly answerService: AnswerService =
     Container.get("AnswerService");
   private readonly userService: UserService = Container.get("UserService");
@@ -30,19 +34,12 @@ export default class AnswerResolver {
     @Arg("data") answerData: AnswerInput,
     @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
-    const newAnswer = await this.answerService.addNew(
-      answerData,
-      userId,
-      questionId
-    );
-    return newAnswer;
+    return await this.answerService.addNew(answerData, userId, questionId);
   }
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() answer: PostAnswer): Promise<User> {
-    const author = await this.userService.findById(answer.userId);
-
-    return author;
+    return await this.userService.findById(answer.userId);
   }
 
   @Mutation(() => PostAnswer, { description: "답변글 수정 Mutation" })
@@ -54,11 +51,10 @@ export default class AnswerResolver {
     @Ctx("userId") userId: number
   ): Promise<PostAnswer> {
     const answer = await this.answerService.findById(answerId);
-    const anwerAuthorId = answer.userId;
-    if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const updateResult = await this.answerService.modify(answerId, answerInput);
+    if (userId !== answer.userId)
+      throw new AuthenticationError("not your answer!");
 
-    return await this.answerService.findById(answerId);
+    return await this.answerService.modify(answerId, answerInput);
   }
 
   @Mutation(() => Boolean, {
@@ -69,11 +65,10 @@ export default class AnswerResolver {
     @Ctx("userId") userId: number
   ): Promise<boolean> {
     const answer = await this.answerService.findById(answerId);
-    const anwerAuthorId = answer.userId;
-    if (userId !== anwerAuthorId) throw new AuthorizationError();
-    const isDeleted = await this.answerService.delete(answerId);
+    if (userId !== answer.userId)
+      throw new AuthenticationError("not your answer!");
 
-    return isDeleted;
+    return await this.answerService.delete(answerId);
   }
 
   @Mutation(() => Boolean, {
@@ -111,8 +106,22 @@ export default class AnswerResolver {
     answerId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const result = await this.answerService.adopt(userId, answerId);
+    const answer = await this.answerService.findById(answerId);
+    const question = await this.questionService.findById(answer.postQuestionId);
 
-    return result;
+    if (answer.postQuestionUserId !== userId)
+      throw new AuthenticationError("not your question.");
+
+    if (answer.userId === userId)
+      throw new CommonError("can't adopt your answer");
+
+    if (question.adopted === true)
+      throw new CommonError("question already adopted another answer");
+
+    if (answer.state !== 0) {
+      throw new CommonError("answer is already adopted");
+    }
+
+    return await this.answerService.adopt(answerId);
   }
 }

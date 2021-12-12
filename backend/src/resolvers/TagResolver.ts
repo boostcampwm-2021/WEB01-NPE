@@ -1,7 +1,7 @@
+import UserHasTag from "../entities/UserHasTag";
 import { Arg, Int, Query, Resolver } from "type-graphql";
 import { Container } from "typedi";
-import { Tag } from "../entities/Tag";
-import { UserHasTag } from "../entities/UserHasTag";
+import Tag from "../entities/Tag";
 import TagService from "../services/Tag/TagService";
 
 @Resolver(Tag)
@@ -41,7 +41,7 @@ export default class TagResolver {
     @Arg("userId", () => Int, { description: "조회할 유저의 ID" })
     userId: number
   ) {
-    const data = await this.tagService.findAllByUserId(userId);
+    const data = await this.tagService.findByUserId(userId);
 
     return data;
   }

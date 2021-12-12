@@ -1,25 +1,18 @@
-import { Field, ID, ObjectType } from "type-graphql";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PostQuestionHasTag } from "./PostQuestionHasTag";
-import { UserHasTag } from "./UserHasTag";
+import { Field, Int, ObjectType } from "type-graphql";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import PostQuestion from "./PostQuestion";
 
 @ObjectType("Tag", { description: "태그 Ojbect 입니다." })
-@Entity("tag")
-export class Tag {
-  @Field(() => ID, { description: "태그의 ID" })
-  @PrimaryGeneratedColumn({ type: "int", name: "id" })
+@Entity()
+export default class Tag {
+  @Field(() => Int, { description: "태그의 ID" })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Field({ description: "태그의 이름" })
-  @Column("varchar", { name: "name", length: 15 })
+  @Column("varchar", { length: 30 })
   name: string;
 
-  @OneToMany(
-    () => PostQuestionHasTag,
-    (postQuestionHasTag) => postQuestionHasTag.tag
-  )
-  postQuestionHasTags: PostQuestionHasTag[];
-
-  @OneToMany(() => UserHasTag, (userHasTag) => userHasTag.tag)
-  userHasTags: UserHasTag[];
+  @ManyToMany(() => PostQuestion)
+  questions: PostQuestion[];
 }

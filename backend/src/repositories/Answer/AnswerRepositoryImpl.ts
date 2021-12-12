@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from "typeorm";
 import AnswerInput from "../../dto/AnswerInput";
-import { PostAnswer } from "../../entities/PostAnswer";
+import PostAnswer from "../../entities/PostAnswer";
 import AnswerRepository from "./AnswerRepository";
 
 @EntityRepository(PostAnswer)

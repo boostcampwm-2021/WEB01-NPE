@@ -1,9 +1,10 @@
-import { QuestionThumb } from "@src/entities/QuestionThumb";
+import { ThumbValue } from "@src/entities/abstract/Thumb";
+import QuestionThumb from "@src/entities/QuestionThumb";
 
 export default interface QuestionThumbRepository {
   deleteByQuestionId(questionId: number): Promise<void>;
   addNew(
-    value: 1 | -1,
+    value: ThumbValue,
     questionId: number,
     userId: number
   ): Promise<QuestionThumb>;

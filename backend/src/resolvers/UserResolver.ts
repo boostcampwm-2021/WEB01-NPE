@@ -7,9 +7,9 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import { PostAnswer } from "../entities/PostAnswer";
-import { PostQuestion } from "../entities/PostQuestion";
-import { User } from "../entities/User";
+import PostAnswer from "../entities/PostAnswer";
+import PostQuestion from "../entities/PostQuestion";
+import User from "../entities/User";
 import UserService from "../services/User/UserService";
 import Container, { Service } from "typedi";
 import QuestionService from "../services/Question/QuestionService";

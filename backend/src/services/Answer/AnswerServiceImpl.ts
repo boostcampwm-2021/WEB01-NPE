@@ -1,8 +1,6 @@
 import Container from "typedi";
 import AnswerInput from "../../dto/AnswerInput";
-import { PostAnswer } from "../../entities/PostAnswer";
-import AuthorizationError from "../../errors/AuthorizationError";
-import CommonError from "../../errors/CommonError";
+import PostAnswer from "../../entities/PostAnswer";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
 import AnswerThumbRepository from "../../repositories/AnswerThumb/AnswerThumbRepository";
 import QuestionRepository from "../../repositories/Question/QuestionRepository";
@@ -75,34 +73,22 @@ export default class AnswerServiceImpl implements AnswerService {
     return true;
   }
 
-  public async adopt(userId: number, answerId: number): Promise<boolean> {
+  public async adopt(answerId: number): Promise<boolean> {
     const answer = await this.answerRepository.findById(answerId);
     const answerAuthor = await this.userRepository.findById(answer.userId);
     const question = await this.questionRepository.findById(
       answer.postQuestionId
     );
 
-    if (answer.postQuestionUserId !== userId)
-      throw new AuthorizationError(
-        "you don't have permission! It is not your question."
-      );
+    question.adopted = true;
+    await this.questionRepository.saveOrUpdate(question);
 
-    if (answer.userId === userId)
-      throw new CommonError("you can't adopt your answer");
+    answer.state = 1;
+    await this.answerRepository.saveOrUpdate(answer);
 
-    if (question.adopted === 1)
-      throw new CommonError("question already adopted another answer");
+    answerAuthor.score += 50;
+    await this.userRepository.saveOrUpdate(answerAuthor);
 
-    if (answer.state === 0) {
-      question.adopted = 1;
-      answer.state = 1;
-      answerAuthor.score += 50;
-      await this.answerRepository.saveOrUpdate(answer);
-      await this.userRepository.saveOrUpdate(answerAuthor);
-      await this.questionRepository.saveOrUpdate(question);
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 }

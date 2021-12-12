@@ -1,8 +1,8 @@
-import { UserHasTag } from "../../entities/UserHasTag";
+import "reflect-metadata";
+import UserHasTag from "../../entities/UserHasTag";
 
 export default interface UserHasTagRepository {
-  findAllTagIdsByUserId(userId: number): Promise<UserHasTag[]>;
-  findAllByUserId(userId: number): Promise<UserHasTag[]>;
-  findByUserIdAndTagId(userId: number, tagId: number): Promise<UserHasTag>;
-  saveOrUpdate(userHasTag: UserHasTag): Promise<UserHasTag>;
+  findByUserId(userId: number): Promise<UserHasTag[]>;
+  addNewRelations(userId: number, tagIds: number[]): Promise<UserHasTag[]>;
+  increseAll(userId: number, tagIds: number[]): Promise<boolean>;
 }

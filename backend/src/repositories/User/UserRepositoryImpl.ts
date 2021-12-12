@@ -1,6 +1,6 @@
 import UserDto from "@src/dto/UserDto";
 import { EntityRepository, Repository } from "typeorm";
-import { User } from "../../entities/User";
+import User from "../../entities/User";
 import UserRepository from "./UserRepository";
 
 @EntityRepository(User)
