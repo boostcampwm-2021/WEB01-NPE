@@ -68,7 +68,7 @@ const graphQLMiddleware = async () => {
 
   const io = new socketio.Server(server, {
     cors: {
-      origin: "*",
+      origin: process.env.ORIGIN,
       credentials: true,
     },
     path: "/socket",
