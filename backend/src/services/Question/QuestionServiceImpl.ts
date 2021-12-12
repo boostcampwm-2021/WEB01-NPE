@@ -7,18 +7,21 @@ import QuestionRepository from "../../repositories/Question/QuestionRepository";
 import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
 import QuestionService from "./QuestionService";
 import TagRepository from "@src/repositories/Tag/TagRepository";
+import UserHasTagRepository from "@src/repositories/UserHasTag/UserHasTagRepository";
 
 export default class QuestionServiceImpl implements QuestionService {
   private readonly questionRepository: QuestionRepository;
   private readonly answerRepository: AnswerRepository;
   private readonly questionThumbRepository: QuestionThumbRepository;
   private readonly tagRepository: TagRepository;
+  private readonly userHasTagRepository: UserHasTagRepository;
 
   constructor() {
     this.answerRepository = Container.get("AnswerRepository");
     this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
     this.tagRepository = Container.get("TagRepository");
+    this.userHasTagRepository = Container.get("UserHasTagRepository");
   }
 
   public async search(
@@ -66,6 +69,17 @@ export default class QuestionServiceImpl implements QuestionService {
     );
 
     // 유저-태그 관계
+    const tagIds = tags.map((tag) => tag.id);
+    const savedTagIds = (
+      await this.userHasTagRepository.findByUserId(userId)
+    ).map((entity) => entity.tagId);
+
+    const notSavedTagIds = tagIds.filter(
+      (tagId) => !savedTagIds.includes(tagId)
+    );
+
+    await this.userHasTagRepository.addNewRelations(userId, notSavedTagIds);
+    await this.userHasTagRepository.increseAll(userId, tagIds);
 
     return newQuestion;
   }
@@ -79,8 +93,6 @@ export default class QuestionServiceImpl implements QuestionService {
       fieldsToUpdate,
       tags
     );
-
-    // 유저-태그 관계
 
     return updatedQuestion;
   }

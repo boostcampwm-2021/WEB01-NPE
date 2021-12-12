@@ -1,3 +1,5 @@
+import UserHasTag from "@src/entities/UserHasTag";
+import UserHasTagRepository from "@src/repositories/UserHasTag/UserHasTagRepository";
 import Container from "typedi";
 import Tag from "../../entities/Tag";
 import TagRepository from "../../repositories/Tag/TagRepository";
@@ -5,9 +7,11 @@ import TagService from "./TagService";
 
 export default class TagServiceImpl implements TagService {
   private readonly tagRepository: TagRepository;
+  private readonly userHasTagRepository: UserHasTagRepository;
 
   constructor() {
     this.tagRepository = Container.get("TagRepository");
+    this.userHasTagRepository = Container.get("UserHasTagRepository");
   }
 
   public async findAll(): Promise<Tag[]> {
@@ -33,8 +37,7 @@ export default class TagServiceImpl implements TagService {
     return tagIds;
   }
 
-  // public async findAllByUserId(userId: number): Promise<UserHasTag[]> {
-  //   const tagIds = await this.userHasTagRepository.findAllByUserId(userId);
-  //   return tagIds;
-  // }
+  public async findByUserId(userId: number): Promise<UserHasTag[]> {
+    return await this.userHasTagRepository.findByUserId(userId);
+  }
 }

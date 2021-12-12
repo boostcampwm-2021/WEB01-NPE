@@ -11,6 +11,7 @@ import ThumbServiceImpl from "./services/Thumb/ThumbServiceImpl";
 import UserServiceImpl from "./services/User/UserServiceImpl";
 import QuestionServiceImpl from "./services/Question/QuestionServiceImpl";
 import AnswerServiceImpl from "./services/Answer/AnswerServiceImpl";
+import UserHasTagRepositoryImpl from "./repositories/UserHasTag/UserHasTagRepositoryImpl";
 
 export default () => {
   // Variables
@@ -31,6 +32,10 @@ export default () => {
   Container.set(
     "QuestionThumbRepository",
     getCustomRepository(QuestionThumbRepositoryImpl)
+  );
+  Container.set(
+    "UserHasTagRepository",
+    getCustomRepository(UserHasTagRepositoryImpl)
   );
 
   // Services
