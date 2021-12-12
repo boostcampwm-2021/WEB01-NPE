@@ -12,15 +12,11 @@ export default class UserServiceImpl implements UserService {
   }
 
   public async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findById(id);
-
-    return user;
+    return await this.userRepository.findById(id);
   }
 
   public async findByUsername(username: string): Promise<User> {
-    const user = await this.userRepository.findByUsername(username);
-
-    return user;
+    return await this.userRepository.findByUsername(username);
   }
 
   public async register(userDto: UserDto): Promise<User> {
@@ -28,8 +24,6 @@ export default class UserServiceImpl implements UserService {
   }
 
   public async getRank(): Promise<User[]> {
-    const users = this.userRepository.findAndOrderByScoreDesc(5);
-
-    return users;
+    return await this.userRepository.findAndOrderByScoreDesc(5);
   }
 }

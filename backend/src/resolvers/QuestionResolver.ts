@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   Arg,
   Ctx,
@@ -16,11 +17,13 @@ import QuestionInput from "../dto/QuestionInput";
 import SearchQuestionInput from "../dto/SearchQuestionInput";
 import TagService from "../services/Tag/TagService";
 import UserService from "../services/User/UserService";
-import "reflect-metadata";
 import { Container } from "typedi";
 import ThumbService from "../services/Thumb/ThumbService";
 import QuestionService from "../services/Question/QuestionService";
 import AnswerService from "../services/Answer/AnswerService";
+import NoSuchUserError from "../errors/NoSuchUserError";
+import AuthenticationError from "../errors/AuthenticationError";
+import CommonError from "../errors/CommonError";
 
 @Resolver(PostQuestion)
 export default class QuestionResolver {
@@ -38,8 +41,7 @@ export default class QuestionResolver {
   async findOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await this.questionService.findById(id);
-    return question;
+    return await this.questionService.findById(id);
   }
 
   @Mutation(() => PostQuestion, {
@@ -48,15 +50,12 @@ export default class QuestionResolver {
   async viewOneQuestionById(
     @Arg("id", () => Int, { description: "질문글 ID" }) id: number
   ) {
-    const question = await this.questionService.viewById(id);
-    return question;
+    return await this.questionService.viewById(id);
   }
 
   @FieldResolver(() => User, { description: "작성자 User Object" })
   async author(@Root() question: PostQuestion): Promise<User> {
-    const author = await this.userService.findById(question.userId);
-
-    return author;
+    return await this.userService.findById(question.userId);
   }
 
   @FieldResolver(() => [PostAnswer], {
@@ -64,16 +63,12 @@ export default class QuestionResolver {
     nullable: "items",
   })
   async answers(@Root() question: PostQuestion): Promise<PostAnswer[]> {
-    const answers = await this.answerService.findAllByQuestionId(question.id);
-
-    return answers;
+    return await this.answerService.findAllByQuestionId(question.id);
   }
 
   @FieldResolver(() => Int, { description: "해당 질문글에 달린 답변글의 개수" })
   async answerCount(@Root() question: PostQuestion): Promise<number> {
-    const count = this.questionService.getAnswerCount(question.id);
-
-    return count;
+    return await this.questionService.getAnswerCount(question.id);
   }
 
   @FieldResolver(() => [Tag], {
@@ -82,9 +77,7 @@ export default class QuestionResolver {
   })
   async tags(@Root() question: PostQuestion): Promise<Tag[]> {
     const tagIds = await this.tagService.findAllIdsByQuestionId(question.id);
-    const tags = await this.tagService.findByIds(tagIds);
-
-    return tags;
+    return await this.tagService.findByIds(tagIds);
   }
 
   @Query(() => [PostQuestion], {
@@ -94,9 +87,17 @@ export default class QuestionResolver {
   async searchQuestions(
     @Arg("searchQuery") searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const questions = await this.questionService.search(searchQuery);
+    const { author } = searchQuery;
 
-    return questions;
+    // 작성자 존재 확인
+    if (author) {
+      const user = await this.userService.findByUsername(author);
+      if (!user) {
+        throw new NoSuchUserError("No Such User! Check Username");
+      }
+    }
+
+    return await this.questionService.search(searchQuery);
   }
 
   @Mutation(() => PostQuestion, { description: "질문글 작성 Mutation" })
@@ -104,9 +105,7 @@ export default class QuestionResolver {
     @Arg("data") questionData: QuestionInput,
     @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    const newQuestion = await this.questionService.addNew(questionData, userId);
-
-    return newQuestion;
+    return await this.questionService.addNew(questionData, userId);
   }
 
   @Mutation(() => PostQuestion, { description: "질문글 수정 Mutation" })
@@ -117,11 +116,11 @@ export default class QuestionResolver {
     fieldsToUpdate: QuestionInput,
     @Ctx("userId") userId: number
   ): Promise<PostQuestion> {
-    return await this.questionService.modify(
-      questionId,
-      fieldsToUpdate,
-      userId
-    );
+    const question = await this.questionService.findById(questionId);
+    if (question.userId !== userId)
+      throw new AuthenticationError("not your post!");
+
+    return await this.questionService.modify(questionId, fieldsToUpdate);
   }
 
   @Mutation(() => Boolean, {
@@ -133,11 +132,10 @@ export default class QuestionResolver {
     @Ctx("userId") userId: number
   ): Promise<boolean> {
     const question = await this.questionService.findById(questionId);
-    const questionAuthor = question.userId;
-    if (questionAuthor !== userId) throw new Error("Not your Post!");
-    const isDeleted = await this.questionService.delete(questionId);
+    if (question.userId !== userId)
+      throw new AuthenticationError("Not your Post!");
 
-    return isDeleted;
+    return await this.questionService.delete(questionId);
   }
 
   @Mutation(() => Boolean, {
@@ -148,9 +146,7 @@ export default class QuestionResolver {
     questionId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const result = await this.thumbService.questionThumbUp(questionId, userId);
-
-    return result;
+    return await this.thumbService.questionThumbUp(questionId, userId);
   }
 
   @Mutation(() => Boolean, {
@@ -161,12 +157,7 @@ export default class QuestionResolver {
     questionId: number,
     @Ctx("userId") userId: number
   ): Promise<boolean> {
-    const result = await this.thumbService.questionThumbDown(
-      questionId,
-      userId
-    );
-
-    return result;
+    return await this.thumbService.questionThumbDown(questionId, userId);
   }
 
   @Query(() => [PostQuestion], {
@@ -184,11 +175,15 @@ export default class QuestionResolver {
     @Arg("questionId", { description: "싫어요 표시할 질문글의 ID" })
     questionId: number
   ) {
-    const result = await this.questionService.turnOffRealtimeShare(
-      userId,
-      questionId
-    );
+    const question = await this.questionService.findById(questionId);
 
-    return result;
+    if (question.userId !== userId)
+      throw new AuthenticationError("not your question!");
+
+    if (question.realtimeShare === false)
+      throw new CommonError("realtime share is already disabled");
+
+    console.log("!!!");
+    return await this.questionService.turnOffRealtimeShare(questionId);
   }
 }

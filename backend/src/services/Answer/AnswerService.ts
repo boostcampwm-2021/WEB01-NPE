@@ -12,5 +12,5 @@ export default interface AnswerService {
   findById(answerId: number): Promise<PostAnswer>;
   modify(answerId: number, answerInput: AnswerInput): Promise<PostAnswer>;
   delete(answerId: number): Promise<boolean>;
-  adopt(userId: number, answerId: number): Promise<boolean>;
+  adopt(answerId: number): Promise<boolean>;
 }

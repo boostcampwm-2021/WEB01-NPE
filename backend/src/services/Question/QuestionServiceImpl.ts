@@ -1,27 +1,20 @@
-import NoSuchUserError from "../../errors/NoSuchUserError";
 import Container from "typedi";
 import QuestionInput from "../../dto/QuestionInput";
 import SearchQuestionInput from "../../dto/SearchQuestionInput";
 import PostQuestion from "../../entities/PostQuestion";
-import CommonError from "../../errors/CommonError";
-import NoSuchQuestionError from "../../errors/NoSuchQuestionError";
 import AnswerRepository from "../../repositories/Answer/AnswerRepository";
 import QuestionRepository from "../../repositories/Question/QuestionRepository";
 import QuestionThumbRepository from "../../repositories/QuestionThumb/QuestionThumbRepository";
-import UserRepository from "../../repositories/User/UserRepository";
 import QuestionService from "./QuestionService";
-import AuthenticationError from "../../errors/AuthenticationError";
 import TagRepository from "@src/repositories/Tag/TagRepository";
 
 export default class QuestionServiceImpl implements QuestionService {
-  private readonly userRepository: UserRepository;
   private readonly questionRepository: QuestionRepository;
   private readonly answerRepository: AnswerRepository;
   private readonly questionThumbRepository: QuestionThumbRepository;
   private readonly tagRepository: TagRepository;
 
   constructor() {
-    this.userRepository = Container.get("UserRepository");
     this.answerRepository = Container.get("AnswerRepository");
     this.questionRepository = Container.get("QuestionRepository");
     this.questionThumbRepository = Container.get("QuestionThumbRepository");
@@ -31,16 +24,6 @@ export default class QuestionServiceImpl implements QuestionService {
   public async search(
     searchQuery: SearchQuestionInput
   ): Promise<PostQuestion[]> {
-    const { author } = searchQuery;
-
-    // 작성자 존재 확인
-    if (author) {
-      const user = await this.userRepository.findByUsername(author);
-      if (!user) {
-        throw new NoSuchUserError("No Such User! Check Username");
-      }
-    }
-
     return await this.questionRepository.findByArgs(searchQuery);
   }
 
@@ -52,9 +35,6 @@ export default class QuestionServiceImpl implements QuestionService {
 
   public async findById(id: number): Promise<PostQuestion> {
     const question = await this.questionRepository.findById(id);
-
-    if (!question) throw new NoSuchQuestionError("Check ID");
-
     return question;
   }
 
@@ -90,15 +70,7 @@ export default class QuestionServiceImpl implements QuestionService {
     return newQuestion;
   }
 
-  public async modify(
-    questionId: number,
-    fieldsToUpdate: QuestionInput,
-    userId: number
-  ) {
-    const question = await this.questionRepository.findById(questionId);
-    if (question.userId !== userId)
-      throw new AuthenticationError("not your post!");
-
+  public async modify(questionId: number, fieldsToUpdate: QuestionInput) {
     const tags = fieldsToUpdate.tagIds.length
       ? await this.tagRepository.findByIds(fieldsToUpdate.tagIds)
       : [];
@@ -121,21 +93,12 @@ export default class QuestionServiceImpl implements QuestionService {
   }
 
   public async getAnswerCount(questionId: number): Promise<number> {
-    const count = await this.answerRepository.countByQuestionId(questionId);
-
-    return count;
+    return await this.answerRepository.countByQuestionId(questionId);
   }
 
-  public async turnOffRealtimeShare(userId: number, questionId: number) {
+  public async turnOffRealtimeShare(questionId: number) {
     const question = await this.questionRepository.findById(questionId);
-
-    if (question.userId !== userId)
-      throw new AuthenticationError("not your question!");
-
-    if (question.realtimeShare === false)
-      throw new CommonError("realtime share is already disabled");
-
-    question.realtimeShare = true;
+    question.realtimeShare = false;
     await this.questionRepository.saveOrUpdate(question);
 
     return true;
