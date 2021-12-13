@@ -1,4 +1,4 @@
-import { Tag } from "@src/entities/Tag";
+import Tag from "@src/entities/Tag";
 import Mock from "./mock";
 import faker from "faker";
 
