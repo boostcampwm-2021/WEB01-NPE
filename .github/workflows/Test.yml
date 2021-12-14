@@ -8,8 +8,6 @@ on:
 jobs:
   Jest_Test:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./backend
     strategy:
       matrix:
         node-version: [16.x]
@@ -17,9 +15,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install dependencies
-        run: yarn install
-        working-directory: ${{ env.working-directory }}
+        run: cd backend && yarn install
 
       - name: run test
-        run: yarn test:unit
-        working-directory: ${{ env.working-directory }}
+        run: cd backend && yarn test:unit
