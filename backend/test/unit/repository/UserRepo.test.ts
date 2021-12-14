@@ -1,8 +1,7 @@
 import "reflect-metadata";
 import UserDto from "@src/dto/UserDto";
-import { User } from "@src/entities/User";
+import User from "@src/entities/User";
 import UserRepositoryImpl from "@src/repositories/User/UserRepositoryImpl";
-import { when } from "jest-when";
 
 describe("UserRepository", () => {
   let instance: UserRepositoryImpl;

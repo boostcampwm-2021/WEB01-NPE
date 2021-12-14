@@ -1,4 +1,4 @@
-import { PostQuestion } from "@src/entities/PostQuestion";
+import PostQuestion from "@src/entities/PostQuestion";
 import Mock from "./mock";
 import faker from "faker";
 import QuestionInput from "@src/dto/QuestionInput";
@@ -9,7 +9,7 @@ export default class QuestionMock implements Mock<PostQuestion> {
     question.title = faker.datatype.string(20);
     question.desc = faker.datatype.string(20);
     question.createdAt = new Date();
-    question.realtimeShare = 0;
+    question.realtimeShare = false;
 
     return question;
   }
@@ -25,6 +25,7 @@ export default class QuestionMock implements Mock<PostQuestion> {
     const questionInput = new QuestionInput();
     questionInput.title = faker.datatype.string(20);
     questionInput.desc = faker.datatype.string(20);
+    questionInput.realtimeShare = false;
 
     return questionInput;
   }

@@ -9,9 +9,8 @@ import QuestionMock from "./mockdata/QuestionMock";
 import faker from "faker";
 import "jest-sorted";
 import TagMock from "./mockdata/TagMock";
-import { PostQuestionHasTag } from "@src/entities/PostQuestionHasTag";
-import { UserHasTag } from "@src/entities/UserHasTag";
-import { PostQuestion } from "@src/entities/PostQuestion";
+import UserHasTag from "@src/entities/UserHasTag";
+import PostQuestion from "@src/entities/PostQuestion";
 
 describe("QuestionService", () => {
   let questionService: QuestionService;
@@ -95,39 +94,26 @@ describe("QuestionService", () => {
     await entityManager.save(user);
 
     const tags = new TagMock().getMany(TAG_COUNT);
-    const tagsSaved = [];
-    for (const tag of tags) {
-      const tagSaved = await entityManager.save(tag);
-      tagsSaved.push(tagSaved);
-    }
+    const tagsSaved = await entityManager.save(tags);
+    const tagIds = tagsSaved.map((tag) => tag.id);
 
     const questionInput = new QuestionMock().getOneInput();
     questionInput.tagIds = tagsSaved.map((tag) => tag.id);
 
     // when
     const addedQuestion = await questionService.addNew(questionInput, userId);
+    const questionTagIds = addedQuestion.tags.map((tagEntity) => tagEntity.id);
+
+    const userTags = await entityManager.find(UserHasTag, {
+      where: { userId },
+    });
+    const userTagIds = userTags.map((ut) => ut.tagId);
+    const userTagCounts = userTags.map((ut) => ut.count);
 
     // then
-    const addedQuestionId = addedQuestion.id;
-    const addedQuestionTags = await entityManager.find(PostQuestionHasTag, {
-      postQuestionId: addedQuestionId,
-    });
-    const addedUserTags = await entityManager.find(UserHasTag, {
-      where: { userId: userId },
-    });
-    const tagIds = tags.map((tag) => tag.id);
-    const addedQuestionTagIds = addedQuestionTags.map((qt) => qt.tagId);
-    const addedUserTagIds = addedUserTags.map((ut) => ut.tagId);
-    const addedUserTagCounts = addedUserTags.map((ut) => ut.count);
-    const expectedTagCount = Array.from(
-      { length: TAG_COUNT },
-      (undefined, i) => 1
-    );
-
-    expect(addedQuestionTagIds).toEqual(tagIds);
-    expect(addedUserTagIds).toEqual(tagIds);
-    expect(addedUserTagCounts).toHaveLength(TAG_COUNT);
-    expect(addedUserTagCounts).toEqual(expectedTagCount);
+    expect(questionTagIds).toStrictEqual(tagIds);
+    expect(userTagIds).toStrictEqual(tagIds);
+    expect(userTagCounts).toStrictEqual([1, 1, 1, 1, 1]);
   });
 
   it("turnOffRealtimeShare 작동여부", async () => {
@@ -137,23 +123,19 @@ describe("QuestionService", () => {
     await entityManager.save(user);
 
     const question = new QuestionMock().getOne();
-    question.realtimeShare = 1;
+    question.realtimeShare = true;
     question.userId = userId;
     const beforeQuestion = await entityManager.save(question);
     const questionId = beforeQuestion.id;
 
     // when
-    const result = await questionService.turnOffRealtimeShare(
-      userId,
-      questionId
-    );
-
-    // then
+    const result = await questionService.turnOffRealtimeShare(questionId);
     const afterQuestion = await entityManager.findOne(PostQuestion, {
       id: questionId,
     });
 
+    // then
     expect(result).toBe(true);
-    expect(afterQuestion.realtimeShare).toBe(0);
+    expect(afterQuestion.realtimeShare).toBe(false);
   });
 });

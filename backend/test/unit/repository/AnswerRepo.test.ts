@@ -1,5 +1,5 @@
 import AnswerInput from "@src/dto/AnswerInput";
-import { PostAnswer } from "@src/entities/PostAnswer";
+import PostAnswer from "@src/entities/PostAnswer";
 import AnswerRepositoryImpl from "@src/repositories/Answer/AnswerRepositoryImpl";
 
 describe("AnswerRepository", () => {

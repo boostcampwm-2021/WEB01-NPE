@@ -1,8 +1,8 @@
 import "reflect-metadata";
 import QuestionInput from "@src/dto/QuestionInput";
-import { PostQuestion } from "@src/entities/PostQuestion";
+import PostQuestion from "@src/entities/PostQuestion";
 import QuestionRepositoryImpl from "@src/repositories/Question/QuestionRepositoryImpl";
-import NoSuchQuestionError from "@src/errors/NoSuchQuestionError";
+import Tag from "@src/entities/Tag";
 
 describe("QuestionRepository", () => {
   let instance: QuestionRepositoryImpl;
@@ -19,17 +19,29 @@ describe("QuestionRepository", () => {
     questionInput.desc = "Desc bla bla...";
     questionInput.realtimeShare = true;
 
+    const tag1 = new Tag();
+    tag1.id = 1;
+    tag1.name = "js";
+    const tag2 = new Tag();
+    tag2.id = 2;
+    tag2.name = "ts";
+
     instance.save = jest
       .fn()
       .mockImplementation(async (question: PostQuestion) => question);
 
     // when
-    const resultQuestion = await instance.addNew(questionInput, USER_ID);
+    const resultQuestion = await instance.addNew(
+      questionInput,
+      [tag1, tag2],
+      USER_ID
+    );
 
     // then
     expect(resultQuestion.title).toBe(questionInput.title);
     expect(resultQuestion.desc).toBe(questionInput.desc);
-    expect(resultQuestion.realtimeShare).toBe(1);
+    expect(resultQuestion.realtimeShare).toBe(true);
+    expect(resultQuestion.tags).toStrictEqual([tag1, tag2]);
   });
 
   it("modify", async () => {
@@ -40,6 +52,13 @@ describe("QuestionRepository", () => {
     questionInput.title = "Title";
     questionInput.desc = "Desc bla bla...";
     questionInput.realtimeShare = true;
+
+    const tag1 = new Tag();
+    tag1.id = 1;
+    tag1.name = "js";
+    const tag2 = new Tag();
+    tag2.id = 2;
+    tag2.name = "ts";
 
     instance.findById = jest
       .fn()
@@ -55,13 +74,17 @@ describe("QuestionRepository", () => {
       .mockImplementation(async (question: PostQuestion) => question);
 
     // when
-    const modifiedQuestion = await instance.modify(QUESTION_ID, questionInput);
+    const modifiedQuestion = await instance.modify(QUESTION_ID, questionInput, [
+      tag1,
+      tag2,
+    ]);
 
     // then
     expect(modifiedQuestion.id).toBe(QUESTION_ID);
     expect(modifiedQuestion.userId).toBe(USER_ID);
     expect(modifiedQuestion.title).toBe(questionInput.title);
     expect(modifiedQuestion.desc).toBe(questionInput.desc);
-    expect(modifiedQuestion.realtimeShare).toBe(1);
+    expect(modifiedQuestion.realtimeShare).toBe(true);
+    expect(modifiedQuestion.tags).toStrictEqual([tag1, tag2]);
   });
 });
