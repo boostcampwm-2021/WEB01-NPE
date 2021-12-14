@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.REMOTE_PASSWORD }}
           port: ${{ secrets.REMOTE_PORT }}
           source: "*"
-          target: "deploy"
+          target: "temp"
           overwrite: true
 
   Docker_compose_up_with_build_option:
@@ -36,7 +36,7 @@ jobs:
       - name: Excute deploy script
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: cd deploy && docker-compose up --build --detach
+          command: ./deploy.sh
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           password: ${{ secrets.REMOTE_PASSWORD }}
