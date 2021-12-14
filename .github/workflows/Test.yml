@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  Jest Test:
+  Jest_Test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
