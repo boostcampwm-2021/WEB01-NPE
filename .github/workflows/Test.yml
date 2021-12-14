@@ -8,6 +8,8 @@ on:
 jobs:
   Jest Test:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
     strategy:
       matrix:
         node-version: [16.x]
