@@ -7,7 +7,7 @@ on:
 
 jobs:
   scp:
-    name: scp iles
+    name: scp files to ncloud instance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

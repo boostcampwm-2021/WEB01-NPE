@@ -22,7 +22,7 @@
       "./src/types"
     ]
   },
-  "include": ["src", "test", "package.json", "yarn.lock", "ormconfig.json"],
+  "include": ["src", "package.json", "ormconfig.json", "pm2.json"],
   "exclude": ["node_modules"],
   "typeAcquisition": {
     "include": ["jest"]

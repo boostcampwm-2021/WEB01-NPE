@@ -12,3 +12,6 @@ dist/
 
 # legacy
 src/entities/legacy
+
+# pm2 실행 설정 파일
+pm2.json
