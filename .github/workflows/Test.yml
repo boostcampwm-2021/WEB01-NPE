@@ -16,24 +16,6 @@ jobs:
 
       - name: install dependencies
         run: yarn install
-      
+
       - name: run test
         run: yarn test
-          uses: actions/github-script@0.2.0
-            with:
-              github-token: ${{github.token}}
-              script: |
-                const ref = "${{github.ref}}"
-                const pull_number = Number(ref.split("/")[2])
-                await github.pulls.createComment({
-                  ...context.repo,
-                  pull_number,
-                  body:"백엔드 테스트코드가 실패했습니다. 다시 확인해주세요",
-                  event: "REQUEST_CHANGES"
-                })
-                await github.pulls.update({
-                  ...context.repo,
-                  pull_number,
-                  state: "closed"
-                })
-          if: failure()
