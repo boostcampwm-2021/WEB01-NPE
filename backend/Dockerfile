@@ -13,6 +13,6 @@ WORKDIR /app/backend
 COPY --from=builder /app/backend/dist .
 
 # install pm2
-RUN npm install pm2 -g
+RUN yarn global add pm2
 # install dependencies
 RUN yarn install --no-lockfile --production
