@@ -1,24 +1,37 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { Container } from "./styled";
-import Audio from "./Audio";
-import StreamProfile from "./StreamProfile";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  FunctionComponent,
+} from "react";
 import { Socket } from "socket.io-client";
 
+import { LiveAudio } from "@components/atoms";
+import { AudioStreamProfileList } from "@components/organisms";
+
+import { ICE_SERVERS, MEDIA_CONFIG, OFFER_RECEIVE } from "./config";
+import { Container } from "./styled";
 import * as Styled from "./styled";
 
-export default function LiveAudioStream({ socket }: { socket: Socket }) {
+interface Props {
+  socket: Socket;
+}
+
+const LiveAudioStream: FunctionComponent<Props> = ({ socket }) => {
   const pcsRef = useRef({});
   const localAudioRef = useRef<HTMLAudioElement>(null);
   const localStreamRef = useRef<MediaStream>(null);
+
   const [users, setUsers] = useState([]);
   const [profiles, setProfiles] = useState<{ [socketId: string]: any }>({});
 
   const getLocalStream = useCallback(async () => {
     try {
-      const localStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: false,
-      });
+      const localStream = await navigator.mediaDevices.getUserMedia(
+        MEDIA_CONFIG
+      );
+
       localStreamRef.current = localStream;
       socket.emit("join");
       if (localAudioRef.current) {
@@ -32,7 +45,7 @@ export default function LiveAudioStream({ socket }: { socket: Socket }) {
 
   const createPeerConnection = useCallback((socketID) => {
     try {
-      const pc = new RTCPeerConnection(pc_config);
+      const pc = new RTCPeerConnection(ICE_SERVERS);
       pc.onicecandidate = (e) => {
         if (!(socket && e.candidate)) return;
         socket.emit("candidate", {
@@ -108,10 +121,7 @@ export default function LiveAudioStream({ socket }: { socket: Socket }) {
         if (!(pc && socket)) return;
         pcsRef.current = { ...pcsRef.current, [userID]: pc };
         try {
-          const localSdp = await pc.createOffer({
-            offerToReceiveAudio: true,
-            offerToReceiveVideo: false,
-          });
+          const localSdp = await pc.createOffer(OFFER_RECEIVE);
           await pc.setLocalDescription(new RTCSessionDescription(localSdp));
           socket.emit("offer", {
             sdp: localSdp,
@@ -192,27 +202,13 @@ export default function LiveAudioStream({ socket }: { socket: Socket }) {
 
   return (
     <Container>
-      <Styled.ProfileContainer>
-        {Object.values(profiles).map((elm, idx) => {
-          const name = elm.user.name;
-          const profileUrl = elm.user.image;
-          return (
-            <StreamProfile name={name} profileUrl={profileUrl} key={idx} />
-          );
-        })}
-      </Styled.ProfileContainer>
+      <AudioStreamProfileList profiles={profiles} />
       <audio muted ref={localAudioRef} autoPlay />
       {users.map((user, index) => (
-        <Audio key={index} stream={user.stream} />
+        <LiveAudio key={index} stream={user.stream} />
       ))}
     </Container>
   );
-}
-
-const pc_config = {
-  iceServers: [
-    {
-      urls: ["stun:stun1.l.google.com:19302", "stun:stun2.l.google.com:19302"],
-    },
-  ],
 };
+
+export default LiveAudioStream;

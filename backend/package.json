@@ -5,6 +5,8 @@
     "build": "tsc --build",
     "test": "jest",
     "start:pm2": "NODE_ENV=test pm2 start src/App.ts --watch & npx y-websocket-server",
+    "test:unit": "jest --testPathPattern=test/unit",
+    "test:integration": "jest --testPathPattern=test/integration",
     "start:dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/App.ts & npx y-websocket-server",
     "start:test": "cross-env NODE_ENV=test nodemon --exec ts-node src/App.ts & npx y-websocket-server",
     "start:socket": "npx y-websocket-server",
