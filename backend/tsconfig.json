@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src", "package.json"],
+  "include": ["src", "package.json", "pm2.json", "ormconfig.json"],
   "typeAcquisition": {
     "include": ["jest"]
   }
