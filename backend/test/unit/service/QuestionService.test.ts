@@ -1,9 +1,9 @@
 import "reflect-metadata";
+import Container from "typedi";
+import InjectRepo from "./InjectRepo";
 import QuestionRepository from "@src/repositories/Question/QuestionRepository";
 import UserRepository from "@src/repositories/User/UserRepository";
 import QuestionServiceImpl from "@src/services/Question/QuestionServiceImpl";
-import Container from "typedi";
-import InjectRepo from "./InjectRepo";
 import PostQuestion from "@src/entities/PostQuestion";
 import QuestionThumbRepository from "@src/repositories/QuestionThumb/QuestionThumbRepository";
 
@@ -21,10 +21,6 @@ describe("QuestionService", () => {
     userRepo = Container.get("UserRepository");
     questionThumbRepo = Container.get("QuestionThumbRepository");
   });
-
-  it("findById Id에 해당하는 글 없을시 에러", async () => {});
-
-  it("search 없는 작성자 넘길 시 에러", async () => {});
 
   it("viewById 조회수 증가", async () => {
     // given
@@ -60,8 +56,4 @@ describe("QuestionService", () => {
     expect(questionThumbRepo.deleteByQuestionId).toBeCalledWith(1);
     expect(questionThumbRepo.deleteByQuestionId).toBeCalledWith(QUESTION_ID);
   });
-
-  it("turnOffRealtimeShare 권한 없는 질문글 입력시 에러", async () => {});
-
-  it("turnOffRealtimeShare 이미 turnoff된 질문글 입력시 에러", async () => {});
 });
