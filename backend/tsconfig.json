@@ -1,29 +1,22 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es2015",
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "dist",
-    "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "sourceMap": true,
     "noImplicitAny": true,
     "removeComments": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@jest",
-      "./src/types"
-    ]
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src", "package.json", "ormconfig.json", "pm2.json"],
-  "exclude": ["node_modules"],
+  "include": ["src", "test", "package.json"],
   "typeAcquisition": {
     "include": ["jest"]
   }
