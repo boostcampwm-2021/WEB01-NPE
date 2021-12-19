@@ -9,3 +9,4 @@ export { default as RealTimeEditor } from "./RealTimeEditor";
 export { default as LivaAudioStream } from "./LiveAudioStream";
 export { default as LiveChat } from "./LiveChat";
 export { default as LeaderBoard } from "./LeaderBoard";
+export { default as AudioStreamProfileList } from "./AudioStreamProfileList";

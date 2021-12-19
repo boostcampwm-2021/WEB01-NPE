@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from "react";
-import Router from "next/router";
 import Image from "next/image";
 
 import { Text } from "@components/atoms";
@@ -9,7 +8,7 @@ interface Props {
   profileUrl: string;
 }
 
-const StreamProfile: FunctionComponent<Props> = ({ name, profileUrl }) => {
+const AudioStreamProfile: FunctionComponent<Props> = ({ name, profileUrl }) => {
   return (
     <li>
       <div>
@@ -20,4 +19,4 @@ const StreamProfile: FunctionComponent<Props> = ({ name, profileUrl }) => {
   );
 };
 
-export default StreamProfile;
+export default AudioStreamProfile;
