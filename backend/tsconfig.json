@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src", "test", "package.json"],
+  "include": ["src", "package.json"],
   "typeAcquisition": {
     "include": ["jest"]
   }
