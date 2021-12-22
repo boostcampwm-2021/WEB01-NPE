@@ -16,15 +16,16 @@
 </div>
 
 ## 팀원소개
-| 안승재 🕸 | 장다윗 🕸 | 조승희 🕸 | 황우진 🕸 |
-| :---: | :---: | :---: | :---: |
-| <img src="https://user-images.githubusercontent.com/49035066/138902384-74aa03f1-e2ad-4584-9f1c-a6168b3cd2ef.jpg" width="500px"> | <img src="https://i.ibb.co/pXTkwJV/image.jpg" width="500px"> | <img src="https://avatars.githubusercontent.com/u/50866506?v=4" width="500px"> | <img src="https://avatars.githubusercontent.com/u/67536413?v=4" width="500px"> | 
-| [@getState](https://github.com/getState) | [@david02324](https://github.com/david02324) | [@sa02045](https://github.com/sa02045)| [@hwangwoojin](https://github.com/hwangwoojin) |
-| 저희 10분만 쉬었다 할까요..? | 네 알겠습니다~ | 그렇게 하면 될 것 같아요 | 작업한거 노션 링크좀 올려주세요 |
+
+|                                                            안승재 🕸                                                             |                           장다윗 🕸                           |                                    조승희 🕸                                    |                                    황우진 🕸                                    |
+| :-----------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
+| <img src="https://user-images.githubusercontent.com/49035066/138902384-74aa03f1-e2ad-4584-9f1c-a6168b3cd2ef.jpg" width="500px"> | <img src="https://i.ibb.co/pXTkwJV/image.jpg" width="500px"> | <img src="https://avatars.githubusercontent.com/u/50866506?v=4" width="500px"> | <img src="https://avatars.githubusercontent.com/u/67536413?v=4" width="500px"> |
+|                                            [@getState](https://github.com/getState)                                             |         [@david02324](https://github.com/david02324)         |                     [@sa02045](https://github.com/sa02045)                     |                 [@hwangwoojin](https://github.com/hwangwoojin)                 |
+|                                                  저희 10분만 쉬었다 할까요..?                                                   |                        네 알겠습니다~                        |                            그렇게 하면 될 것 같아요                            |                        작업한거 노션 링크좀 올려주세요                         |
 
 ## 프로젝트 소개
 
-실시간으로 내 코드의 문제에 대해 답을 알고 싶나요? 일반적인 답변이 아닌 실시간으로 코드를 수정하고 음성으로 설명하며 도움을 받아보세요! 
+실시간으로 내 코드의 문제에 대해 답을 알고 싶나요? 일반적인 답변이 아닌 실시간으로 코드를 수정하고 음성으로 설명하며 도움을 받아보세요!
 
 NPE 는 개발자들을 위한 질문/답변 위주의 커뮤니티 입니다. 기본적인 디자인은 Stackoverflow를 참고했으며, 해당 커뮤니티에 기능에 더해서 실시간 답변 기능을 추가하였습니다.
 
@@ -35,16 +36,14 @@ NPE 는 개발자들을 위한 질문/답변 위주의 커뮤니티 입니다. �
 - 개발자들이 질문이나 답변을 할 수 있는 커뮤니티 기능을 제공합니다.
 - 유저의 활동을 분석한 랭크/등급 기능을 제공합니다.
 - 실시간으로 답변할 수 있는 여러가지 기능들을 제공합니다.
-    - 화상,음성, 채팅, 실시간 코드 편집기
-    - `WebRtc`, [`sockiet.io`](http://sockiet.io) , 실시간 편집 : socket 기반 라이브러리
+  - 화상,음성, 채팅, 실시간 코드 편집기
+  - `WebRtc`, [`sockiet.io`](http://sockiet.io) , 실시간 편집 : socket 기반 라이브러리
 
 ## [위키](https://github.com/boostcampwm-2021/WEB01-NPE/wiki)
 
 ### [🚩 기술 스택 🚩](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
 
-### [🚤 플로우차트 🚤](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
-
-### [🥨 ERD 🥨](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
+### [🥨 ERD 🥨](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#erd)
 
 ### [🖼 와이어프레임 🖼](https://github.com/boostcampwm-2021/WEB01-NPE/wiki/%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD#%ED%94%8C%EB%A1%9C%EC%9A%B0%EC%B0%A8%ED%8A%B8)
 
