@@ -17,4 +17,4 @@ services:
     environment:
       PM2_PUBLIC_KEY: $PM2_PUBLIC_KEY
       PM2_SECRET_KEY: $PM2_SECRET_KEY
-    command: sh -c "pm2-runtime pm2.json"
+    command: sh -c "pm2-runtime pm2.json & npx y-websocket-server"
