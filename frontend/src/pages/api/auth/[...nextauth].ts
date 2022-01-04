@@ -11,7 +11,7 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn(u, a, profile) {
+    async signIn(u, a, profile: Record<string, unknown>) {
       const userId = profile.id as number;
       const username = profile.login as string;
       const profileUrl = profile.avatar_url as string;
